@@ -3,5 +3,5 @@ require 'datagraph/version'
 
 ##
 module Datagraph
-  # TODO
+  autoload :Client, 'datagraph/client'
 end
