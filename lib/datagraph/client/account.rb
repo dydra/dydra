@@ -1,6 +1,6 @@
 module Datagraph::Client
   ##
-  class Account
+  class Account < Resource
     # TODO
   end # class Account
 end # module Datagraph::Client
