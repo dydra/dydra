@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+$:.unshift(File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib')))
+require 'datagraph'
+
+abort "Usage: #{File.basename($0)} [options] command [args...]" if ARGV.empty?
