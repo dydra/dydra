@@ -25,6 +25,18 @@ module Datagraph::Client
     end
 
     ##
+    # Returns the RDF data for this resource.
+    def to_rdf
+      get('.nt', 'Accept' => 'text/plain') do |response|
+        case response
+          when Net::HTTPSuccess
+            reader = RDF::NTriples::Reader.new(response.body)
+            reader.to_a.extend(RDF::Enumerable, RDF::Queryable) # FIXME
+        end
+      end
+    end
+
+    ##
     # Performs an HTTP GET request on this resource.
     #
     # @param  [String, #to_s]          format
