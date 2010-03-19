@@ -51,6 +51,23 @@ module Datagraph::Client
     end
 
     ##
+    # Returns a developer-friendly representation of this resource.
+    #
+    # @return [String]
+    def inspect
+      sprintf("#<%s:%#0x(%s)>", self.class.name, object_id, to_s)
+    end
+
+    ##
+    # Outputs a developer-friendly representation of this resource to
+    # `stderr`.
+    #
+    # @return [void]
+    def inspect!
+      warn(inspect)
+    end
+
+    ##
     # Performs an HTTP HEAD request on this resource.
     #
     # @param  [String, #to_s]          format
