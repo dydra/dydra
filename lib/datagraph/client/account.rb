@@ -42,5 +42,17 @@ module Datagraph::Client
     def to_s
       name
     end
+
+    ##
+    # Returns the RDF data describing this account.
+    def to_rdf
+      get('.nt', 'Accept' => 'text/plain') do |response|
+        case response
+          when Net::HTTPSuccess
+            reader = RDF::NTriples::Reader.new(response.body)
+            reader.to_a.extend(RDF::Enumerable, RDF::Queryable) # FIXME
+        end
+      end
+    end
   end # class Account
 end # module Datagraph::Client
