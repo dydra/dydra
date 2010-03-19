@@ -26,18 +26,17 @@ module Datagraph
     ##
     # Exports repository data in N-Triples format.
     def export(*repository_specs)
+      repositories = []
       repository_specs.each do |repository_spec|
-        unless Repository::SPEC =~ repository_spec
-          abort "#{basename}: invalid repository spec `#{repository_spec}'" 
-        end
+        abort "#{basename}: invalid repository spec `#{repository_spec}'" unless repository_spec =~ Repository::SPEC
+        repository = Repository.new(*repository_spec.split('/'))
+        abort "#{basename}: invalid account `#{repository.account}'" unless repository.account.exists?
+        abort "#{basename}: invalid repository `#{repository}'" unless repository.exists?
+        repositories << repository
       end
-
       RDF::NTriples::Writer.new($stdout) do |writer|
-        repository_specs.each do |repository_spec|
-          account_name, repository_name = repository_spec.split('/')
-          Account.new(account_name).repository(repository_name).to_rdf.each do |statement|
-            writer << statement
-          end
+        repositories.each do |repository|
+          repository.to_rdf.each { |statement| writer << statement }
         end
       end
     end
