@@ -1,6 +1,28 @@
 module Datagraph::Client
   ##
+  # Represents a Datagraph.org RDF repository.
   class Repository < Resource
-    # TODO
+    SPEC = %r(^([^/]+)/([^/]+)$)
+
+    attr_reader :account
+    attr_reader :name
+
+    ##
+    # @param  [String, #to_s] account_name
+    # @param  [String, #to_s] name
+    def initialize(account_name, name)
+      @account = case account_name
+        when Account then account_name
+        else Account.new(account_name.to_s)
+      end
+      @name = name.to_s
+      super(Datagraph::URL.join(@account.name, @name))
+    end
+
+    ##
+    # Returns a string representation of the repository name.
+    def to_s
+      [account.name, name].join('/')
+    end
   end # class Repository
 end # module Datagraph::Client
