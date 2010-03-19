@@ -51,6 +51,25 @@ module Datagraph::Client
     end
 
     ##
+    # Performs an HTTP HEAD request on this resource.
+    #
+    # @param  [String, #to_s]          format
+    # @param  [Hash{String => String}] headers
+    # @yield  [response]
+    # @yieldparam [Net::HTTPResponse] response
+    # @return [Net::HTTPResponse]
+    def head(format = nil, headers = {}, &block)
+      Net::HTTP.start(url.host, url.port) do |http|
+        response = http.head(url.path.to_s + format.to_s, HEADERS.merge(headers))
+        if block_given?
+          block.call(response)
+        else
+          response
+        end
+      end
+    end
+
+    ##
     # Performs an HTTP GET request on this resource.
     #
     # @param  [String, #to_s]          format
@@ -68,7 +87,5 @@ module Datagraph::Client
         end
       end
     end
-
-    alias_method :head, :get # FIXME
   end # class Resource
 end # module Datagraph::Client
