@@ -24,20 +24,6 @@ module Datagraph::Client
     end
 
     ##
-    # Returns `true` if this account exists on Datagraph.org.
-    #
-    # @return [Boolean]
-    def exists?
-      get do |response|
-        case response
-          when Net::HTTPSuccess     then true
-          when Net::HTTPClientError then false
-          else true # FIXME: dubious default, for now
-        end
-      end
-    end
-
-    ##
     # Returns the given repository belonging to this account.
     #
     # @param  [String, #to_s] name

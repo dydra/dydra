@@ -17,6 +17,20 @@ module Datagraph::Client
     end
 
     ##
+    # Returns `true` if this resource exists on Datagraph.org.
+    #
+    # @return [Boolean]
+    def exists?
+      head do |response|
+        case response
+          when Net::HTTPSuccess     then true
+          when Net::HTTPClientError then false
+          else true # FIXME: dubious default, for now
+        end
+      end
+    end
+
+    ##
     # Returns the URL of this resource.
     #
     # @return [RDF::URI]
@@ -54,5 +68,7 @@ module Datagraph::Client
         end
       end
     end
+
+    alias_method :head, :get # FIXME
   end # class Resource
 end # module Datagraph::Client
