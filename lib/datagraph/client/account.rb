@@ -38,6 +38,15 @@ module Datagraph::Client
     end
 
     ##
+    # Returns the given repository belonging to this account.
+    #
+    # @param  [String, #to_s] name
+    # @return [Repository]
+    def repository(name)
+      Repository.new(self, name)
+    end
+
+    ##
     # Returns a string representation of the account name.
     def to_s
       name
