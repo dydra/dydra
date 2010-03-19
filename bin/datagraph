@@ -1,5 +1,55 @@
 #!/usr/bin/env ruby
 $:.unshift(File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib')))
 require 'datagraph'
+require 'rdf/cli'
 
-abort "Usage: #{File.basename($0)} [options] command [args...]" if ARGV.empty?
+module Datagraph
+  class CLI
+    include Datagraph::Client
+
+    def initialize
+      options = RDF::CLI.options do
+        self.banner = "Usage: #{RDF::CLI.basename} [options] command [args...]"
+        self.on('-d', '--debug',   'Enable debug output for troubleshooting.') do
+          $DEBUG = true
+        end
+        self.on('-v', '--verbose', 'Enable verbose output. May be given more than once.') do
+          $VERBOSE = true
+        end
+        self.on('-V', '--version', 'Display the Datagraph CLI version and exit.') do
+          puts Datagraph::VERSION; exit
+        end
+      end
+      abort options.banner if ARGV.empty?
+    end
+
+    ##
+    # Exports repository data in N-Triples format.
+    def export(*repository_specs)
+      repository_specs.each do |repository_spec|
+        unless Repository::SPEC =~ repository_spec
+          abort "#{basename}: invalid repository spec `#{repository_spec}'" 
+        end
+      end
+
+      RDF::NTriples::Writer.new($stdout) do |writer|
+        repository_specs.each do |repository_spec|
+          account_name, repository_name = repository_spec.split('/')
+          Account.new(account_name).repository(repository_name).to_rdf.each do |statement|
+            writer << statement
+          end
+        end
+      end
+    end
+
+    protected
+
+    def basename() RDF::CLI.basename end
+  end
+end
+
+begin
+  Datagraph::CLI.new.send(command = ARGV.shift, *ARGV)
+rescue NoMethodError => e
+  abort "#{RDF::CLI.basename}: unknown command `#{command}'"
+end
