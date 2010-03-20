@@ -6,6 +6,19 @@ module Datagraph::Client
   class Resource
     HEADERS = {'Accept' => 'text/plain'} # N-Triples
 
+    def self.new(*args, &block)
+      if self == Resource
+        case spec = args.first
+          when Repository::SPEC
+            Repository.new(*spec.split('/'))
+          when Account::SPEC
+            Account.new(spec)
+        end
+      else
+        super
+      end
+    end
+
     ##
     # @return [RDF::URI]
     attr_reader :url
