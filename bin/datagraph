@@ -5,8 +5,6 @@ require 'rdf/cli'
 
 module Datagraph
   class CLI
-    include Datagraph::Client
-
     def initialize
       options = RDF::CLI.options do
         self.banner = "Usage: #{RDF::CLI.basename} [options] command [args...]"
@@ -24,21 +22,38 @@ module Datagraph
     end
 
     ##
-    # Exports repository data in N-Triples format.
-    def export(*repository_specs)
-      repositories = []
-      repository_specs.each do |repository_spec|
-        abort "#{basename}: invalid repository spec `#{repository_spec}'" unless repository_spec =~ Repository::SPEC
-        repository = Repository.new(*repository_spec.split('/'))
-        abort "#{basename}: invalid account `#{repository.account}'" unless repository.account.exists?
-        abort "#{basename}: invalid repository `#{repository}'" unless repository.exists?
-        repositories << repository
+    # Base class for CLI commands.
+    class Command
+      include Datagraph::Client
+
+      def validate_repository_specs(repository_specs)
+        repositories = []
+        repository_specs.each do |repository_spec|
+          abort "#{basename}: invalid repository spec `#{repository_spec}'" unless repository_spec =~ Repository::SPEC
+          repository = Repository.new(*repository_spec.split('/'))
+          abort "#{basename}: invalid account `#{repository.account}'" unless repository.account.exists?
+          abort "#{basename}: invalid repository `#{repository}'" unless repository.exists?
+          repositories << repository
+        end
+        repositories
       end
-      RDF::NTriples::Writer.new($stdout) do |writer|
-        repositories.each do |repository|
-          repository.to_rdf.each { |statement| writer << statement }
+    end
+
+    ##
+    # Exports repository data in N-Triples format.
+    class Export < Command
+      def execute(*repository_specs)
+        repositories = validate_repository_specs(repository_specs)
+        RDF::NTriples::Writer.new($stdout) do |writer|
+          repositories.each do |repository|
+            repository.to_rdf.each { |statement| writer << statement }
+          end
         end
       end
+    end
+
+    def export(*repository_specs)
+      Export.new.execute(*repository_specs)
     end
 
     protected
