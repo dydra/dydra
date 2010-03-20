@@ -6,14 +6,14 @@ GEMSPEC = Gem::Specification.new do |gem|
   gem.date               = File.mtime('VERSION').strftime('%Y-%m-%d')
 
   gem.name               = 'datagraph'
-  gem.homepage           = 'http://github.com/datagraph/datagraph'
+  gem.homepage           = 'http://datagraph.org/'
   gem.license            = 'Public Domain' if gem.respond_to?(:license=)
   gem.summary            = 'Datagraph.org API client.'
   gem.description        = gem.summary
   gem.rubyforge_project  = 'datagraph'
 
-  gem.authors            = ['Arto Bendiken', 'Ben Lavender', 'Josh Huckabee']
-  gem.email              = 'arto.bendiken@gmail.com'
+  gem.authors            = ['Datagraph']
+  gem.email              = 'datagraph@googlegroups.com'
 
   gem.platform           = Gem::Platform::RUBY
   gem.files              = %w(AUTHORS README UNLICENSE VERSION bin/datagraph) + Dir.glob('lib/**/*.rb')
