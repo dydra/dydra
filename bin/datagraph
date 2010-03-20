@@ -40,6 +40,18 @@ module Datagraph
     end
 
     ##
+    # Counts repository statements.
+    class Count < Command
+      def execute(*repository_specs)
+        repositories = validate_repository_specs(repository_specs)
+        count = repositories.inject(0) do |count, repository|
+          count += repository.count
+        end
+        puts count.to_s
+      end
+    end
+
+    ##
     # Exports repository data in N-Triples format.
     class Export < Command
       def execute(*repository_specs)
@@ -50,6 +62,10 @@ module Datagraph
           end
         end
       end
+    end
+
+    def count(*repository_specs)
+      Count.new.execute(*repository_specs)
     end
 
     def export(*repository_specs)

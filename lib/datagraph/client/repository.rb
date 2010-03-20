@@ -20,6 +20,12 @@ module Datagraph::Client
     end
 
     ##
+    # Returns the number of RDF statements in this repository.
+    def count
+      to_rdf.size # TODO: optimize this.
+    end
+
+    ##
     # Returns a string representation of the repository name.
     def to_s
       [account.name, name].join('/')
