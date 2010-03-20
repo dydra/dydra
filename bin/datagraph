@@ -50,7 +50,7 @@ module Datagraph
         resources = validate_resource_specs(resource_specs)
         resources.each do |resource|
           unless resource.is_a?(Repository)
-            abort "#{basename}: invalid repository spec `#{resource}'"
+            RDF::CLI.abort "invalid repository spec `#{resource}'"
           end
         end
         resources
@@ -61,12 +61,12 @@ module Datagraph
         resource_specs.each do |resource_spec|
           case resource = Resource.new(resource_spec)
             when Account
-              abort "#{basename}: unknown account `#{resource}'" unless resource.exists?
+              RDF::CLI.abort "unknown account `#{resource}'" unless resource.exists?
             when Repository
-              abort "#{basename}: unknown account `#{resource.account}'" unless resource.account.exists?
-              abort "#{basename}: unknown repository `#{resource}'" unless resource.exists?
+              RDF::CLI.abort "unknown account `#{resource.account}'" unless resource.account.exists?
+              RDF::CLI.abort "unknown repository `#{resource}'" unless resource.exists?
             when nil
-              abort "#{basename}: invalid resource spec `#{resource_spec}'"
+              RDF::CLI.abort "invalid resource spec `#{resource_spec}'"
           end
           resources << resource
         end
@@ -106,7 +106,7 @@ module Datagraph
         begin
           require 'launchy'
         rescue LoadError => e
-          abort "#{basename}: install the 'launchy' gem to use this command"
+          RDF::CLI.abort "install the 'launchy' gem to use this command"
         end
         resources = validate_resource_specs(resource_specs)
         resources.each do |resource|
@@ -131,5 +131,5 @@ end
 begin
   Datagraph::CLI.new.send(command = ARGV.shift, *ARGV)
 rescue NoMethodError => e
-  abort "#{RDF::CLI.basename}: unknown command `#{command}'"
+  RDF::CLI.abort "unknown command `#{command}'"
 end
