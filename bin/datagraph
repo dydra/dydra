@@ -21,6 +21,18 @@ module Datagraph
       abort options.banner if ARGV.empty?
     end
 
+    def count(*repository_specs)
+      Count.new.execute(*repository_specs)
+    end
+
+    def export(*repository_specs)
+      Export.new.execute(*repository_specs)
+    end
+
+    def open(*repository_specs)
+      Open.new.execute(*repository_specs)
+    end
+
     ##
     # Base class for CLI commands.
     class Command
@@ -36,6 +48,10 @@ module Datagraph
           repositories << repository
         end
         repositories
+      end
+
+      def basename
+        RDF::CLI.basename
       end
     end
 
@@ -64,17 +80,21 @@ module Datagraph
       end
     end
 
-    def count(*repository_specs)
-      Count.new.execute(*repository_specs)
+    ##
+    # Opens a repository in the web browser application.
+    class Open < Command
+      def execute(*repository_specs)
+        begin
+          require 'launchy'
+        rescue LoadError => e
+          abort "#{basename}: install the 'launchy' gem to use this command"
+        end
+        repositories = validate_repository_specs(repository_specs)
+        repositories.each do |repository|
+          Launchy.open(repository.url)
+        end
+      end
     end
-
-    def export(*repository_specs)
-      Export.new.execute(*repository_specs)
-    end
-
-    protected
-
-    def basename() RDF::CLI.basename end
   end
 end
 
