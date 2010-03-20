@@ -21,16 +21,20 @@ module Datagraph
       abort options.banner if ARGV.empty?
     end
 
-    def count(*repository_specs)
-      Count.new.execute(*repository_specs)
+    def count(*resource_specs)
+      Count.new.execute(*resource_specs)
     end
 
-    def export(*repository_specs)
-      Export.new.execute(*repository_specs)
+    def export(*resource_specs)
+      Export.new.execute(*resource_specs)
     end
 
-    def open(*repository_specs)
-      Open.new.execute(*repository_specs)
+    def open(*resource_specs)
+      Open.new.execute(*resource_specs)
+    end
+
+    def url(*resource_specs)
+      URL.new.execute(*resource_specs)
     end
 
     ##
@@ -38,28 +42,43 @@ module Datagraph
     class Command
       include Datagraph::Client
 
-      def validate_repository_specs(repository_specs)
-        repositories = []
-        repository_specs.each do |repository_spec|
-          abort "#{basename}: invalid repository spec `#{repository_spec}'" unless repository_spec =~ Repository::SPEC
-          repository = Repository.new(*repository_spec.split('/'))
-          abort "#{basename}: invalid account `#{repository.account}'" unless repository.account.exists?
-          abort "#{basename}: invalid repository `#{repository}'" unless repository.exists?
-          repositories << repository
-        end
-        repositories
-      end
-
       def basename
         RDF::CLI.basename
+      end
+
+      def validate_repository_specs(resource_specs)
+        resources = validate_resource_specs(resource_specs)
+        resources.each do |resource|
+          unless resource.is_a?(Repository)
+            abort "#{basename}: invalid repository spec `#{resource}'"
+          end
+        end
+        resources
+      end
+
+      def validate_resource_specs(resource_specs)
+        resources = []
+        resource_specs.each do |resource_spec|
+          case resource = Resource.new(resource_spec)
+            when Account
+              abort "#{basename}: unknown account `#{resource}'" unless resource.exists?
+            when Repository
+              abort "#{basename}: unknown account `#{resource.account}'" unless resource.account.exists?
+              abort "#{basename}: unknown repository `#{resource}'" unless resource.exists?
+            when nil
+              abort "#{basename}: invalid resource spec `#{resource_spec}'"
+          end
+          resources << resource
+        end
+        resources
       end
     end
 
     ##
-    # Counts repository statements.
+    # Outputs the number of statements in a repository.
     class Count < Command
-      def execute(*repository_specs)
-        repositories = validate_repository_specs(repository_specs)
+      def execute(*resource_specs)
+        repositories = validate_repository_specs(resource_specs)
         count = repositories.inject(0) do |count, repository|
           count += repository.count
         end
@@ -70,8 +89,8 @@ module Datagraph
     ##
     # Exports repository data in N-Triples format.
     class Export < Command
-      def execute(*repository_specs)
-        repositories = validate_repository_specs(repository_specs)
+      def execute(*resource_specs)
+        repositories = validate_repository_specs(resource_specs)
         RDF::NTriples::Writer.new($stdout) do |writer|
           repositories.each do |repository|
             repository.to_rdf.each { |statement| writer << statement }
@@ -81,17 +100,28 @@ module Datagraph
     end
 
     ##
-    # Opens a repository in the web browser application.
+    # Opens an account or a repository in a web browser.
     class Open < Command
-      def execute(*repository_specs)
+      def execute(*resource_specs)
         begin
           require 'launchy'
         rescue LoadError => e
           abort "#{basename}: install the 'launchy' gem to use this command"
         end
-        repositories = validate_repository_specs(repository_specs)
-        repositories.each do |repository|
-          Launchy.open(repository.url)
+        resources = validate_resource_specs(resource_specs)
+        resources.each do |resource|
+          Launchy.open(resource.url)
+        end
+      end
+    end
+
+    ##
+    # Outputs the URL for an account or a repository.
+    class URL < Command
+      def execute(*resource_specs)
+        resources = validate_resource_specs(resource_specs)
+        resources.each do |resource|
+          puts resource.url.to_s
         end
       end
     end
