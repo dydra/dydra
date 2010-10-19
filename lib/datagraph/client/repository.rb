@@ -4,6 +4,22 @@ module Datagraph::Client
   class Repository < Resource
     SPEC = %r(^([^/]+)/([^/]+)$)
 
+    ##
+    # @param  [Hash{Symbol => Object}] options
+    # @option options [String] :account_name (nil)
+    # @yield  [repository]
+    # @yieldparam [Repository] repository
+    # @return [Enumerator]
+    def self.each(options = {}, &block)
+      if block_given?
+        result = Datagraph::Client.xmlrpc.call('datagraph.repository.list', options[:account_name] || '')
+        result.each do |(account_name, repository_name)|
+          block.call(Repository.new(account_name, repository_name))
+        end
+      end
+      enum_for(:each, options)
+    end
+
     # @return [Account]
     attr_reader :account
 
