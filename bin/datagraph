@@ -32,6 +32,7 @@ module Datagraph
       puts "    drop        Destroys a repository permanently."
       puts "    clear       Deletes all data from a repository."
       puts "    count       Outputs the number of statements in a repository."
+      puts "    query       Queries a repository."
       puts "    import      Imports data into a repository."
       puts "    export      Exports data from a repository in N-Triples format."
       puts "    open        Opens an account or a repository in a web browser."
@@ -64,6 +65,10 @@ module Datagraph
 
     def count(*resource_specs)
       Count.new.execute(*resource_specs)
+    end
+
+    def query(repository_spec, query)
+      Query.new.execute(repository_spec, query)
     end
 
     def import(resource_spec, *urls)
@@ -183,6 +188,15 @@ module Datagraph
           count += repository.count
         end
         puts count.to_s
+      end
+    end
+
+    ##
+    # Queries a repository.
+    class Query < Command
+      def execute(repository_spec, query)
+        repository = validate_repository_specs([repository_spec]).first
+        # TODO
       end
     end
 
