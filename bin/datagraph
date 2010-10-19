@@ -26,6 +26,7 @@ module Datagraph
       puts
       puts "Commands:"
       puts "    register    Registers a new user account."
+      puts "    create      Creates a new repository."
       puts "    rename      Renames a repository."
       puts "    count       Outputs the number of statements in a repository."
       puts "    import      Imports data into a repository."
@@ -36,6 +37,10 @@ module Datagraph
 
     def register(account_name, password = nil)
       Register.new.execute(account_name, password)
+    end
+
+    def create(*repository_specs)
+      Create.new.execute(*repository_specs)
     end
 
     def rename(old_repository_spec, new_repository_spec)
@@ -103,6 +108,15 @@ module Datagraph
     # Registers a new user account.
     class Register < Command
       def execute(account_name, password = nil)
+        # TODO
+      end
+    end
+
+    ##
+    # Creates a new repository.
+    class Create < Command
+      def execute(*repository_specs)
+        repositories = validate_repository_specs(repository_specs) # FIXME
         # TODO
       end
     end
