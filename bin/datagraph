@@ -6,7 +6,7 @@ require 'rdf/cli'
 module Datagraph
   class CLI
     def initialize
-      options = RDF::CLI.options do
+      @options = RDF::CLI.options do
         self.banner = "Usage: #{RDF::CLI.basename} [options] command [args...]"
         self.on('-d', '--debug',   'Enable debug output for troubleshooting.') do
           $DEBUG = true
@@ -18,7 +18,17 @@ module Datagraph
           puts Datagraph::VERSION; exit
         end
       end
-      abort options.banner if ARGV.empty?
+      abort @options.banner if ARGV.empty?
+    end
+
+    def help(command = nil)
+      puts @options.banner
+      puts
+      puts "Commands:"
+      puts "    count       Outputs the number of statements in a repository."
+      puts "    export      Exports repository data in N-Triples format."
+      puts "    open        Opens an account or a repository in a web browser."
+      puts "    url         Outputs the URL of an account or a repository."
     end
 
     def count(*resource_specs)
@@ -116,7 +126,7 @@ module Datagraph
     end
 
     ##
-    # Outputs the URL for an account or a repository.
+    # Outputs the URL of an account or a repository.
     class URL < Command
       def execute(*resource_specs)
         resources = validate_resource_specs(resource_specs)
