@@ -63,16 +63,16 @@ module Datagraph
       Command::Clear.new.execute(*repository_specs)
     end
 
-    def count(*resource_specs)
-      Command::Count.new.execute(*resource_specs)
+    def count(*repository_specs)
+      Command::Count.new.execute(*repository_specs)
     end
 
     def query(repository_spec, query)
       Command::Query.new.execute(repository_spec, query)
     end
 
-    def import(resource_spec, *urls)
-      Command::Import.new.execute(resource_spec, *urls)
+    def import(repository_spec, *urls)
+      Command::Import.new.execute(repository_spec, *urls)
     end
 
     def export(*resource_specs)
