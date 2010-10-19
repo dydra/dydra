@@ -1,10 +1,9 @@
-require 'rdf'
-require 'datagraph/version'
+require 'rdf' # @see http://rubygems.org/gems/rdf
 
-##
 module Datagraph
-  URI = RDF::URI.new('http://datagraph.org/')
-  URL = RDF::URI.new(ENV['DATAGRAPH_URL'] || URI)
+  URI = RDF::URI('http://api.datagraph.org/')
+  URL = RDF::URI(ENV['DATAGRAPH_URL'] || URI)
 
-  autoload :Client, 'datagraph/client'
+  autoload :Client,  'datagraph/client'
+  autoload :VERSION, 'datagraph/version'
 end
