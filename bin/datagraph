@@ -123,7 +123,9 @@ module Datagraph
     # Registers a new user account.
     class Register < Command
       def execute(account_name, password = nil)
-        # TODO
+        password ||= '' # FIXME
+        url = Datagraph::Client.xmlrpc.call("datagraph.account.register", account_name, password)
+        puts "Account #{url} registered successfully." if $VERBOSE
       end
     end
 
