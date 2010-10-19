@@ -25,11 +25,16 @@ module Datagraph
       puts @options.banner
       puts
       puts "Commands:"
+      puts "    register    Registers a new user account."
       puts "    count       Outputs the number of statements in a repository."
       puts "    import      Imports data into a repository."
       puts "    export      Exports data from a repository in N-Triples format."
       puts "    open        Opens an account or a repository in a web browser."
       puts "    url         Outputs the URL of an account or a repository."
+    end
+
+    def register(account_name, password = nil)
+      Register.new.execute(account_name, password)
     end
 
     def count(*resource_specs)
@@ -90,6 +95,14 @@ module Datagraph
     end
 
     ##
+    # Registers a new user account.
+    class Register < Command
+      def execute(account_name, password = nil)
+        # TODO
+      end
+    end
+
+    ##
     # Outputs the number of statements in a repository.
     class Count < Command
       def execute(*resource_specs)
@@ -105,7 +118,7 @@ module Datagraph
     # Imports data into a repository.
     class Import < Command
       def execute(resource_spec, *urls)
-        repositories = validate_repository_specs(resource_specs)
+        repositories = validate_repository_specs([resource_spec])
         urls.each do |url|
           # TODO
         end
