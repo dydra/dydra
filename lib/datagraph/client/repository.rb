@@ -4,7 +4,10 @@ module Datagraph::Client
   class Repository < Resource
     SPEC = %r(^([^/]+)/([^/]+)$)
 
+    # @return [Account]
     attr_reader :account
+
+    # @return [String]
     attr_reader :name
 
     ##
@@ -20,13 +23,33 @@ module Datagraph::Client
     end
 
     ##
+    # Creates this repository on Datagraph.org.
+    #
+    # @return [void]
+    def create!
+      Datagraph::Client.xmlrpc.call('datagraph.repository.create', account.name, name)
+    end
+
+    ##
+    # Destroys this repository from Datagraph.org.
+    #
+    # @return [void]
+    def destroy!
+      Datagraph::Client.xmlrpc.call('datagraph.repository.delete', account.name, name)
+    end
+
+    ##
     # Returns the number of RDF statements in this repository.
+    #
+    # @return [Integer]
     def count
       Datagraph::Client.xmlrpc.call('datagraph.repository.count', account.name, name)
     end
 
     ##
     # Returns a string representation of the repository name.
+    #
+    # @return [String]
     def to_s
       [account.name, name].join('/')
     end
