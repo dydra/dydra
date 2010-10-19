@@ -14,6 +14,19 @@ module Datagraph::Client
       Account.new(name).exists?
     end
 
+    ##
+    # Registers a new user account with Datagraph.org.
+    #
+    # @param  [String] name
+    # @param  [Hash{Symbol => Object}] options
+    # @option options [String] :password
+    # @return [Account]
+    def self.register!(name, options = {})
+      Datagraph::Client.xmlrpc.call('datagraph.account.register', name, options[:password])
+      self.new(name)
+    end
+
+    # @return [String]
     attr_reader :name
 
     ##
