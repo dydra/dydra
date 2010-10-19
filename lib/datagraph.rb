@@ -5,5 +5,6 @@ module Datagraph
   URL = RDF::URI(ENV['DATAGRAPH_URL'] || URI)
 
   autoload :Client,  'datagraph/client'
+  autoload :Command, 'datagraph/command'
   autoload :VERSION, 'datagraph/version'
 end

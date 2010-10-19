@@ -17,5 +17,5 @@ module Datagraph
     def self.xmlrpc
       XMLRPC::Client.new2(Datagraph::URL.join('xmlrpc'))
     end
-  end
-end
+  end # Client
+end # Datagraph

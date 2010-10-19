@@ -40,239 +40,51 @@ module Datagraph
     end
 
     def register(account_name, password = nil)
-      Register.new.execute(account_name, password)
+      Command::Register.new.execute(account_name, password)
     end
 
     def list(*resource_specs)
-      List.new.execute(*resource_specs)
+      Command::List.new.execute(*resource_specs)
     end
 
     def create(*repository_specs)
-      Create.new.execute(*repository_specs)
+      Command::Create.new.execute(*repository_specs)
     end
 
     def rename(old_repository_spec, new_repository_spec)
-      Rename.new.execute(old_repository_spec, new_repository_spec)
+      Command::Rename.new.execute(old_repository_spec, new_repository_spec)
     end
 
     def drop(*repository_specs)
-      Drop.new.execute(*repository_specs)
+      Command::Drop.new.execute(*repository_specs)
     end
 
     def clear(*repository_specs)
-      Clear.new.execute(*repository_specs)
+      Command::Clear.new.execute(*repository_specs)
     end
 
     def count(*resource_specs)
-      Count.new.execute(*resource_specs)
+      Command::Count.new.execute(*resource_specs)
     end
 
     def query(repository_spec, query)
-      Query.new.execute(repository_spec, query)
+      Command::Query.new.execute(repository_spec, query)
     end
 
     def import(resource_spec, *urls)
-      Import.new.execute(resource_spec, *urls)
+      Command::Import.new.execute(resource_spec, *urls)
     end
 
     def export(*resource_specs)
-      Export.new.execute(*resource_specs)
+      Command::Export.new.execute(*resource_specs)
     end
 
     def open(*resource_specs)
-      Open.new.execute(*resource_specs)
+      Command::Open.new.execute(*resource_specs)
     end
 
     def url(*resource_specs)
-      URL.new.execute(*resource_specs)
-    end
-
-    ##
-    # Base class for CLI commands.
-    class Command
-      include Datagraph::Client
-
-      def basename
-        RDF::CLI.basename
-      end
-
-      def validate_repository_specs(resource_specs)
-        resources = validate_resource_specs(resource_specs)
-        resources.each do |resource|
-          unless resource.is_a?(Repository)
-            RDF::CLI.abort "invalid repository spec `#{resource}'"
-          end
-        end
-        resources
-      end
-
-      def validate_resource_specs(resource_specs)
-        resources = parse_resource_specs(resource_specs)
-        resources.each do |resource|
-          case resource
-            when Account
-              RDF::CLI.abort "unknown account `#{resource}'" unless resource.exists?
-            when Repository
-              RDF::CLI.abort "unknown account `#{resource.account}'" unless resource.account.exists?
-              RDF::CLI.abort "unknown repository `#{resource}'" unless resource.exists?
-          end
-        end
-        resources
-      end
-
-      def parse_repository_specs(resource_specs)
-        resources = parse_resource_specs(resource_specs)
-        resources.each do |resource|
-          unless resource.is_a?(Repository)
-            RDF::CLI.abort "invalid repository spec `#{resource}'"
-          end
-        end
-        resources
-      end
-
-      def parse_resource_specs(resource_specs)
-        resources = []
-        resource_specs.each do |resource_spec|
-          unless resource = Resource.new(resource_spec)
-            RDF::CLI.abort "invalid resource spec `#{resource_spec}'"
-          end
-          resources << resource
-        end
-        resources
-      end
-    end
-
-    ##
-    # Registers a new user account.
-    class Register < Command
-      def execute(account_name, password = nil)
-        password ||= '' # FIXME
-        url = Datagraph::Client.xmlrpc.call("datagraph.account.register", account_name, password)
-        puts "Account #{url} successfully registered." if $VERBOSE
-      end
-    end
-
-    ##
-    # Lists existing repositories.
-    class List < Command
-      def execute(*resource_specs)
-        # TODO
-      end
-    end
-
-    ##
-    # Creates a new repository.
-    class Create < Command
-      def execute(*repository_specs)
-        repositories = parse_repository_specs(repository_specs)
-        repositories.each do |repository|
-          url = Datagraph::Client.xmlrpc.call("datagraph.repository.create", repository.account.name, repository.name)
-          puts "Repository #{url} successfully created." if $VERBOSE
-        end
-      end
-    end
-
-    ##
-    # Renames a repository.
-    class Rename < Command
-      def execute(old_repository_spec, new_repository_spec)
-        old_repository = validate_repository_specs([old_repository_spec]).first
-        new_repository = parse_repository_specs([new_repository_spec]).first
-        # TODO
-      end
-    end
-
-    ##
-    # Destroys a repository permanently.
-    class Drop < Command
-      def execute(*repository_specs)
-        repositories = validate_repository_specs(repository_specs)
-        repositories.each do |repository|
-          url = Datagraph::Client.xmlrpc.call("datagraph.repository.delete", repository.account.name, repository.name)
-          puts "Repository successfully dropped." if $VERBOSE
-        end
-      end
-    end
-
-    ##
-    # Deletes all data from a repository.
-    class Clear < Command
-      def execute(*repository_specs)
-        repositories = validate_repository_specs(repository_specs)
-        # TODO
-      end
-    end
-
-    ##
-    # Outputs the number of statements in a repository.
-    class Count < Command
-      def execute(*resource_specs)
-        repositories = validate_repository_specs(resource_specs)
-        count = repositories.inject(0) do |count, repository|
-          count += repository.count
-        end
-        puts count.to_s
-      end
-    end
-
-    ##
-    # Queries a repository.
-    class Query < Command
-      def execute(repository_spec, query)
-        repository = validate_repository_specs([repository_spec]).first
-        # TODO
-      end
-    end
-
-    ##
-    # Imports data into a repository.
-    class Import < Command
-      def execute(resource_spec, *urls)
-        repositories = validate_repository_specs([resource_spec])
-        urls.each do |url|
-          # TODO
-        end
-      end
-    end
-
-    ##
-    # Exports data from a repository in N-Triples format.
-    class Export < Command
-      def execute(*resource_specs)
-        repositories = validate_repository_specs(resource_specs)
-        RDF::NTriples::Writer.new($stdout) do |writer|
-          repositories.each do |repository|
-            repository.to_rdf.each { |statement| writer << statement }
-          end
-        end
-      end
-    end
-
-    ##
-    # Opens an account or a repository in a web browser.
-    class Open < Command
-      def execute(*resource_specs)
-        begin
-          require 'launchy'
-        rescue LoadError => e
-          RDF::CLI.abort "install the 'launchy' gem to use this command"
-        end
-        resources = validate_resource_specs(resource_specs)
-        resources.each do |resource|
-          Launchy.open(resource.url)
-        end
-      end
-    end
-
-    ##
-    # Outputs the URL of an account or a repository.
-    class URL < Command
-      def execute(*resource_specs)
-        resources = validate_resource_specs(resource_specs)
-        resources.each do |resource|
-          puts resource.url.to_s
-        end
-      end
+      Command::URL.new.execute(*resource_specs)
     end
   end
 end

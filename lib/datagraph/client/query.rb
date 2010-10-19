@@ -30,5 +30,5 @@ module Datagraph::Client
     def to_s
       path
     end
-  end # class Query
-end # module Datagraph::Client
+  end # Query
+end # Datagraph::Client

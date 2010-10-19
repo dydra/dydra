@@ -30,5 +30,5 @@ module Datagraph::Client
     def to_s
       [account.name, name].join('/')
     end
-  end # class Repository
-end # module Datagraph::Client
+  end # Repository
+end # Datagraph::Client

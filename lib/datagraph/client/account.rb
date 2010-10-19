@@ -37,5 +37,5 @@ module Datagraph::Client
     def to_s
       name
     end
-  end # class Account
-end # module Datagraph::Client
+  end # Account
+end # Datagraph::Client

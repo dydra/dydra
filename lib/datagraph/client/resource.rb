@@ -117,5 +117,5 @@ module Datagraph::Client
         end
       end
     end
-  end # class Resource
-end # module Datagraph::Client
+  end # Resource
+end # Datagraph::Client
