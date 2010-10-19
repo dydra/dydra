@@ -22,7 +22,7 @@ module Datagraph::Client
     ##
     # Returns the number of RDF statements in this repository.
     def count
-      to_rdf.size # TODO: optimize this.
+      Datagraph::Client.xmlrpc.call('datagraph.repository.count', account.name, name)
     end
 
     ##
