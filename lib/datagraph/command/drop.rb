@@ -6,7 +6,7 @@ module Datagraph
       def execute(*repository_specs)
         repositories = validate_repository_specs(repository_specs)
         repositories.each do |repository|
-          url = Datagraph::Client.xmlrpc.call("datagraph.repository.delete", repository.account.name, repository.name)
+          url = Datagraph::Client.xmlrpc.call('datagraph.repository.delete', repository.account.name, repository.name)
           puts "Repository successfully dropped." if $VERBOSE
         end
       end
