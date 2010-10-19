@@ -47,6 +47,15 @@ module Datagraph::Client
     end
 
     ##
+    # Imports data from a URL into this repository.
+    #
+    # @param  [String, #to_s] url
+    # @return [void]
+    def import!(url)
+      Datagraph::Client.xmlrpc.call('datagraph.repository.import', account.name, name, url.to_s)
+    end
+
+    ##
     # Returns the number of RDF statements in this repository.
     #
     # @return [Integer]
