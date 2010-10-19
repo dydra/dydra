@@ -28,6 +28,7 @@ module Datagraph
       puts "    register    Registers a new user account."
       puts "    create      Creates a new repository."
       puts "    rename      Renames a repository."
+      puts "    drop        Destroys a repository permanently."
       puts "    count       Outputs the number of statements in a repository."
       puts "    import      Imports data into a repository."
       puts "    export      Exports data from a repository in N-Triples format."
@@ -45,6 +46,10 @@ module Datagraph
 
     def rename(old_repository_spec, new_repository_spec)
       Rename.new.execute(old_repository_spec, new_repository_spec)
+    end
+
+    def drop(*repository_specs)
+      Drop.new.execute(*repository_specs)
     end
 
     def count(*resource_specs)
@@ -127,6 +132,15 @@ module Datagraph
       def execute(old_repository_spec, new_repository_spec)
         old_repository = validate_repository_specs([old_repository_spec]).first
         new_repository = validate_repository_specs([new_repository_spec]).first # FIXME
+        # TODO
+      end
+    end
+
+    ##
+    # Destroys a repository permanently.
+    class Drop < Command
+      def execute(*repository_specs)
+        repositories = validate_repository_specs(repository_specs)
         # TODO
       end
     end
