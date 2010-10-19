@@ -107,16 +107,34 @@ module Datagraph
       end
 
       def validate_resource_specs(resource_specs)
-        resources = []
-        resource_specs.each do |resource_spec|
-          case resource = Resource.new(resource_spec)
+        resources = parse_resource_specs(resource_specs)
+        resources.each do |resource|
+          case resource
             when Account
               RDF::CLI.abort "unknown account `#{resource}'" unless resource.exists?
             when Repository
               RDF::CLI.abort "unknown account `#{resource.account}'" unless resource.account.exists?
               RDF::CLI.abort "unknown repository `#{resource}'" unless resource.exists?
-            when nil
-              RDF::CLI.abort "invalid resource spec `#{resource_spec}'"
+          end
+        end
+        resources
+      end
+
+      def parse_repository_specs(resource_specs)
+        resources = parse_resource_specs(resource_specs)
+        resources.each do |resource|
+          unless resource.is_a?(Repository)
+            RDF::CLI.abort "invalid repository spec `#{resource}'"
+          end
+        end
+        resources
+      end
+
+      def parse_resource_specs(resource_specs)
+        resources = []
+        resource_specs.each do |resource_spec|
+          unless resource = Resource.new(resource_spec)
+            RDF::CLI.abort "invalid resource spec `#{resource_spec}'"
           end
           resources << resource
         end
@@ -130,7 +148,7 @@ module Datagraph
       def execute(account_name, password = nil)
         password ||= '' # FIXME
         url = Datagraph::Client.xmlrpc.call("datagraph.account.register", account_name, password)
-        puts "Account #{url} registered successfully." if $VERBOSE
+        puts "Account #{url} successfully registered." if $VERBOSE
       end
     end
 
@@ -146,8 +164,11 @@ module Datagraph
     # Creates a new repository.
     class Create < Command
       def execute(*repository_specs)
-        repositories = validate_repository_specs(repository_specs) # FIXME
-        # TODO
+        repositories = parse_repository_specs(repository_specs)
+        repositories.each do |repository|
+          url = Datagraph::Client.xmlrpc.call("datagraph.repository.create", repository.account.name, repository.name)
+          puts "Repository #{url} successfully created." if $VERBOSE
+        end
       end
     end
 
@@ -156,7 +177,7 @@ module Datagraph
     class Rename < Command
       def execute(old_repository_spec, new_repository_spec)
         old_repository = validate_repository_specs([old_repository_spec]).first
-        new_repository = validate_repository_specs([new_repository_spec]).first # FIXME
+        new_repository = parse_repository_specs([new_repository_spec]).first
         # TODO
       end
     end
@@ -166,7 +187,10 @@ module Datagraph
     class Drop < Command
       def execute(*repository_specs)
         repositories = validate_repository_specs(repository_specs)
-        # TODO
+        repositories.each do |repository|
+          url = Datagraph::Client.xmlrpc.call("datagraph.repository.delete", repository.account.name, repository.name)
+          puts "Repository successfully dropped." if $VERBOSE
+        end
       end
     end
 
