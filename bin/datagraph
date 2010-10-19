@@ -26,13 +26,18 @@ module Datagraph
       puts
       puts "Commands:"
       puts "    count       Outputs the number of statements in a repository."
-      puts "    export      Exports repository data in N-Triples format."
+      puts "    import      Imports data into a repository."
+      puts "    export      Exports data from a repository in N-Triples format."
       puts "    open        Opens an account or a repository in a web browser."
       puts "    url         Outputs the URL of an account or a repository."
     end
 
     def count(*resource_specs)
       Count.new.execute(*resource_specs)
+    end
+
+    def import(resource_spec, *urls)
+      Import.new.execute(resource_spec, *urls)
     end
 
     def export(*resource_specs)
@@ -97,7 +102,18 @@ module Datagraph
     end
 
     ##
-    # Exports repository data in N-Triples format.
+    # Imports data into a repository.
+    class Import < Command
+      def execute(resource_spec, *urls)
+        repositories = validate_repository_specs(resource_specs)
+        urls.each do |url|
+          # TODO
+        end
+      end
+    end
+
+    ##
+    # Exports data from a repository in N-Triples format.
     class Export < Command
       def execute(*resource_specs)
         repositories = validate_repository_specs(resource_specs)
