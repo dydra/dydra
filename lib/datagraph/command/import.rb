@@ -3,10 +3,15 @@ module Datagraph
     ##
     # Imports data into a repository.
     class Import < Command
-      def execute(resource_spec, *urls)
-        repositories = validate_repository_specs([resource_spec])
+      ##
+      # @param  [String] repository_spec
+      # @param  [Array<String>] urls
+      # @return [void]
+      def execute(repository_spec, *urls)
+        repository = validate_repository_specs([repository_spec]).first
         urls.each do |url|
-          # TODO
+          puts "Importing #{url} into #{repository.url}..." if $VERBOSE
+          repository.import!(url)
         end
       end
     end # Import

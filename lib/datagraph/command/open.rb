@@ -3,6 +3,9 @@ module Datagraph
     ##
     # Opens an account or a repository in a web browser.
     class Open < Command
+      ##
+      # @param  [Array<String>] resource_specs
+      # @return [void]
       def execute(*resource_specs)
         begin
           require 'launchy'

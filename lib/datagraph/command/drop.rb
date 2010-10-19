@@ -3,11 +3,14 @@ module Datagraph
     ##
     # Destroys a repository permanently.
     class Drop < Command
+      ##
+      # @param  [Array<String>] repository_specs
+      # @return [void]
       def execute(*repository_specs)
         repositories = validate_repository_specs(repository_specs)
         repositories.each do |repository|
-          url = Datagraph::Client.xmlrpc.call('datagraph.repository.delete', repository.account.name, repository.name)
-          puts "Repository successfully dropped." if $VERBOSE
+          repository.destroy!
+          puts "Repository #{repository.url} successfully dropped." if $VERBOSE
         end
       end
     end # Drop

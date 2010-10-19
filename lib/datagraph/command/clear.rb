@@ -3,10 +3,13 @@ module Datagraph
     ##
     # Deletes all data from a repository.
     class Clear < Command
+      ##
+      # @param  [Array<String>] repository_specs
+      # @return [void]
       def execute(*repository_specs)
         repositories = validate_repository_specs(repository_specs)
         repositories.each do |repository|
-          Datagraph::Client.xmlrpc.call('datagraph.repository.clear', repository.account.name, repository.name)
+          repository.clear!
           puts "Repository #{repository.url} successfully cleared." if $VERBOSE
         end
       end

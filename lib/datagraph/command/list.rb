@@ -3,7 +3,10 @@ module Datagraph
     ##
     # Lists existing repositories.
     class List < Command
-      def execute(*resource_specs)
+      ##
+      # @param  [Array<String>] repository_specs
+      # @return [void]
+      def execute(*repository_specs)
         # TODO
       end
     end # List
