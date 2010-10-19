@@ -12,7 +12,7 @@ GEMSPEC = Gem::Specification.new do |gem|
   gem.description        = gem.summary
   gem.rubyforge_project  = 'datagraph'
 
-  gem.authors            = ['Datagraph']
+  gem.author             = 'Datagraph'
   gem.email              = 'datagraph@googlegroups.com'
 
   gem.platform           = Gem::Platform::RUBY
@@ -25,12 +25,12 @@ GEMSPEC = Gem::Specification.new do |gem|
   gem.test_files         = %w()
   gem.has_rdoc           = false
 
-  gem.required_ruby_version      = '>= 1.8.2'
+  gem.required_ruby_version      = '>= 1.8.1'
   gem.requirements               = []
-  gem.add_development_dependency 'rdf-spec', '>= 0.1.10'
+  gem.add_runtime_dependency     'rdf',      '~> 0.2.3'
+  #gem.add_runtime_dependency     'rdfbus',   '>= 0.0.1'
+  gem.add_development_dependency 'yard' ,    '>= 0.6.0'
   gem.add_development_dependency 'rspec',    '>= 1.3.0'
-  gem.add_development_dependency 'yard' ,    '>= 0.5.5'
-  gem.add_runtime_dependency     'rdf',      '>= 0.1.10'
-  gem.add_runtime_dependency     'rdfbus',   '>= 0.0.1'
+  gem.add_development_dependency 'rdf-spec', '~> 0.2.3'
   gem.post_install_message       = nil
 end
