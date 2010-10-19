@@ -39,6 +39,14 @@ module Datagraph::Client
     end
 
     ##
+    # Deletes all data from this repository.
+    #
+    # @return [void]
+    def clear!
+      Datagraph::Client.xmlrpc.call('datagraph.repository.clear', account.name, name)
+    end
+
+    ##
     # Returns the number of RDF statements in this repository.
     #
     # @return [Integer]
