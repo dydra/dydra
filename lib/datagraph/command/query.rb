@@ -9,7 +9,8 @@ module Datagraph
       # @return [void]
       def execute(repository_spec, query)
         repository = validate_repository_specs([repository_spec]).first
-        # TODO
+        process_uuid = repository.query(query)
+        puts "Query #{process_uuid} successfully started." if $VERBOSE # FIXME
       end
     end # Query
   end # Command
