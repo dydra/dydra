@@ -2,7 +2,7 @@ module Datagraph::Client
   ##
   # Represents a Datagraph.org user account.
   class Account < Resource
-    SPEC = %r(^([^/]+)$)
+    SPEC = %r(^([^/]+)$) # /account
 
     ##
     # Returns `true` if an account with the given `name` exists on

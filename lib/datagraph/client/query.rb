@@ -2,7 +2,7 @@ module Datagraph::Client
   ##
   # Represents a Datagraph.org SPARQL query.
   class Query < Resource
-    SPEC = %r(^([^/\.]+)/([^/\.]+)/([^/\.]+)$)
+    SPEC = %r(^([^/\.]+)/([^/\.]+)/([^/\.]+)$) # /account/repository/query
 
     attr_reader :repository
     attr_reader :name

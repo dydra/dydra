@@ -2,7 +2,7 @@ module Datagraph::Client
   ##
   # Represents a Datagraph.org RDF repository.
   class Repository < Resource
-    SPEC = %r(^([^/]+)/([^/]+)$)
+    SPEC = %r(^([^/]+)/([^/]+)$) # /account/repository
 
     ##
     # @param  [Hash{Symbol => Object}] options
@@ -83,9 +83,9 @@ module Datagraph::Client
     # Queries this repository.
     #
     # @param  [String] query
-    # @return [String]
+    # @return [Process]
     def query(query)
-      Datagraph::Client.xmlrpc.call('datagraph.repository.query', account.name, name, query.to_s)
+      Process.new(Datagraph::Client.xmlrpc.call('datagraph.repository.query', account.name, name, query.to_s))
     end
 
     ##
