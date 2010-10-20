@@ -78,7 +78,7 @@ module Datagraph
       Command::Count.new.execute(*repository_specs)
     end
 
-    def query(repository_spec, query)
+    def query(repository_spec, query = nil)
       Command::Query.new.execute(repository_spec, query)
     end
 
