@@ -12,7 +12,7 @@ module Datagraph::Client
     # @return [Enumerator]
     def self.each(options = {}, &block)
       if block_given?
-        result = Datagraph::Client.xmlrpc.call('datagraph.repository.list', options[:account_name] || '')
+        result = Datagraph::Client.rpc.call('datagraph.repository.list', options[:account_name] || '')
         result.each do |(account_name, repository_name)|
           block.call(Repository.new(account_name, repository_name))
         end
@@ -43,7 +43,7 @@ module Datagraph::Client
     #
     # @return [Process]
     def create!
-      Process.new(Datagraph::Client.xmlrpc.call('datagraph.repository.create', account.name, name))
+      Process.new(Datagraph::Client.rpc.call('datagraph.repository.create', account.name, name))
     end
 
     ##
@@ -51,7 +51,7 @@ module Datagraph::Client
     #
     # @return [Process]
     def destroy!
-      Process.new(Datagraph::Client.xmlrpc.call('datagraph.repository.destroy', account.name, name))
+      Process.new(Datagraph::Client.rpc.call('datagraph.repository.destroy', account.name, name))
     end
 
     ##
@@ -59,7 +59,7 @@ module Datagraph::Client
     #
     # @return [Process]
     def clear!
-      Process.new(Datagraph::Client.xmlrpc.call('datagraph.repository.clear', account.name, name))
+      Process.new(Datagraph::Client.rpc.call('datagraph.repository.clear', account.name, name))
     end
 
     ##
@@ -68,7 +68,7 @@ module Datagraph::Client
     # @param  [String, #to_s] url
     # @return [Process]
     def import!(url)
-      Process.new(Datagraph::Client.xmlrpc.call('datagraph.repository.import', account.name, name, url.to_s))
+      Process.new(Datagraph::Client.rpc.call('datagraph.repository.import', account.name, name, url.to_s))
     end
 
     ##
@@ -76,7 +76,7 @@ module Datagraph::Client
     #
     # @return [Integer]
     def count
-      Datagraph::Client.xmlrpc.call('datagraph.repository.count', account.name, name)
+      Datagraph::Client.rpc.call('datagraph.repository.count', account.name, name)
     end
 
     ##
@@ -85,7 +85,7 @@ module Datagraph::Client
     # @param  [String] query
     # @return [Process]
     def query(query)
-      Process.new(Datagraph::Client.xmlrpc.call('datagraph.repository.query', account.name, name, query.to_s))
+      Process.new(Datagraph::Client.rpc.call('datagraph.repository.query', account.name, name, query.to_s))
     end
 
     ##

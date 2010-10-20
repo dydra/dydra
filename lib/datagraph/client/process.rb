@@ -52,7 +52,7 @@ module Datagraph::Client
     #
     # @return [Symbol]
     def status
-      Datagraph::Client.xmlrpc.call('datagraph.process.status', uuid).to_sym
+      Datagraph::Client.rpc.call('datagraph.process.status', uuid).to_sym
     end
 
     ##
@@ -77,7 +77,7 @@ module Datagraph::Client
     #
     # @return [void]
     def abort!
-      Datagraph::Client.xmlrpc.call('datagraph.process.abort', uuid)
+      Datagraph::Client.rpc.call('datagraph.process.abort', uuid)
       self
     end
 

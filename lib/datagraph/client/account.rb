@@ -22,7 +22,7 @@ module Datagraph::Client
     # @option options [String] :password
     # @return [Account]
     def self.register!(name, options = {})
-      Datagraph::Client.xmlrpc.call('datagraph.account.register', name, options[:password])
+      Datagraph::Client.rpc.call('datagraph.account.register', name, options[:password])
       self.new(name)
     end
 

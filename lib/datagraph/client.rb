@@ -11,6 +11,14 @@ module Datagraph
     autoload :Query,      'datagraph/client/query'
 
     ##
+    # Returns a Datagraph.org RPC API client.
+    #
+    # @return [XMLRPC::Client]
+    def self.rpc
+      self.xmlrpc # defaults to XML-RPC for now
+    end
+
+    ##
     # Returns a Datagraph.org XML-RPC API client.
     #
     # @return [XMLRPC::Client]
