@@ -11,7 +11,7 @@ module Datagraph
         repository = validate_repository_specs([repository_spec]).first
         urls.each do |url|
           puts "Importing #{url} into #{repository.url}..." if $VERBOSE
-          repository.import!(url)
+          process = repository.import!(url)
         end
       end
     end # Import

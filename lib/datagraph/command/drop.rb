@@ -9,7 +9,7 @@ module Datagraph
       def execute(*repository_specs)
         repositories = validate_repository_specs(repository_specs)
         repositories.each do |repository|
-          repository.destroy!
+          process = repository.destroy!
           puts "Repository #{repository.url} successfully dropped." if $VERBOSE
         end
       end

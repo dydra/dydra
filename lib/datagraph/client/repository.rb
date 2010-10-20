@@ -41,34 +41,34 @@ module Datagraph::Client
     ##
     # Creates this repository on Datagraph.org.
     #
-    # @return [void]
+    # @return [Process]
     def create!
-      Datagraph::Client.xmlrpc.call('datagraph.repository.create', account.name, name)
+      Process.new(Datagraph::Client.xmlrpc.call('datagraph.repository.create', account.name, name))
     end
 
     ##
     # Destroys this repository from Datagraph.org.
     #
-    # @return [void]
+    # @return [Process]
     def destroy!
-      Datagraph::Client.xmlrpc.call('datagraph.repository.delete', account.name, name)
+      Process.new(Datagraph::Client.xmlrpc.call('datagraph.repository.destroy', account.name, name))
     end
 
     ##
     # Deletes all data from this repository.
     #
-    # @return [void]
+    # @return [Process]
     def clear!
-      Datagraph::Client.xmlrpc.call('datagraph.repository.clear', account.name, name)
+      Process.new(Datagraph::Client.xmlrpc.call('datagraph.repository.clear', account.name, name))
     end
 
     ##
     # Imports data from a URL into this repository.
     #
     # @param  [String, #to_s] url
-    # @return [void]
+    # @return [Process]
     def import!(url)
-      Datagraph::Client.xmlrpc.call('datagraph.repository.import', account.name, name, url.to_s)
+      Process.new(Datagraph::Client.xmlrpc.call('datagraph.repository.import', account.name, name, url.to_s))
     end
 
     ##
