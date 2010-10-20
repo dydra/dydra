@@ -25,8 +25,11 @@ module Datagraph
       puts @options.banner
       puts
       puts "Commands:"
+      puts "    help        Shows this help."
       puts "    register    Registers a new user account."
       puts "    list        Lists existing repositories."
+      puts "    open        Opens an account or a repository in a web browser."
+      puts "    url         Outputs the URL of an account or a repository."
       puts "    create      Creates a new repository."
       puts "    rename      Renames a repository."
       puts "    drop        Destroys a repository permanently."
@@ -35,8 +38,8 @@ module Datagraph
       puts "    query       Queries a repository."
       puts "    import      Imports data into a repository."
       puts "    export      Exports data from a repository in N-Triples format."
-      puts "    open        Opens an account or a repository in a web browser."
-      puts "    url         Outputs the URL of an account or a repository."
+      puts "    status      Shows pending, running, and completed processes."
+      puts "    abort       Aborts a pending or running process."
     end
 
     def register(account_name, password = nil)
@@ -45,6 +48,14 @@ module Datagraph
 
     def list(*resource_specs)
       Command::List.new.execute(*resource_specs)
+    end
+
+    def open(*resource_specs)
+      Command::Open.new.execute(*resource_specs)
+    end
+
+    def url(*resource_specs)
+      Command::URL.new.execute(*resource_specs)
     end
 
     def create(*repository_specs)
@@ -79,12 +90,12 @@ module Datagraph
       Command::Export.new.execute(*resource_specs)
     end
 
-    def open(*resource_specs)
-      Command::Open.new.execute(*resource_specs)
+    def status(process_uuid = nil)
+      Command::Status.new.execute(process_uuid)
     end
 
-    def url(*resource_specs)
-      Command::URL.new.execute(*resource_specs)
+    def abort(process_uuid)
+      Command::Abort.new.execute(process_uuid)
     end
   end
 end

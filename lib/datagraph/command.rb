@@ -2,17 +2,19 @@ module Datagraph
   ##
   # Base class for CLI commands.
   class Command
-    autoload :Register, 'datagraph/command/register'
-    autoload :List,     'datagraph/command/list'
-    autoload :Create,   'datagraph/command/create'
-    autoload :Rename,   'datagraph/command/rename'
-    autoload :Drop,     'datagraph/command/drop'
+    autoload :Abort,    'datagraph/command/abort'
     autoload :Clear,    'datagraph/command/clear'
     autoload :Count,    'datagraph/command/count'
-    autoload :Query,    'datagraph/command/query'
-    autoload :Import,   'datagraph/command/import'
+    autoload :Create,   'datagraph/command/create'
+    autoload :Drop,     'datagraph/command/drop'
     autoload :Export,   'datagraph/command/export'
+    autoload :Import,   'datagraph/command/import'
+    autoload :List,     'datagraph/command/list'
     autoload :Open,     'datagraph/command/open'
+    autoload :Query,    'datagraph/command/query'
+    autoload :Register, 'datagraph/command/register'
+    autoload :Rename,   'datagraph/command/rename'
+    autoload :Status,   'datagraph/command/status'
     autoload :URL,      'datagraph/command/url'
 
     include Datagraph::Client

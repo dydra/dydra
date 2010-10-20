@@ -15,7 +15,7 @@ module Datagraph::Client
     end
 
     ##
-    # Returns `true` if this process is pending to run.
+    # Returns `true` if this process is currently pending to run.
     #
     # @return [Boolean]
     def pending?
