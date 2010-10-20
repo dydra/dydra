@@ -8,7 +8,8 @@ module Datagraph
       # @return [void]
       def execute(process_uuid = nil)
         if process_uuid
-          case status = Process.new(process_uuid).status
+          process = Process.new(process_uuid)
+          case status = process.status
             when :pending
               puts "The process #{process} is currently pending to run."
             when :running
