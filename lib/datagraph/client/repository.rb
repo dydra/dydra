@@ -80,6 +80,15 @@ module Datagraph::Client
     end
 
     ##
+    # Queries this repository.
+    #
+    # @param  [String] query
+    # @return [String]
+    def query(query)
+      Datagraph::Client.xmlrpc.call('datagraph.repository.query', account.name, name, query.to_s)
+    end
+
+    ##
     # Returns a string representation of the repository name.
     #
     # @return [String]
