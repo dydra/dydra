@@ -1,5 +1,3 @@
-require 'xmlrpc/client'
-
 module Datagraph
   ##
   # Datagraph.org API client library.
@@ -15,16 +13,8 @@ module Datagraph
     #
     # @return [XMLRPC::Client]
     def self.rpc
-      self.xmlrpc # defaults to XML-RPC for now
-    end
-
-    ##
-    # Returns a Datagraph.org XML-RPC API client.
-    #
-    # @return [XMLRPC::Client]
-    # @see    http://ruby-doc.org/stdlib/libdoc/xmlrpc/rdoc/classes/XMLRPC/Client.html
-    def self.xmlrpc
-      XMLRPC::Client.new2(Datagraph::URL.join('xmlrpc'))
+      require 'xmlrpc/client' unless defined?(XMLRPC::Client)
+      XMLRPC::Client.new2(Datagraph::URL.join('rpc')) # defaults to XML-RPC for now
     end
   end # Client
 end # Datagraph
