@@ -48,6 +48,15 @@ module Datagraph::Client
     alias_method :finished?, :completed?
 
     ##
+    # Returns `true` if this process has completed or was aborted, and
+    # `false` if it's currently pending or running.
+    #
+    # @return [Boolean]
+    def done?
+      completed? || aborted?
+    end
+
+    ##
     # Returns the current status of this process.
     #
     # @return [Symbol]
@@ -78,6 +87,23 @@ module Datagraph::Client
     # @return [void]
     def abort!
       Datagraph::Client.rpc.call('datagraph.process.abort', uuid)
+      self
+    end
+
+    ##
+    # Waits until this process is done, meanwhile calling the given `block`
+    # at regular intervals.
+    #
+    # @param  [Hash{Symbol => Object} options
+    # @option options [Float] :sleep (0.5)
+    #   how many seconds to sleep before re-polling the process status
+    # @return [void] self
+    def wait!(options = {}, &block)
+      delay = options[:sleep] || 0.5
+      until done?
+        yield if block_given?
+        sleep delay unless delay.zero?
+      end
       self
     end
 
