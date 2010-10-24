@@ -71,7 +71,11 @@ module Datagraph
         else Account.new(account_name.to_s)
       end
       @name = name.to_s
-      super(Datagraph::URL.join(@account.name, @name))
+      if Datagraph::URL.respond_to?(:'/')
+        super(Datagraph::URL / @account.name / @name)    # RDF.rb 0.3.0+
+      else
+        super(Datagraph::URL.join(@account.name, @name)) # RDF.rb 0.2.x
+      end
     end
 
     ##
