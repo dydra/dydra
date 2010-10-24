@@ -100,16 +100,7 @@ module Datagraph
   end
 end
 
-if (SOCKS_SERVER = ENV['SOCKS_SERVER']) && !SOCKS_SERVER.empty?
-  begin
-    host, port = SOCKS_SERVER.split(':', 2)
-    require 'socksify' # @see http://rubygems.org/gems/socksify
-    TCPSocket::socks_server = host
-    TCPSocket::socks_port   = port.to_i
-  rescue LoadError => e
-    warn "WARNING: install the 'socksify' gem to use your configured SOCKS proxy (#{SOCKS_SERVER})."
-  end
-end
+Datagraph::Client.setup!
 
 begin
   Datagraph::CLI.new.send(command = ARGV.shift, *ARGV)
