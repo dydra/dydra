@@ -9,7 +9,7 @@ module Datagraph
       # @return [void]
       def execute(account_name, password = nil)
         password ||= '' # FIXME
-        account = Datagraph::Client::Account.register!(account_name, :password => password)
+        account = Datagraph::Account.register!(account_name, :password => password)
         puts "Account #{account.url} successfully registered." if $VERBOSE
       end
     end # Register

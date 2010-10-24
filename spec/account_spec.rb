@@ -1,5 +1,5 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
-describe Datagraph::Client::Repository do
+describe Datagraph::Account do
   # TODO
 end

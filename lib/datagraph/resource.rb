@@ -1,6 +1,6 @@
 require 'net/http'
 
-module Datagraph::Client
+module Datagraph
   ##
   # Base class for Datagraph.org resources.
   class Resource
@@ -118,4 +118,4 @@ module Datagraph::Client
       end
     end
   end # Resource
-end # Datagraph::Client
+end # Datagraph

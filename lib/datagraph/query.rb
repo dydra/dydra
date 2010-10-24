@@ -1,4 +1,4 @@
-module Datagraph::Client
+module Datagraph
   ##
   # Represents a Datagraph.org SPARQL query.
   class Query < Resource
@@ -31,4 +31,4 @@ module Datagraph::Client
       path
     end
   end # Query
-end # Datagraph::Client
+end # Datagraph

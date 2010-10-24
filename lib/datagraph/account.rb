@@ -1,4 +1,4 @@
-module Datagraph::Client
+module Datagraph
   ##
   # Represents a Datagraph.org user account.
   class Account < Resource
@@ -51,4 +51,4 @@ module Datagraph::Client
       name
     end
   end # Account
-end # Datagraph::Client
+end # Datagraph

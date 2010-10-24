@@ -1,4 +1,4 @@
-module Datagraph::Client
+module Datagraph
   ##
   # Represents a Datagraph.org process.
   class Process < Resource
@@ -113,4 +113,4 @@ module Datagraph::Client
       uuid
     end
   end # Process
-end # Datagraph::Client
+end # Datagraph

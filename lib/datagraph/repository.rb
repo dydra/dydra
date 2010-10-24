@@ -1,4 +1,4 @@
-module Datagraph::Client
+module Datagraph
   ##
   # Represents a Datagraph.org RDF repository.
   class Repository < Resource
@@ -96,4 +96,4 @@ module Datagraph::Client
       [account.name, name].join('/')
     end
   end # Repository
-end # Datagraph::Client
+end # Datagraph
