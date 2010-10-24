@@ -6,6 +6,8 @@ module Datagraph
   class Resource
     HEADERS = {'Accept' => 'text/plain'} # N-Triples
 
+    include Comparable
+
     def self.new(*args, &block)
       if self == Resource
         case spec = args.first
@@ -41,6 +43,25 @@ module Datagraph
           else true # FIXME: dubious default, for now
         end
       end
+    end
+
+    ##
+    # Returns `true` if this resource is equal to the given `other`
+    # resource.
+    #
+    # @param  [Object] other
+    # @return [Boolean]
+    def eql?(other)
+      other.class.eql?(self.class) && self == other
+    end
+
+    ##
+    # Compares this resources to the given `other` resource.
+    #
+    # @param  [Object] other
+    # @return [Integer] `-1`, `0`, or `1`
+    def <=>(other)
+      self.to_uri <=> other.to_uri
     end
 
     ##
