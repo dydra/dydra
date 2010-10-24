@@ -46,7 +46,19 @@ module Datagraph
     end
 
     ##
+    # Returns the list of repositories belonging to this account.
+    #
+    # @return [Array<Repository>]
+    def repositories
+      Repository.each(:account_name => name).select do |repository|
+        repository.account.name == name
+      end
+    end
+
+    ##
     # Returns a string representation of the account name.
+    #
+    # @return [String]
     def to_s
       name
     end
