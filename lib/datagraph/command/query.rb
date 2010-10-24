@@ -15,7 +15,8 @@ module Datagraph
           else query.to_s                             # 'SELECT ...'
         end
         process = repository.query(query)
-        puts "Query #{process} successfully started." if $VERBOSE # FIXME
+        puts "Query #{process} successfully submitted; waiting for results..." if $VERBOSE # FIXME
+        process.wait!
       end
     end # Query
   end # Command
