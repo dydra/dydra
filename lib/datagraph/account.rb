@@ -50,5 +50,12 @@ module Datagraph
     def to_s
       name
     end
+
+    ##
+    # @private
+    # @return [Hash]
+    def info
+      Datagraph::Client.rpc.call('datagraph.account.info', name)
+    end
   end # Account
 end # Datagraph

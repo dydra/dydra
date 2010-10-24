@@ -95,5 +95,12 @@ module Datagraph
     def to_s
       [account.name, name].join('/')
     end
+
+    ##
+    # @private
+    # @return [Hash]
+    def info
+      Datagraph::Client.rpc.call('datagraph.repository.info', account.name, name)
+    end
   end # Repository
 end # Datagraph
