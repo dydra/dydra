@@ -23,6 +23,10 @@ module Datagraph
       RDF::CLI.basename
     end
 
+    def verbose?
+      !!$VERBOSE
+    end
+
     def validate_repository_specs(resource_specs)
       resources = validate_resource_specs(resource_specs)
       resources.each do |resource|

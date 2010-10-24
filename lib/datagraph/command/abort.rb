@@ -8,7 +8,7 @@ module Datagraph
       # @return [void]
       def execute(process_uuid)
         (process = Process.new(process_uuid)).abort!
-        puts "The process #{process} was successfully aborted." if $VERBOSE
+        puts "The process #{process} was successfully aborted." if verbose?
       end
     end # Abort
   end # Command

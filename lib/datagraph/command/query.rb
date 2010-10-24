@@ -15,16 +15,16 @@ module Datagraph
           else query.to_s                             # 'SELECT ...'
         end
         process = repository.query(query)
-        $stdout.puts "Query #{process} successfully submitted." if $VERBOSE # FIXME
+        $stdout.puts "Query #{process} successfully submitted." if verbose? # FIXME
         #process.wait!
-        $stdout.write "Query executing..." if $VERBOSE
+        $stdout.write "Query executing..." if verbose?
         $stdout.flush
         until Datagraph::Client.rpc.call('datagraph.query.done', process.uuid)
           $stdout.write "."
           $stdout.flush
           sleep 1.0
         end
-        $stdout.puts " done." if $VERBOSE
+        $stdout.puts " done." if verbose?
       end
     end # Query
   end # Command

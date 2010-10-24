@@ -10,7 +10,7 @@ module Datagraph
         repositories = validate_repository_specs(repository_specs)
         repositories.each do |repository|
           process = repository.clear!
-          puts "Repository #{repository.url} successfully cleared." if $VERBOSE
+          puts "Repository #{repository.url} successfully cleared." if verbose?
         end
       end
     end # Clear

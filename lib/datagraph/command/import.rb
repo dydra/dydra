@@ -10,7 +10,7 @@ module Datagraph
       def execute(repository_spec, *urls)
         repository = validate_repository_specs([repository_spec]).first
         urls.each do |url|
-          puts "Importing #{url} into #{repository.url}..." if $VERBOSE
+          puts "Importing #{url} into #{repository.url}..." if verbose?
           process = repository.import!(url)
         end
       end

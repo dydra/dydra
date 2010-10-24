@@ -10,7 +10,7 @@ module Datagraph
         repositories = parse_repository_specs(repository_specs)
         repositories.each do |repository|
           process = repository.create!
-          puts "Repository #{repository.url} successfully created." if $VERBOSE
+          puts "Repository #{repository.url} successfully created." if verbose?
         end
       end
     end # Create
