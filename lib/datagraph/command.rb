@@ -19,12 +19,20 @@ module Datagraph
 
     include Datagraph::Client
 
+    def initialize(options = {})
+      @options = options.dup
+    end
+
     def basename
       RDF::CLI.basename
     end
 
     def verbose?
-      !!$VERBOSE
+      @options[:verbose] || $VERBOSE
+    end
+
+    def debug?
+      @options[:debug] || $DEBUG
     end
 
     def validate_repository_specs(resource_specs)

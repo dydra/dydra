@@ -5,24 +5,28 @@ require 'rdf/cli'
 
 module Datagraph
   class CLI
+    BANNER = "Usage: #{RDF::CLI.basename} [options] command [args...]"
+
     def initialize
-      @options = RDF::CLI.options do
-        self.banner = "Usage: #{RDF::CLI.basename} [options] command [args...]"
+      options = {}
+      optparser = RDF::CLI.options do
+        self.banner = BANNER
         self.on('-d', '--debug',   'Enable debug output for troubleshooting.') do
-          $DEBUG = true
+          options[:debug] = true
         end
         self.on('-v', '--verbose', 'Enable verbose output. May be given more than once.') do
-          $VERBOSE = true
+          options[:verbose] = true
         end
         self.on('-V', '--version', 'Display the Datagraph CLI version and exit.') do
           puts Datagraph::VERSION; exit
         end
       end
-      abort @options.banner if ARGV.empty?
+      Kernel.abort BANNER if ARGV.empty?
+      @options = options
     end
 
     def help(command = nil)
-      puts @options.banner
+      puts BANNER
       puts
       puts "Commands:"
       puts "    help        Shows this help."
@@ -43,59 +47,59 @@ module Datagraph
     end
 
     def register(account_name, password = nil)
-      Command::Register.new.execute(account_name, password)
+      Command::Register.new(@options).execute(account_name, password)
     end
 
     def list(*resource_specs)
-      Command::List.new.execute(*resource_specs)
+      Command::List.new(@options).execute(*resource_specs)
     end
 
     def open(*resource_specs)
-      Command::Open.new.execute(*resource_specs)
+      Command::Open.new(@options).execute(*resource_specs)
     end
 
     def url(*resource_specs)
-      Command::URL.new.execute(*resource_specs)
+      Command::URL.new(@options).execute(*resource_specs)
     end
 
     def create(*repository_specs)
-      Command::Create.new.execute(*repository_specs)
+      Command::Create.new(@options).execute(*repository_specs)
     end
 
     def rename(old_repository_spec, new_repository_spec)
-      Command::Rename.new.execute(old_repository_spec, new_repository_spec)
+      Command::Rename.new(@options).execute(old_repository_spec, new_repository_spec)
     end
 
     def drop(*repository_specs)
-      Command::Drop.new.execute(*repository_specs)
+      Command::Drop.new(@options).execute(*repository_specs)
     end
 
     def clear(*repository_specs)
-      Command::Clear.new.execute(*repository_specs)
+      Command::Clear.new(@options).execute(*repository_specs)
     end
 
     def count(*repository_specs)
-      Command::Count.new.execute(*repository_specs)
+      Command::Count.new(@options).execute(*repository_specs)
     end
 
     def query(repository_spec, query = nil)
-      Command::Query.new.execute(repository_spec, query)
+      Command::Query.new(@options).execute(repository_spec, query)
     end
 
     def import(repository_spec, *urls)
-      Command::Import.new.execute(repository_spec, *urls)
+      Command::Import.new(@options).execute(repository_spec, *urls)
     end
 
     def export(*resource_specs)
-      Command::Export.new.execute(*resource_specs)
+      Command::Export.new(@options).execute(*resource_specs)
     end
 
     def status(process_uuid = nil)
-      Command::Status.new.execute(process_uuid)
+      Command::Status.new(@options).execute(process_uuid)
     end
 
     def abort(process_uuid)
-      Command::Abort.new.execute(process_uuid)
+      Command::Abort.new(@options).execute(process_uuid)
     end
   end
 end
