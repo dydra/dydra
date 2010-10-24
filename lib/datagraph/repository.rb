@@ -20,11 +20,47 @@ module Datagraph
       enum_for(:each, options)
     end
 
+    ##
+    # The account the repository belongs to.
+    #
     # @return [Account]
     attr_reader :account
 
+    ##
+    # The machine-readable name of the repository.
+    #
     # @return [String]
     attr_reader :name
+
+    ##
+    # The short description of the repository.
+    #
+    # @return [String]
+    attr_reader :summary
+
+    ##
+    # The long description of the repository.
+    #
+    # @return [String]
+    attr_reader :description
+
+    ##
+    # The time that the repository was first created.
+    #
+    # @return [DateTime]
+    attr_reader :created
+
+    ##
+    # The time that the repository was last updated.
+    #
+    # @return [DateTime]
+    attr_reader :updated
+
+    [:summary, :description, :created, :updated].each do |property|
+      class_eval(<<-EOS)
+        def #{property}(); info['#{property}']; end
+      EOS
+    end
 
     ##
     # @param  [String, #to_s] account_name
