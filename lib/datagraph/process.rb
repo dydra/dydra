@@ -53,7 +53,7 @@ module Datagraph
     #
     # @return [Boolean]
     def done?
-      completed? || aborted?
+      [:completed, :aborted].include?(status)
     end
 
     ##
