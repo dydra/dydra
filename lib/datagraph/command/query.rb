@@ -15,16 +15,34 @@ module Datagraph
           else query.to_s                             # 'SELECT ...'
         end
         process = repository.query(query)
-        $stdout.puts "Query #{process} successfully submitted." if verbose? # FIXME
+        $stderr.puts "Query #{process} successfully submitted." if verbose? # FIXME
         #process.wait!
-        $stdout.write "Query executing..." if verbose?
-        $stdout.flush
+        $stderr.write "Query executing..." if verbose?
+        $stderr.flush
         until Datagraph::Client.rpc.call('datagraph.query.done', process.uuid)
-          $stdout.write "."
-          $stdout.flush
+          $stderr.write "."
+          $stderr.flush
           sleep 1.0
         end
-        $stdout.puts " done." if verbose?
+        $stderr.puts " done." if verbose?
+        begin
+          case result = Datagraph::Client.rpc.call('datagraph.query.result', process.uuid)
+            when TrueClass, FalseClass
+              $stdout.puts result.inspect
+            when Array
+              require 'rdf/json'
+              parser = RDF::JSON::Reader.new(StringIO.new("{}"))
+              result.each do |bindings|
+                bindings.each do |k, v|
+                  bindings[k] = parser.parse_object(v)
+                end
+                solution = RDF::Query::Solution.new(bindings)
+                $stdout.puts solution.to_hash.inspect # FIXME
+              end
+          end
+        rescue XMLRPC::FaultException => e # FIXME: JSON-RPC
+          $stderr.puts e.message
+        end
       end
     end # Query
   end # Command
