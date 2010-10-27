@@ -35,6 +35,14 @@ module Datagraph
       @options[:debug] || $DEBUG
     end
 
+    def stdout
+      $stdout
+    end
+
+    def stderr
+      $stderr
+    end
+
     def validate_repository_specs(resource_specs)
       resources = validate_resource_specs(resource_specs)
       resources.each do |resource|
