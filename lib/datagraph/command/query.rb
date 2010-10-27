@@ -47,6 +47,7 @@ module Datagraph
 
       ##
       # @private
+      # @see http://www.w3.org/TR/rdf-sparql-json-res/
       def to_sparql_json(solutions)
         json = {:head => {:vars => []}, :results => {:bindings => []}}
         solutions.each do |solution|
