@@ -43,11 +43,15 @@ module Datagraph
       $stderr
     end
 
+    def abort(msg)
+      RDF::CLI.abort(msg)
+    end
+
     def validate_repository_specs(resource_specs)
       resources = validate_resource_specs(resource_specs)
       resources.each do |resource|
         unless resource.is_a?(Repository)
-          RDF::CLI.abort "invalid repository spec `#{resource}'"
+          abort "invalid repository spec `#{resource}'"
         end
       end
       resources
@@ -58,10 +62,10 @@ module Datagraph
       resources.each do |resource|
         case resource
           when Account
-            RDF::CLI.abort "unknown account `#{resource}'" unless resource.exists?
+            abort "unknown account `#{resource}'" unless resource.exists?
           when Repository
-            RDF::CLI.abort "unknown account `#{resource.account}'" unless resource.account.exists?
-            RDF::CLI.abort "unknown repository `#{resource}'" unless resource.exists?
+            abort "unknown account `#{resource.account}'" unless resource.account.exists?
+            abort "unknown repository `#{resource}'" unless resource.exists?
         end
       end
       resources
@@ -71,7 +75,7 @@ module Datagraph
       resources = parse_resource_specs(resource_specs)
       resources.each do |resource|
         unless resource.is_a?(Repository)
-          RDF::CLI.abort "invalid repository spec `#{resource}'"
+          abort "invalid repository spec `#{resource}'"
         end
       end
       resources
@@ -81,7 +85,7 @@ module Datagraph
       resources = []
       resource_specs.each do |resource_spec|
         unless resource = Resource.new(resource_spec)
-          RDF::CLI.abort "invalid resource spec `#{resource_spec}'"
+          abort "invalid resource spec `#{resource_spec}'"
         end
         resources << resource
       end

@@ -10,7 +10,7 @@ module Datagraph
         begin
           require 'launchy'
         rescue LoadError => e
-          RDF::CLI.abort "install the 'launchy' gem to use this command"
+          abort "install the 'launchy' gem to use this command"
         end
         resources = validate_resource_specs(resource_specs)
         resources.each do |resource|
