@@ -30,6 +30,7 @@ module Datagraph
       def upload_local_file(filepath)
         require_gem! 's3',   "file uploads require the S3 gem"
         require_gem! 'uuid', "file uploads require the UUID gem"
+        UUID.state_file = false # disable the problematic `/var/tmp/ruby-uuid` state file
 
         abort "file does not exist: #{filepath}"    unless File.exists?(filepath)
         abort "file is not readable: #{filepath}"   unless File.readable?(filepath)
