@@ -32,6 +32,14 @@ module Datagraph
     end
 
     ##
+    # Returns the root-relative path of this resource.
+    #
+    # @return [String]
+    def path
+      url.path[1..-1]
+    end
+
+    ##
     # Returns `true` if this resource exists on Datagraph.org.
     #
     # @return [Boolean]
