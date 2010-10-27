@@ -19,10 +19,11 @@ module Datagraph
     #
     # @param  [String] name
     # @param  [Hash{Symbol => Object}] options
+    # @option options [String] :email
     # @option options [String] :password
     # @return [Account]
     def self.register!(name, options = {})
-      Datagraph::Client.rpc.call('datagraph.account.register', name, options[:password])
+      Datagraph::Client.rpc.call('datagraph.account.register', name, options[:email], options[:password]) # FIXME
       self.new(name)
     end
 
