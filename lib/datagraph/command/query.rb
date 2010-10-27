@@ -30,7 +30,7 @@ module Datagraph
             when TrueClass, FalseClass
               $stdout.puts result.inspect
             when Array
-              require 'rdf/json'
+              require_gem! 'rdf/json', "missing RDF/JSON support"
               parser = RDF::JSON::Reader.new(StringIO.new("{}"))
               solutions = result.map do |bindings|
                 bindings.each do |k, v|

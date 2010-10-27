@@ -47,6 +47,14 @@ module Datagraph
       RDF::CLI.abort(msg)
     end
 
+    def require_gem!(gem, msg)
+      begin
+        require gem
+      rescue LoadError => e
+        abort "#{msg} (hint: `gem install #{gem}')."
+      end
+    end
+
     def validate_repository_specs(resource_specs)
       resources = validate_resource_specs(resource_specs)
       resources.each do |resource|
