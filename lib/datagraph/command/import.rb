@@ -43,8 +43,11 @@ module Datagraph
         })
 
         stdout.puts "Uploading #{filepath} to temporary cloud storage..." if verbose?
-        bucket = s3.buckets.find(BUCKET) rescue nil
-        abort "temporary failure, please try again later (bucket #{BUCKET} not found)." unless bucket
+        begin
+          bucket = s3.buckets.find(BUCKET)
+        rescue S3::Error::NoSuchBucket => e
+          abort "temporary failure, please try again later (bucket #{BUCKET} not found)."
+        end
 
         object = bucket.objects.build('import/' + UUID.generate.to_s)
         object.content      = open(filepath)
