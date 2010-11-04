@@ -15,6 +15,7 @@ module Datagraph
     # @private
     # @return [void]
     def self.setup!(options = {})
+      warn "WARNING: the DATAGRAPH_URL environment variable is not set." if ENV['DATAGRAPH_URL'].to_s.empty?
       if (socks_server = ENV['SOCKS_SERVER']) && !socks_server.empty?
         begin
           host, port = socks_server.split(':', 2)
