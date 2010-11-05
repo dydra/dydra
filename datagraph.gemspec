@@ -16,7 +16,7 @@ GEMSPEC = Gem::Specification.new do |gem|
   gem.email              = 'datagraph@googlegroups.com'
 
   gem.platform           = Gem::Platform::RUBY
-  gem.files              = %w(AUTHORS README UNLICENSE VERSION bin/datagraph) + Dir.glob('lib/**/*.rb')
+  gem.files              = %w(AUTHORS CREDITS README UNLICENSE VERSION bin/datagraph) + Dir.glob('lib/**/*.rb')
   gem.bindir             = %q(bin)
   gem.executables        = %w(datagraph)
   gem.default_executable = gem.executables.first
