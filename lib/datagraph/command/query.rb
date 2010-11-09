@@ -59,7 +59,7 @@ module Datagraph
               when RDF::Node     then {:type => :bnode, :value => v.id.to_s}
               when RDF::URI      then {:type => :uri, :value => v.to_s}
               when RDF::Literal  then case
-                when v.datatype? then {:type => :literal, :value => v.to_s, :datatype => v.datatype.to_s}
+                when v.datatype? then {:type => :'typed-literal', :value => v.to_s, :datatype => v.datatype.to_s}
                 when v.language? then {:type => :literal, :value => v.to_s, 'xml:lang' => v.language.to_s}
                 else {:type => :literal, :value => v.to_s}
               end
