@@ -2,13 +2,24 @@ module Datagraph
   ##
   # Datagraph.org API client library.
   module Client
+    # what a mouthful.  
+    # workaround for a bug in Rexml in 1.9.2
+    # kou posted it in:
+    # http://www.ruby-forum.com/topic/463233
+    module XMLRPCUTF8Fix
+      def do_rpc(request, async=false)
+        data = super
+        data.force_encoding("UTF-8") if data.respond_to?(:force_encoding)
+        data
+      end
+    end
     ##
     # Returns a Datagraph.org RPC API client.
     #
     # @return [XMLRPC::Client]
     def self.rpc
       require 'xmlrpc/client' unless defined?(XMLRPC::Client)
-      XMLRPC::Client.new2(Datagraph::URL.join('rpc')) # defaults to XML-RPC for now
+      XMLRPC::Client.new2(Datagraph::URL.join('rpc')).extend(XMLRPCUTF8Fix) # defaults to XML-RPC for now
     end
 
     ##
