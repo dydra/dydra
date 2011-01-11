@@ -1,4 +1,4 @@
-module Datagraph
+module Dydra
   class Command
     ##
     # Registers a new user account.
@@ -9,9 +9,9 @@ module Datagraph
       # @return [void]
       def execute(account_name, password = nil)
         password ||= '' # FIXME
-        account = Datagraph::Account.register!(account_name, :password => password)
+        account = Dydra::Account.register!(account_name, :password => password)
         puts "Account #{account.url} successfully registered." if verbose?
       end
     end # Register
   end # Command
-end # Datagraph
+end # Dydra

@@ -1,4 +1,4 @@
-module Datagraph
+module Dydra
   class Command
     ##
     # Creates a new repository.
@@ -15,4 +15,4 @@ module Datagraph
       end
     end # Create
   end # Command
-end # Datagraph
+end # Dydra

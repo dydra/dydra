@@ -1,8 +1,8 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
-describe Datagraph::Account do
+describe Dydra::Account do
   before :all do
-    @account = Datagraph::Account.new('jhacker') # the demo account
+    @account = Dydra::Account.new('jhacker') # the demo account
   end
 
   context "Account#exists?" do
@@ -15,7 +15,7 @@ describe Datagraph::Account do
     end
 
     it "should return false if the repository does not exist" do
-      Datagraph::Account.new('foobar').exists?.should == false
+      Dydra::Account.new('foobar').exists?.should == false
     end
   end
 
@@ -44,7 +44,7 @@ describe Datagraph::Account do
     end
 
     it "should return a repository" do
-      @account.repository('foaf').should be_a(Datagraph::Repository)
+      @account.repository('foaf').should be_a(Dydra::Repository)
     end
   end
 
@@ -55,7 +55,7 @@ describe Datagraph::Account do
 
     it "should return an array of repositories" do
       @account.repositories.should be_a(Array)
-      @account.repositories.each { |r| r.should be_a(Datagraph::Repository) }
+      @account.repositories.each { |r| r.should be_a(Dydra::Repository) }
     end
 
     it "should return the repositories belonging to the account" do

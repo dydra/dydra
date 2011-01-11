@@ -1,4 +1,4 @@
-module Datagraph
+module Dydra
   class Command
     ##
     # Lists existing repositories.
@@ -14,4 +14,4 @@ module Datagraph
       end
     end # List
   end # Command
-end # Datagraph
+end # Dydra

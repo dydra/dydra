@@ -1,4 +1,4 @@
-require 'datagraph'
+require 'dydra'
 require 'rdf/spec'
 
 RSpec.configure do |config|

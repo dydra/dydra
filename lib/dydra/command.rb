@@ -1,23 +1,23 @@
-module Datagraph
+module Dydra
   ##
   # Base class for CLI commands.
   class Command
-    autoload :Abort,    'datagraph/command/abort'
-    autoload :Clear,    'datagraph/command/clear'
-    autoload :Count,    'datagraph/command/count'
-    autoload :Create,   'datagraph/command/create'
-    autoload :Drop,     'datagraph/command/drop'
-    autoload :Export,   'datagraph/command/export'
-    autoload :Import,   'datagraph/command/import'
-    autoload :List,     'datagraph/command/list'
-    autoload :Open,     'datagraph/command/open'
-    autoload :Query,    'datagraph/command/query'
-    autoload :Register, 'datagraph/command/register'
-    autoload :Rename,   'datagraph/command/rename'
-    autoload :Status,   'datagraph/command/status'
-    autoload :URL,      'datagraph/command/url'
+    autoload :Abort,    'dydra/command/abort'
+    autoload :Clear,    'dydra/command/clear'
+    autoload :Count,    'dydra/command/count'
+    autoload :Create,   'dydra/command/create'
+    autoload :Drop,     'dydra/command/drop'
+    autoload :Export,   'dydra/command/export'
+    autoload :Import,   'dydra/command/import'
+    autoload :List,     'dydra/command/list'
+    autoload :Open,     'dydra/command/open'
+    autoload :Query,    'dydra/command/query'
+    autoload :Register, 'dydra/command/register'
+    autoload :Rename,   'dydra/command/rename'
+    autoload :Status,   'dydra/command/status'
+    autoload :URL,      'dydra/command/url'
 
-    include Datagraph::Client
+    include Dydra::Client
 
     def initialize(options = {})
       @options = options.dup
@@ -100,4 +100,4 @@ module Datagraph
       resources
     end
   end # Command
-end # Datagraph
+end # Dydra

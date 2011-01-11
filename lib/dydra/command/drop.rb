@@ -1,4 +1,4 @@
-module Datagraph
+module Dydra
   class Command
     ##
     # Destroys a repository permanently.
@@ -15,4 +15,4 @@ module Datagraph
       end
     end # Drop
   end # Command
-end # Datagraph
+end # Dydra

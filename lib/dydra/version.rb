@@ -1,4 +1,4 @@
-module Datagraph
+module Dydra
   module VERSION
     MAJOR = 0
     MINOR = 0

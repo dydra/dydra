@@ -1,4 +1,4 @@
-module Datagraph
+module Dydra
   class Command
     ##
     # Queries a repository.
@@ -19,14 +19,14 @@ module Datagraph
         #process.wait!
         $stderr.write "Query executing..." if verbose?
         $stderr.flush
-        until Datagraph::Client.rpc.call('dydra.query.done', process.uuid)
+        until Dydra::Client.rpc.call('dydra.query.done', process.uuid)
           $stderr.write "."
           $stderr.flush
           sleep 1.0
         end
         $stderr.puts " done." if verbose?
         begin
-          case result = Datagraph::Client.rpc.call('dydra.query.result', process.uuid)
+          case result = Dydra::Client.rpc.call('dydra.query.result', process.uuid)
             when TrueClass, FalseClass
               $stdout.puts result.inspect
             when Array
@@ -70,4 +70,4 @@ module Datagraph
       end
     end # Query
   end # Command
-end # Datagraph
+end # Dydra

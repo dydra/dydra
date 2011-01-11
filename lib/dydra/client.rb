@@ -1,22 +1,22 @@
 require 'xmlrpc/client'
 
-module Datagraph
+module Dydra
   ##
-  # Datagraph.org API client library.
+  # Dydra.com API client library.
   module Client
     ##
-    # Returns a Datagraph.org RPC API client.
+    # Returns a Dydra.com RPC API client.
     #
     # @return [XMLRPC::Client]
     def self.rpc
-      XMLRPC::Client.new2(Datagraph::URL.join('rpc')) # defaults to XML-RPC for now
+      XMLRPC::Client.new2(Dydra::URL.join('rpc')) # defaults to XML-RPC for now
     end
 
     ##
     # @private
     # @return [void]
     def self.setup!(options = {})
-      warn "WARNING: the DATAGRAPH_URL environment variable is not set." if ENV['DATAGRAPH_URL'].to_s.empty?
+      warn "WARNING: the DYDRA_URL environment variable is not set." if ENV['DYDRA_URL'].to_s.empty?
       if (socks_server = ENV['SOCKS_SERVER']) && !socks_server.empty?
         begin
           host, port = socks_server.split(':', 2)
@@ -30,6 +30,6 @@ module Datagraph
       end
     end
   end # Client
-end # Datagraph
+end # Dydra
 
-require 'datagraph/patches/xmlrpc'
+require 'dydra/patches/xmlrpc'

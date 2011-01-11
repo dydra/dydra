@@ -1,12 +1,12 @@
-module Datagraph
+module Dydra
   ##
-  # Represents a Datagraph.org user account.
+  # Represents a Dydra.com user account.
   class Account < Resource
     SPEC = %r(^([^/]+)$) # /account
 
     ##
     # Returns `true` if an account with the given `name` exists on
-    # Datagraph.org.
+    # Dydra.com.
     #
     # @param  [String, #to_s] name
     # @return [Boolean]
@@ -15,7 +15,7 @@ module Datagraph
     end
 
     ##
-    # Registers a new user account with Datagraph.org.
+    # Registers a new user account with Dydra.com.
     #
     # @param  [String] name
     # @param  [Hash{Symbol => Object}] options
@@ -23,7 +23,7 @@ module Datagraph
     # @option options [String] :password
     # @return [Account]
     def self.register!(name, options = {})
-      Datagraph::Client.rpc.call('dydra.account.register', name, options[:email], options[:password]) # FIXME
+      Dydra::Client.rpc.call('dydra.account.register', name, options[:email], options[:password]) # FIXME
       self.new(name)
     end
 
@@ -34,7 +34,7 @@ module Datagraph
     # @param  [String, #to_s] name
     def initialize(name)
       @name = name.to_s
-      super(Datagraph::URL.join(@name))
+      super(Dydra::URL.join(@name))
     end
 
     ##
@@ -68,7 +68,7 @@ module Datagraph
     # @private
     # @return [Hash]
     def info
-      Datagraph::Client.rpc.call('dydra.account.info', name)
+      Dydra::Client.rpc.call('dydra.account.info', name)
     end
   end # Account
-end # Datagraph
+end # Dydra

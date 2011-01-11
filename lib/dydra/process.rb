@@ -1,6 +1,6 @@
-module Datagraph
+module Dydra
   ##
-  # Represents a Datagraph.org process.
+  # Represents a Dydra.com process.
   class Process < Resource
     SPEC = %r(^([^/]+)$) # /uuid
 
@@ -11,7 +11,7 @@ module Datagraph
     # @param  [String, #to_s] uuid
     def initialize(uuid)
       @uuid = uuid.to_s
-      super(Datagraph::URL.join(@uuid)) # FIXME
+      super(Dydra::URL.join(@uuid)) # FIXME
     end
 
     ##
@@ -61,7 +61,7 @@ module Datagraph
     #
     # @return [Symbol]
     def status
-      Datagraph::Client.rpc.call('dydra.process.status', uuid).to_sym
+      Dydra::Client.rpc.call('dydra.process.status', uuid).to_sym
     end
 
     ##
@@ -86,7 +86,7 @@ module Datagraph
     #
     # @return [void]
     def abort!
-      Datagraph::Client.rpc.call('dydra.process.abort', uuid)
+      Dydra::Client.rpc.call('dydra.process.abort', uuid)
       self
     end
 
@@ -113,4 +113,4 @@ module Datagraph
       uuid
     end
   end # Process
-end # Datagraph
+end # Dydra

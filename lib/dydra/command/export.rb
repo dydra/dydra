@@ -1,4 +1,4 @@
-module Datagraph
+module Dydra
   class Command
     ##
     # Exports data from a repository in N-Triples format.
@@ -17,4 +17,4 @@ module Datagraph
       end
     end # Export
   end # Command
-end # Datagraph
+end # Dydra

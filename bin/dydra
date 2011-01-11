@@ -1,9 +1,9 @@
 #!/usr/bin/env ruby
 $:.unshift(File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib')))
-require 'datagraph'
+require 'dydra'
 require 'rdf/cli'
 
-module Datagraph
+module Dydra
   class CLI
     BANNER = "Usage: #{RDF::CLI.basename} [options] command [args...]"
 
@@ -17,8 +17,8 @@ module Datagraph
         self.on('-v', '--verbose', 'Enable verbose output. May be given more than once.') do
           options[:verbose] = true
         end
-        self.on('-V', '--version', 'Display the Datagraph CLI version and exit.') do
-          puts Datagraph::VERSION; exit
+        self.on('-V', '--version', 'Display the Dydra CLI version and exit.') do
+          puts Dydra::VERSION; exit
         end
       end
       Kernel.abort BANNER if ARGV.empty?
@@ -106,10 +106,10 @@ end
 
 trap(:INT) { abort "" }
 
-Datagraph::Client.setup!
+Dydra::Client.setup!
 
 begin
-  Datagraph::CLI.new.send(command = ARGV.shift, *ARGV)
+  Dydra::CLI.new.send(command = ARGV.shift, *ARGV)
 rescue NoMethodError => e
   RDF::CLI.abort "unknown command `#{command}'"
 end

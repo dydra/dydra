@@ -1,4 +1,4 @@
-module Datagraph
+module Dydra
   class Command
     ##
     # Renames a repository.
@@ -14,4 +14,4 @@ module Datagraph
       end
     end # Rename
   end # Command
-end # Datagraph
+end # Dydra

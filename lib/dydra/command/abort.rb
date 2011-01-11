@@ -1,4 +1,4 @@
-module Datagraph
+module Dydra
   class Command
     ##
     # Aborts a pending or running process.
@@ -12,4 +12,4 @@ module Datagraph
       end
     end # Abort
   end # Command
-end # Datagraph
+end # Dydra

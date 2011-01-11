@@ -1,8 +1,8 @@
 require 'net/http'
 
-module Datagraph
+module Dydra
   ##
-  # Base class for Datagraph.org resources.
+  # Base class for Dydra.com resources.
   class Resource
     HEADERS = {'Accept' => 'text/plain'} # N-Triples
 
@@ -40,7 +40,7 @@ module Datagraph
     end
 
     ##
-    # Returns `true` if this resource exists on Datagraph.org.
+    # Returns `true` if this resource exists on Dydra.com.
     #
     # @return [Boolean]
     def exists?
@@ -147,4 +147,4 @@ module Datagraph
       end
     end
   end # Resource
-end # Datagraph
+end # Dydra

@@ -1,6 +1,6 @@
-module Datagraph
+module Dydra
   ##
-  # Represents a Datagraph.org SPARQL query.
+  # Represents a Dydra.com SPARQL query.
   class Query < Resource
     SPEC = %r(^([^/\.]+)/([^/\.]+)/([^/\.]+)$) # /account/repository/query
 
@@ -16,7 +16,7 @@ module Datagraph
         else Repository.new(*repository_name.to_s.split('/'))
       end
       @name = name.to_s
-      super(Datagraph::URL.join(path))
+      super(Dydra::URL.join(path))
     end
 
     ##
@@ -31,4 +31,4 @@ module Datagraph
       path
     end
   end # Query
-end # Datagraph
+end # Dydra

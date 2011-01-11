@@ -1,4 +1,4 @@
-module Datagraph
+module Dydra
   class Command
     ##
     # Deletes all data from a repository.
@@ -15,4 +15,4 @@ module Datagraph
       end
     end # Clear
   end # Command
-end # Datagraph
+end # Dydra

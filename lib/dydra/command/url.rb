@@ -1,18 +1,17 @@
-module Datagraph
+module Dydra
   class Command
     ##
-    # Opens an account or a repository in a web browser.
-    class Open < Command
+    # Outputs the URL of an account or a repository.
+    class URL < Command
       ##
       # @param  [Array<String>] resource_specs
       # @return [void]
       def execute(*resource_specs)
-        require_gem! 'launchy', "install the 'launchy' gem to use this command"
         resources = validate_resource_specs(resource_specs)
         resources.each do |resource|
-          Launchy.open(resource.url)
+          puts resource.url.to_s
         end
       end
-    end # Open
+    end # URL
   end # Command
-end # Datagraph
+end # Dydra

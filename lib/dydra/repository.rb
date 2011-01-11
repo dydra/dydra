@@ -1,6 +1,6 @@
-module Datagraph
+module Dydra
   ##
-  # Represents a Datagraph.org RDF repository.
+  # Represents a Dydra.com RDF repository.
   class Repository < Resource
     SPEC = %r(^([^/]+)/([^/]+)$) # /account/repository
 
@@ -12,7 +12,7 @@ module Datagraph
     # @return [Enumerator]
     def self.each(options = {}, &block)
       if block_given?
-        result = Datagraph::Client.rpc.call('dydra.repository.list', options[:account_name] || '')
+        result = Dydra::Client.rpc.call('dydra.repository.list', options[:account_name] || '')
         result.each do |(account_name, repository_name)|
           block.call(Repository.new(account_name, repository_name))
         end
@@ -71,27 +71,27 @@ module Datagraph
         else Account.new(account_name.to_s)
       end
       @name = name.to_s
-      if Datagraph::URL.respond_to?(:'/')
-        super(Datagraph::URL / @account.name / @name)    # RDF.rb 0.3.0+
+      if Dydra::URL.respond_to?(:'/')
+        super(Dydra::URL / @account.name / @name)    # RDF.rb 0.3.0+
       else
-        super(Datagraph::URL.join(@account.name, @name)) # RDF.rb 0.2.x
+        super(Dydra::URL.join(@account.name, @name)) # RDF.rb 0.2.x
       end
     end
 
     ##
-    # Creates this repository on Datagraph.org.
+    # Creates this repository on Dydra.com.
     #
     # @return [Process]
     def create!
-      Process.new(Datagraph::Client.rpc.call('dydra.repository.create', path))
+      Process.new(Dydra::Client.rpc.call('dydra.repository.create', path))
     end
 
     ##
-    # Destroys this repository from Datagraph.org.
+    # Destroys this repository from Dydra.com.
     #
     # @return [Process]
     def destroy!
-      Process.new(Datagraph::Client.rpc.call('dydra.repository.destroy', path))
+      Process.new(Dydra::Client.rpc.call('dydra.repository.destroy', path))
     end
 
     ##
@@ -99,7 +99,7 @@ module Datagraph
     #
     # @return [Process]
     def clear!
-      Process.new(Datagraph::Client.rpc.call('dydra.repository.clear', path))
+      Process.new(Dydra::Client.rpc.call('dydra.repository.clear', path))
     end
 
     ##
@@ -108,7 +108,7 @@ module Datagraph
     # @param  [String, #to_s] url
     # @return [Process]
     def import!(url)
-      Process.new(Datagraph::Client.rpc.call('dydra.repository.import', path, url.to_s))
+      Process.new(Dydra::Client.rpc.call('dydra.repository.import', path, url.to_s))
     end
 
     ##
@@ -116,7 +116,7 @@ module Datagraph
     #
     # @return [Integer]
     def count
-      Datagraph::Client.rpc.call('dydra.repository.count', path)
+      Dydra::Client.rpc.call('dydra.repository.count', path)
     end
 
     ##
@@ -125,7 +125,7 @@ module Datagraph
     # @param  [String] query
     # @return [Process]
     def query(query)
-      Process.new(Datagraph::Client.rpc.call('dydra.repository.query', path, query.to_s))
+      Process.new(Dydra::Client.rpc.call('dydra.repository.query', path, query.to_s))
     end
 
     ##
@@ -140,7 +140,7 @@ module Datagraph
     # @private
     # @return [Hash]
     def info
-      Datagraph::Client.rpc.call('dydra.repository.info', path)
+      Dydra::Client.rpc.call('dydra.repository.info', path)
     end
   end # Repository
-end # Datagraph
+end # Dydra

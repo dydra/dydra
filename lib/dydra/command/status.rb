@@ -1,4 +1,4 @@
-module Datagraph
+module Dydra
   class Command
     ##
     # Shows pending, running, and completed processes.
@@ -27,4 +27,4 @@ module Datagraph
       end
     end # Status
   end # Command
-end # Datagraph
+end # Dydra

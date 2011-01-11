@@ -1,4 +1,4 @@
-module Datagraph
+module Dydra
   class Command
     ##
     # Outputs the number of statements in a repository.
@@ -15,4 +15,4 @@ module Datagraph
       end
     end # Count
   end # Command
-end # Datagraph
+end # Dydra

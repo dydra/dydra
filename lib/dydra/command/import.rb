@@ -1,4 +1,4 @@
-module Datagraph
+module Dydra
   class Command
     ##
     # Imports data into a repository.
@@ -75,4 +75,4 @@ module Datagraph
       end
     end # Import
   end # Command
-end # Datagraph
+end # Dydra
