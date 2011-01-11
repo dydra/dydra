@@ -23,7 +23,7 @@ module Datagraph
     # @option options [String] :password
     # @return [Account]
     def self.register!(name, options = {})
-      Datagraph::Client.rpc.call('datagraph.account.register', name, options[:email], options[:password]) # FIXME
+      Datagraph::Client.rpc.call('dydra.account.register', name, options[:email], options[:password]) # FIXME
       self.new(name)
     end
 
@@ -68,7 +68,7 @@ module Datagraph
     # @private
     # @return [Hash]
     def info
-      Datagraph::Client.rpc.call('datagraph.account.info', name)
+      Datagraph::Client.rpc.call('dydra.account.info', name)
     end
   end # Account
 end # Datagraph

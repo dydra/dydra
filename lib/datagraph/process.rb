@@ -61,7 +61,7 @@ module Datagraph
     #
     # @return [Symbol]
     def status
-      Datagraph::Client.rpc.call('datagraph.process.status', uuid).to_sym
+      Datagraph::Client.rpc.call('dydra.process.status', uuid).to_sym
     end
 
     ##
@@ -86,7 +86,7 @@ module Datagraph
     #
     # @return [void]
     def abort!
-      Datagraph::Client.rpc.call('datagraph.process.abort', uuid)
+      Datagraph::Client.rpc.call('dydra.process.abort', uuid)
       self
     end
 
