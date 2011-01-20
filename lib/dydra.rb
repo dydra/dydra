@@ -2,8 +2,8 @@ require 'open-uri'
 require 'rdf'      # @see http://rubygems.org/gems/rdf
 
 module Dydra
-  URI = RDF::URI('http://dydra.com/')
-  URL = RDF::URI(ENV['DYDRA_URL'] || ENV['DATAGRAPH_URL'] || URI)
+  URI = RDF::URI('http://api.dydra.com/')
+  URL = RDF::URI(ENV['DYDRA_URL'] || URI)
 
   autoload :Account,    'dydra/account'
   autoload :Client,     'dydra/client'
