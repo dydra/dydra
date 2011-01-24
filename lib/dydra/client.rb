@@ -11,8 +11,7 @@ module Dydra
     def self.rpc
       url = Dydra::URL.join('rpc')
       unless ENV['DYDRA_TOKEN'].to_s.empty?
-        url.user     = ENV['DYDRA_TOKEN']
-        url.password = ''
+        url = url.join("?auth_token=#{ENV['DYDRA_TOKEN']}")
       end
       XMLRPC::Client.new2(url) # defaults to XML-RPC for now
     end
