@@ -17,8 +17,8 @@ module Dydra
             else upload_local_file(input_url)            # local file to be uploaded
           end
           stdout.puts "Importing #{input_url} into #{repository.path}..." if verbose?
-          process = repository.import!(cloud_url)
-          # TODO: wait for process completion.
+          job = repository.import!(cloud_url)
+          # TODO: wait for job completion.
         end
       end
 

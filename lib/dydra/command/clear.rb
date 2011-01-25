@@ -9,7 +9,7 @@ module Dydra
       def execute(*repository_specs)
         repositories = validate_repository_specs(repository_specs)
         repositories.each do |repository|
-          process = repository.clear!
+          job = repository.clear!
           puts "Repository #{repository.url} successfully cleared." if verbose?
         end
       end

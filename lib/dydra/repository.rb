@@ -81,34 +81,34 @@ module Dydra
     ##
     # Creates this repository on Dydra.com.
     #
-    # @return [Process]
+    # @return [Job]
     def create!
-      Process.new(Dydra::Client.rpc.call('dydra.repository.create', path))
+      Job.new(Dydra::Client.rpc.call('dydra.repository.create', path))
     end
 
     ##
     # Destroys this repository from Dydra.com.
     #
-    # @return [Process]
+    # @return [Job]
     def destroy!
-      Process.new(Dydra::Client.rpc.call('dydra.repository.destroy', path))
+      Job.new(Dydra::Client.rpc.call('dydra.repository.destroy', path))
     end
 
     ##
     # Deletes all data from this repository.
     #
-    # @return [Process]
+    # @return [Job]
     def clear!
-      Process.new(Dydra::Client.rpc.call('dydra.repository.clear', path))
+      Job.new(Dydra::Client.rpc.call('dydra.repository.clear', path))
     end
 
     ##
     # Imports data from a URL into this repository.
     #
     # @param  [String, #to_s] url
-    # @return [Process]
+    # @return [Job]
     def import!(url)
-      Process.new(Dydra::Client.rpc.call('dydra.repository.import', path, url.to_s))
+      Job.new(Dydra::Client.rpc.call('dydra.repository.import', path, url.to_s))
     end
 
     ##
@@ -123,9 +123,9 @@ module Dydra
     # Queries this repository.
     #
     # @param  [String] query
-    # @return [Process]
+    # @return [Job]
     def query(query)
-      Process.new(Dydra::Client.rpc.call('dydra.repository.query', path, query.to_s))
+      Job.new(Dydra::Client.rpc.call('dydra.repository.query', path, query.to_s))
     end
 
     ##

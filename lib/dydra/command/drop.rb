@@ -9,7 +9,7 @@ module Dydra
       def execute(*repository_specs)
         repositories = validate_repository_specs(repository_specs)
         repositories.each do |repository|
-          process = repository.destroy!
+          job = repository.destroy!
           puts "Repository #{repository.url} successfully dropped." if verbose?
         end
       end

@@ -14,19 +14,19 @@ module Dydra
           when /^@(.*)$/ then open($1) { |f| f.read } # @filename.rq, @url.rq
           else query.to_s                             # 'SELECT ...'
         end
-        process = repository.query(query)
-        $stderr.puts "Query #{process} successfully submitted." if verbose? # FIXME
-        #process.wait!
+        job = repository.query(query)
+        $stderr.puts "Query #{job} successfully submitted." if verbose? # FIXME
+        #job.wait!
         $stderr.write "Query executing..." if verbose?
         $stderr.flush
-        until Dydra::Client.rpc.call('dydra.query.done', process.uuid)
+        until Dydra::Client.rpc.call('dydra.query.done', job.uuid)
           $stderr.write "."
           $stderr.flush
           sleep 1.0
         end
         $stderr.puts " done." if verbose?
         begin
-          case result = Dydra::Client.rpc.call('dydra.query.result', process.uuid)
+          case result = Dydra::Client.rpc.call('dydra.query.result', job.uuid)
             when TrueClass, FalseClass
               $stdout.puts result.inspect
             when Array

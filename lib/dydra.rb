@@ -8,7 +8,7 @@ module Dydra
   autoload :Account,    'dydra/account'
   autoload :Client,     'dydra/client'
   autoload :Command,    'dydra/command'
-  autoload :Process,    'dydra/process'
+  autoload :Job,        'dydra/job'
   autoload :Query,      'dydra/query'
   autoload :Repository, 'dydra/repository'
   autoload :Resource,   'dydra/resource'

@@ -1,7 +1,7 @@
 module Dydra
   ##
-  # Represents a Dydra.com process.
-  class Process < Resource
+  # Represents a Dydra.com job.
+  class Job < Resource
     SPEC = %r(^([^/]+)$) # /uuid
 
     # @return [String]
@@ -15,7 +15,7 @@ module Dydra
     end
 
     ##
-    # Returns `true` if this process is currently pending to run.
+    # Returns `true` if this job is currently pending to run.
     #
     # @return [Boolean]
     def pending?
@@ -23,7 +23,7 @@ module Dydra
     end
 
     ##
-    # Returns `true` if this process is currently running.
+    # Returns `true` if this job is currently running.
     #
     # @return [Boolean]
     def running?
@@ -31,7 +31,7 @@ module Dydra
     end
 
     ##
-    # Returns `true` if this process was aborted for any reason.
+    # Returns `true` if this job was aborted for any reason.
     #
     # @return [Boolean]
     def aborted?
@@ -39,7 +39,7 @@ module Dydra
     end
 
     ##
-    # Returns `true` if this process has already completed.
+    # Returns `true` if this job has already completed.
     #
     # @return [Boolean]
     def completed?
@@ -48,7 +48,7 @@ module Dydra
     alias_method :finished?, :completed?
 
     ##
-    # Returns `true` if this process has completed or was aborted, and
+    # Returns `true` if this job has completed or was aborted, and
     # `false` if it's currently pending or running.
     #
     # @return [Boolean]
@@ -57,15 +57,15 @@ module Dydra
     end
 
     ##
-    # Returns the current status of this process.
+    # Returns the current status of this job.
     #
     # @return [Symbol]
     def status
-      Dydra::Client.rpc.call('dydra.process.status', uuid).to_sym
+      Dydra::Client.rpc.call('dydra.job.status', uuid).to_sym
     end
 
     ##
-    # Returns the time when this process was submitted for execution.
+    # Returns the time when this job was submitted for execution.
     #
     # @return [Time]
     def submitted_at
@@ -73,7 +73,7 @@ module Dydra
     end
 
     ##
-    # Returns the time when this process finished executing, or `nil` if it
+    # Returns the time when this job finished executing, or `nil` if it
     # hasn't completed yet.
     #
     # @return [Time]
@@ -82,21 +82,21 @@ module Dydra
     end
 
     ##
-    # Aborts this process.
+    # Aborts this job.
     #
     # @return [void]
     def abort!
-      Dydra::Client.rpc.call('dydra.process.abort', uuid)
+      Dydra::Client.rpc.call('dydra.job.abort', uuid)
       self
     end
 
     ##
-    # Waits until this process is done, meanwhile calling the given `block`
+    # Waits until this job is done, meanwhile calling the given `block`
     # at regular intervals.
     #
     # @param  [Hash{Symbol => Object} options
     # @option options [Float] :sleep (0.5)
-    #   how many seconds to sleep before re-polling the process status
+    #   how many seconds to sleep before re-polling the job status
     # @return [void] self
     def wait!(options = {}, &block)
       delay = options[:sleep] || 0.5
@@ -108,9 +108,9 @@ module Dydra
     end
 
     ##
-    # Returns a string representation of the process ID.
+    # Returns a string representation of the job ID.
     def to_s
       uuid
     end
-  end # Process
+  end # Job
 end # Dydra
