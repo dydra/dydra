@@ -110,6 +110,8 @@ Dydra::Client.setup!
 
 begin
   Dydra::CLI.new.send(command = ARGV.shift, *ARGV)
+rescue Errno::ECONNREFUSED => e # Connection refused - connect(2)
+  RDF::CLI.abort e
 rescue NoMethodError => e
   RDF::CLI.abort "unknown command `#{command}'"
 end
