@@ -19,7 +19,7 @@ module Dydra
         #job.wait!
         $stderr.write "Query executing..." if verbose?
         $stderr.flush
-        until Dydra::Client.rpc.call('dydra.query.done', job.uuid)
+        until Dydra::Client.rpc.call('dydra.job.done', job.uuid)
           $stderr.write "."
           $stderr.flush
           sleep 1.0
