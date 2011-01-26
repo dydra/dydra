@@ -28,17 +28,21 @@ module Dydra
         begin
           case result = Dydra::Client.rpc.call('dydra.query.result', job.uuid)
             when TrueClass, FalseClass
-              $stdout.puts result.inspect
+              $stdout.puts result.inspect # @deprecated
             when Array
               require_gem! 'rdf/json', "missing RDF/JSON support"
-              parser = RDF::JSON::Reader.new(StringIO.new("{}"))
-              solutions = result.map do |bindings|
-                bindings.each do |k, v|
-                  bindings[k] = parser.parse_object(v)
+              parser = RDF::JSON::Reader.new(StringIO.new('{}'))
+              variables = result.shift.map { |variable| variable.to_sym } # the initial row contains the variable names
+              solutions = result.map do |row|
+                bindings = {}
+                row.each_with_index do |value, index|
+                  bindings[variables[index]] = parser.parse_object(value)
                 end
                 solution = RDF::Query::Solution.new(bindings)
               end
               $stdout.puts to_sparql_json(solutions).to_json
+            else
+              $stderr.puts result.inspect if debug?
           end
         rescue XMLRPC::FaultException => e # FIXME: JSON-RPC
           $stderr.puts e.message
