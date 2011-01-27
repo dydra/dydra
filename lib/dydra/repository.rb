@@ -79,11 +79,19 @@ module Dydra
     end
 
     ##
-    # Creates this repository on Dydra.com.
+    # @param [String] repository_name
     #
-    # @return [Job]
+    # Sugar for creating a repository, as .new instantiates an existing one.
+    def self.create!(account, name)
+      self.new(account, name).create!
+    end
+
+    ##
+    # Creates this repository on Dydra.com.
+    # # FIXME server is not async for this method yet
+    # @return [String] repository_name
     def create!
-      Job.new(Dydra::Client.rpc.call('dydra.repository.create', path))
+      Dydra::Client.rpc.call('dydra.repository.create', path)
     end
 
     ##
@@ -96,10 +104,10 @@ module Dydra
 
     ##
     # Deletes all data from this repository.
-    #
+    # #FIXME server is not async for this method yet
     # @return [Job]
     def clear!
-      Job.new(Dydra::Client.rpc.call('dydra.repository.clear', path))
+      Dydra::Client.rpc.call('dydra.repository.clear', path)
     end
 
     ##
