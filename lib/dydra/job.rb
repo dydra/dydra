@@ -53,7 +53,7 @@ module Dydra
     #
     # @return [Boolean]
     def done?
-      [:completed, :aborted].include?(status)
+      [:completed, :aborted, :failed].include?(status)
     end
 
     ##
