@@ -70,10 +70,10 @@ module Dydra
       resources.each do |resource|
         case resource
           when Account
-            abort "unknown account `#{resource}'" unless resource.exists?
+            #abort "unknown account `#{resource}'" unless resource.exists? # FIXME
           when Repository
-            abort "unknown account `#{resource.account}'" unless resource.account.exists?
-            abort "unknown repository `#{resource}'" unless resource.exists?
+            #abort "unknown account `#{resource.account}'" unless resource.account.exists? # FIXME
+            #abort "unknown repository `#{resource}'" unless resource.exists?
         end
       end
       resources
