@@ -1,3 +1,7 @@
+require "uri"
+require "net/http"
+require "net/https"
+
 module Dydra
   class Command
     ##
@@ -14,7 +18,7 @@ module Dydra
         urls.each do |input_url|
           cloud_url = case input_url
             when %r(^(http|https|ftp)://) then input_url # already at a URL
-            else upload_local_file(input_url)            # local file to be uploaded
+            else upload_local_file(repository, input_url)            # local file to be uploaded
           end
           stdout.puts "Importing #{input_url} into #{repository.path}..." if verbose?
           process = repository.import!(cloud_url)
@@ -27,34 +31,64 @@ module Dydra
       #
       # @param  [String] filepath a local file path
       # @return [String] an Amazon S3 URL
-      def upload_local_file(filepath)
-        require_gem! 's3',   "file uploads require the S3 gem"
-        require_gem! 'uuid', "file uploads require the UUID gem"
-        UUID.state_file = false # disable the problematic `/var/tmp/ruby-uuid` state file
-
+      def upload_local_file(repository, filepath)
         abort "file does not exist: #{filepath}"    unless File.exists?(filepath)
         abort "file is not readable: #{filepath}"   unless File.readable?(filepath)
         abort "unknown file extension: #{filepath}" unless content_type = detect_content_type(filepath)
 
-        # TODO: improve this to use signed upload URLs not requiring specific credentials.
-        abort "missing Amazon S3 access credentials." if ENV['AMAZON_ACCESS_KEY_ID'].to_s.empty?
-        s3 = S3::Service.new({
-          :access_key_id     => ENV['AMAZON_ACCESS_KEY_ID'],
-          :secret_access_key => ENV['AMAZON_SECRET_ACCESS_KEY'],
-        })
+        stdout.puts "Preparing upload...." if verbose?
 
-        stdout.puts "Uploading #{filepath} to temporary cloud storage..." if verbose?
-        begin
-          bucket = s3.buckets.find(BUCKET)
-        rescue S3::Error::NoSuchBucket => e
-          abort "temporary failure, please try again later (bucket #{BUCKET} not found)."
+        # Create the boundary used in constructing the form post body
+        o =  [('a'..'z'),('A'..'Z'),(0..9)].map{|i| i.to_a}.flatten
+        boundary = (0..9).map{ o[rand(o.length)] }.join
+
+        # Grab required form params from the server
+        upload_params = repository.s3_upload_params
+
+        # HTTP Setup
+        uri = ::URI.parse(upload_params['url'])
+        http = Net::HTTP.new(uri.host, uri.port)
+        if uri.scheme == 'https'
+          http.use_ssl = true
+          http.verify_mode = OpenSSL::SSL::VERIFY_NONE
         end
 
-        object = bucket.objects.build('import/' + UUID.generate.to_s)
-        object.content      = open(filepath)
-        object.content_type = content_type
-        abort "file upload to #{object.url} failed." unless object.save
-        object.url.to_s
+        # Params order is important to AWS.
+        form_data = [["key", upload_params['key']],
+                     ["AWSAccessKeyId", upload_params['AWSAccessKeyId']], 
+                     ["acl", upload_params['acl']],
+                     ["policy", upload_params['policy']],
+                     ["signature", upload_params['signature']]]
+
+        # Setup the request,
+        request = Net::HTTP::Post.new(uri.request_uri)
+        params = []
+
+        # Setup the normal form params,
+        form_data.each do |k, v|
+          params << "Content-Disposition: form-data; name=\"#{k}\"\r\n\r\n#{v}\r\n"
+        end
+
+        # setup the file param, 
+        File.open(filepath) do |file|
+          params << "Content-Disposition: form-data; name=\"file\"; filename=\"#{ File.basename(filepath) }\"\r\n" +
+                    "Content-Type: #{ content_type }\r\n\r\n#{ file.read }\r\n"
+        end
+
+        # setup the request,
+        request.content_type = "multipart/form-data; boundary=#{ boundary }"
+        request.body = params.collect {|p| "--" + boundary + "\r\n" + p }.join("")  + "--" + boundary + "--"
+
+        # and send it.
+        stdout.puts "Uploading your file to S3...." if verbose?
+        case response = http.request(request)
+          when Net::HTTPSuccess
+            "#{upload_params['url']}/#{upload_params['key'].gsub('${filename}', File.basename(filepath))}"
+          else
+            abort "unable to upload file: #{response.code} - #{response.message}"
+        end
+      rescue Exception => e
+        abort "error during file upload: #{e.message}"
       end
 
       ##

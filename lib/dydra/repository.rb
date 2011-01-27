@@ -112,6 +112,14 @@ module Dydra
     end
 
     ##
+    # Returns params necessary to generate an S3 upload form
+    #
+    # @return [Hash]
+    def s3_upload_params
+      Dydra::Client.rpc.call('dydra.repository.upload.params', path)
+    end
+
+    ##
     # Returns the number of RDF statements in this repository.
     #
     # @return [Integer]
