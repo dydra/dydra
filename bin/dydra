@@ -42,8 +42,8 @@ module Dydra
       puts "    query       Queries a repository."
       puts "    import      Imports data into a repository."
       puts "    export      Exports data from a repository in N-Triples format."
-      puts "    status      Shows pending, running, and completed processes."
-      puts "    abort       Aborts a pending or running process."
+      puts "    status      Shows pending, running, and completed jobs."
+      puts "    abort       Aborts a pending or running job."
     end
 
     def register(account_name, password = nil)
@@ -94,12 +94,12 @@ module Dydra
       Command::Export.new(@options).execute(*resource_specs)
     end
 
-    def status(process_uuid = nil)
-      Command::Status.new(@options).execute(process_uuid)
+    def status(job_uuid = nil)
+      Command::Status.new(@options).execute(job_uuid)
     end
 
-    def abort(process_uuid)
-      Command::Abort.new(@options).execute(process_uuid)
+    def abort(job_uuid)
+      Command::Abort.new(@options).execute(job_uuid)
     end
   end
 end
@@ -110,6 +110,8 @@ Dydra::Client.setup!
 
 begin
   Dydra::CLI.new.send(command = ARGV.shift, *ARGV)
+rescue Errno::ECONNREFUSED => e # Connection refused - connect(2)
+  RDF::CLI.abort e
 rescue NoMethodError => e
   RDF::CLI.abort "unknown command `#{command}'"
 end
