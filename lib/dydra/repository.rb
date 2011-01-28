@@ -159,11 +159,7 @@ module Dydra
       sparql_json = Dydra::Client.rpc.call('dydra.query.result.json', uuid)
       results = SPARQL::Client.new("").parse_json_bindings(sparql_json).map { | result | result.to_hash }
       if results.size == 1 && results.first.keys.size == 1 && results.first.keys.first == :result
-        if results.first[:result].respond_to?(:object)
-          result = results.first[:result].object
-          results = true if result == "true"
-          results = false if result == "false"
-        end
+        results = results.first[:result].object if results.first[:result].respond_to?(:object)
       end
       results
     end
