@@ -83,7 +83,7 @@ module Dydra
     #
     # Sugar for creating a repository, as .new instantiates an existing one.
     def self.create!(account, name)
-      self.new(account, name).create!
+      self.new(account, name).create
     end
 
     ##

@@ -24,15 +24,15 @@ module Dydra
     # @return [Any]
     def self.post where, what, options = {}
       what = what.to_json unless options[:content_type]
-      begin
-        resource(where).post what, { :content_type => 'application/json' }.merge(options)
-      rescue Exception => e
-        puts "got #{e.response.body}"
-      end
+      resource(where).post what, { :content_type => 'application/json' }.merge(options)
     end
 
     def self.resource(location)
-      RestClient::Resource.new Dydra::URL.join(location).to_s, ENV['DYDRA_TOKEN']
+      if ENV['DYDRA_TOKEN']
+        RestClient::Resource.new Dydra::URL.join(location).to_s, ENV['DYDRA_TOKEN']
+      elsif ENV['DYDRA_USER']
+        RestClient::Resource.new Dydra::URL.join(location).to_s, ENV['DYDRA_USER'], ENV['DYDRA_PASS']
+      end
     end
 
     ##
