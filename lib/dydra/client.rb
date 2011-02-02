@@ -1,4 +1,6 @@
 require 'xmlrpc/client'
+require 'rest_client'
+require 'json'
 
 module Dydra
   ##
@@ -14,6 +16,23 @@ module Dydra
         url = url.join("?auth_token=#{ENV['DYDRA_TOKEN']}")
       end
       XMLRPC::Client.new2(url) # defaults to XML-RPC for now
+    end
+
+    ##
+    # Post to the Dydra.com REST API
+    #
+    # @return [Any]
+    def self.post where, what, options = {}
+      what = what.to_json unless options[:content_type]
+      begin
+        resource(where).post what, { :content_type => 'application/json' }.merge(options)
+      rescue Exception => e
+        puts "got #{e.response.body}"
+      end
+    end
+
+    def self.resource(location)
+      RestClient::Resource.new Dydra::URL.join(location).to_s, ENV['DYDRA_TOKEN']
     end
 
     ##

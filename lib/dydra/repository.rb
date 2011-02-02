@@ -88,10 +88,10 @@ module Dydra
 
     ##
     # Creates this repository on Dydra.com.
-    # # FIXME server is not async for this method yet
+    #
     # @return [String] repository_name
-    def create!
-      Dydra::Client.rpc.call('dydra.repository.create', path)
+    def create
+      Dydra::Client.post "#{account}/repositories", { :dydra_repository => { :name => name }}
     end
 
     ##
@@ -145,7 +145,10 @@ module Dydra
     # @param  [String] query
     # @return [Job]
     def query(query)
-      Job.new(Dydra::Client.rpc.call('dydra.repository.query', path, query.to_s))
+      raise StandardError, "#{self.class}#query currently requires an API token, but none was found." unless ENV['DYDRA_TOKEN']
+      Dydra::Client.post "#{account}/#{name}/sparql", { :query => query },
+         :content_type => 'application/x-www-form-urlencoded', 
+         :accept => 'application/sparql-results+json'
     end
 
     ##

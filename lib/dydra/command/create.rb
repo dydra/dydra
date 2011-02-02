@@ -9,7 +9,7 @@ module Dydra
       def execute(*repository_specs)
         repositories = parse_repository_specs(repository_specs)
         repositories.each do |repository|
-          job = repository.create!
+          repository.create
           puts "Repository #{repository.url} successfully created." if verbose?
         end
       end
