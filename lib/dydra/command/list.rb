@@ -7,8 +7,12 @@ module Dydra
       # @param  [Array<String>] resource_specs
       # @return [void]
       def execute(user = nil)
-        Repository.list(user).each do |repository|
-          puts repository
+        begin
+          Repository.list(user).each do |repository|
+            puts repository
+          end
+        rescue RestClient::ResourceNotFound
+          puts "#{user || $dydra[:user]} not found"
         end
       end
     end # List
