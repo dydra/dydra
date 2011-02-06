@@ -6,11 +6,17 @@ module Dydra
       ##
       # @param  [Array<String>] repository_specs
       # @return [void]
-      def execute(*repository_specs)
-        repositories = validate_repository_specs(repository_specs)
+      def execute(*repositories)
+        #repositories = validate_repository_specs(repository_specs)
         repositories.each do |repository|
-          job = repository.destroy!
-          puts "Repository #{repository.url} successfully dropped." if verbose?
+          begin
+            Repository.new(repository).destroy!
+            puts "#{repository} deleted."
+          rescue RestClient::ResourceNotFound
+            puts "#{repository} not found."
+          rescue RestClient::Forbidden
+            puts "Insufficient permissions to delete #{repository}."
+          end
         end
       end
     end # Drop

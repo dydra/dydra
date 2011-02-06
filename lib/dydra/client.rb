@@ -57,16 +57,24 @@ module Dydra
     # 
     # @param [String] where
     # @return [Any]
-    def self.get where, options = {}
+    def self.get(where, options = {})
       resource(where).get({ :accept => :json }.merge(options))
     end
 
+    ##
+    # DELETE from the dydra.com REST API
+    # 
+    # @param [String] where
+    # @return [Any]
+    def self.delete(where)
+      resource(where).delete
+    end
 
     ##
     # POST to the Dydra.com REST API
     #
     # @return [Any]
-    def self.post where, what, options = {}
+    def self.post(where, what, options = {})
       what = what.to_json unless options[:content_type]
       resource(where).post what, { :content_type => 'application/json' }.merge(options)
     end

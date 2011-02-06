@@ -63,16 +63,20 @@ module Dydra
     end
 
     ##
-    # @param  [String, #to_s] account_name
+    # @param  [String, #to_s] user
     # @param  [String, #to_s] name
-    def initialize(account_name, name = nil)
+    def initialize(user, name = nil)
       if name.nil?
-        name = account_name
-        account_name = $dydra[:user]
+        if user =~ /\// # a user/repo form
+          (user, name) = user.split(/\//)
+        else
+          name = user
+          user = $dydra[:user]
+        end
       end
-      @account = case account_name
-        when Account then account_name
-        else Account.new(account_name.to_s)
+      @account = case user
+        when Account then user
+        else Account.new(user.to_s)
       end
       @name = name.to_s
       if Dydra::URL.respond_to?(:'/')
@@ -112,7 +116,7 @@ module Dydra
     #
     # @return [Job]
     def destroy!
-      Job.new(Dydra::Client.rpc.call('dydra.repository.destroy', path))
+      Dydra::Client.delete "#{@account}/#{@name}" 
     end
 
     ##
