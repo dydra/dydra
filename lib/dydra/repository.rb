@@ -12,7 +12,7 @@ module Dydra
     # @return [Enumerator]
     def self.each(options = {}, &block)
       if block_given?
-        result = Dydra::Client.rpc.call('dydra.repository.list', options[:account_name] || '')
+        result = Dydra::Client.rpc.call('dydra.repository.list', $dydra[:user] || '')
         result.each do |(account_name, repository_name)|
           block.call(Repository.new(account_name, repository_name))
         end
@@ -88,6 +88,15 @@ module Dydra
     # Sugar for creating a repository, as .new instantiates an existing one.
     def self.create!(account, name = nil)
       self.new(account, name).create!
+    end
+
+    ##
+    # @param [String] account
+    #
+    # List of repository names. Will use the given user if supplied.
+    def self.list(user = nil)
+      user ||= $dydra[:user]
+      Dydra::Client.get_json(user + "/repositories").map { |r| r['name'] }
     end
 
     ##

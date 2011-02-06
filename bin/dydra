@@ -42,7 +42,7 @@ module Dydra
       puts "    help        Shows this help."
       puts "    login       Cache your dydra credenetials locally."
       puts "    logout      Delete your local credenetials."
-      puts "    list        Lists existing repositories."
+      puts "    list        List your repositories."
       puts "    open        Opens an account or a repository in a web browser."
       puts "    url         Outputs the URL of an account or a repository."
       puts "    create      Creates a new repository."
@@ -62,7 +62,7 @@ module Dydra
     end
 
     def list(*resource_specs)
-      Command::List.new(@options).execute(*resource_specs)
+      Command::List.new(@options).execute(resource_specs.first)
     end
 
     def open(*resource_specs)
