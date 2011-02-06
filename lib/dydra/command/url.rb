@@ -6,10 +6,13 @@ module Dydra
       ##
       # @param  [Array<String>] resource_specs
       # @return [void]
-      def execute(*resource_specs)
-        resources = validate_resource_specs(resource_specs)
+      def execute(*resources)
         resources.each do |resource|
-          puts resource.url.to_s
+          if resource =~ /\//
+            puts Account.new(resource).url
+          else
+            puts Repository.new(resource).url
+          end
         end
       end
     end # URL
