@@ -61,6 +61,10 @@ module Dydra
       Command::Login.new(@options).execute(username, password)
     end
 
+    def logout(*args)
+      Command::Logout.new(@options).execute
+    end
+
     def list(*resource_specs)
       Command::List.new(@options).execute(resource_specs.first)
     end

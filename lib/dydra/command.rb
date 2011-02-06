@@ -11,6 +11,7 @@ module Dydra
     autoload :Import,   'dydra/command/import'
     autoload :List,     'dydra/command/list'
     autoload :Login,    'dydra/command/login'
+    autoload :Logout,   'dydra/command/logout'
     autoload :Open,     'dydra/command/open'
     autoload :Query,    'dydra/command/query'
     autoload :Rename,   'dydra/command/rename'
