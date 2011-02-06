@@ -65,7 +65,11 @@ module Dydra
     ##
     # @param  [String, #to_s] account_name
     # @param  [String, #to_s] name
-    def initialize(account_name, name)
+    def initialize(account_name, name = nil)
+      if name.nil?
+        name = account_name
+        account_name = $dydra[:user]
+      end
       @account = case account_name
         when Account then account_name
         else Account.new(account_name.to_s)
@@ -82,15 +86,15 @@ module Dydra
     # @param [String] repository_name
     #
     # Sugar for creating a repository, as .new instantiates an existing one.
-    def self.create!(account, name)
-      self.new(account, name).create
+    def self.create!(account, name = nil)
+      self.new(account, name).create!
     end
 
     ##
     # Creates this repository on Dydra.com.
     #
     # @return [String] repository_name
-    def create
+    def create!
       Dydra::Client.post "#{account}/repositories", { :dydra_repository => { :name => name }}
     end
 
@@ -145,7 +149,6 @@ module Dydra
     # @param  [String] query
     # @return [Job]
     def query(query)
-      raise StandardError, "#{self.class}#query currently requires an API token, but none was found." unless ENV['DYDRA_TOKEN']
       Dydra::Client.post "#{account}/#{name}/sparql", { :query => query },
          :content_type => 'application/x-www-form-urlencoded', 
          :accept => 'application/sparql-results+json'

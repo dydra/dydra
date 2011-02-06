@@ -6,10 +6,9 @@ module Dydra
       ##
       # @param  [Array<String>] repository_specs
       # @return [void]
-      def execute(*repository_specs)
-        repositories = parse_repository_specs(repository_specs)
+      def execute(*repositories)
         repositories.each do |repository|
-          repository.create
+          Repository.create!(repository)
           puts "Repository #{repository.url} successfully created." if verbose?
         end
       end
