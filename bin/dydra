@@ -46,7 +46,6 @@ module Dydra
       puts "    open        Opens an account or a repository in a web browser."
       puts "    url         Outputs the URL of an account or a repository."
       puts "    create      Creates a new repository."
-      puts "    rename      Renames a repository."
       puts "    drop        Destroys a repository permanently."
       puts "    clear       Deletes all data from a repository."
       puts "    count       Outputs the number of statements in a repository."
@@ -79,10 +78,6 @@ module Dydra
 
     def create(*repository_specs)
       Command::Create.new(@options).execute(*repository_specs)
-    end
-
-    def rename(old_repository_spec, new_repository_spec)
-      Command::Rename.new(@options).execute(old_repository_spec, new_repository_spec)
     end
 
     def drop(*repository_specs)
