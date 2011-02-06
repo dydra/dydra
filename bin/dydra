@@ -7,7 +7,7 @@ module Dydra
   class CLI
     BANNER = "Usage: #{RDF::CLI.basename} [options] command [args...]"
 
-    def initialize
+    def initialize(*args)
       options = {}
       optparser = RDF::CLI.options do
         self.banner = BANNER
@@ -21,8 +21,18 @@ module Dydra
           puts Dydra::VERSION; exit
         end
       end
-      Kernel.abort BANNER if ARGV.empty?
       @options = options
+      (help && Kernel.abort) if args.first.nil?
+      setup unless args.first == 'login'
+      self.send(*args) unless args.empty?
+    end
+
+    def setup
+      begin
+        Dydra::Client.setup!
+      rescue Dydra::AuthenticationError
+        Dydra::Command::Login.new.execute
+      end
     end
 
     def help(command = nil)
@@ -30,7 +40,8 @@ module Dydra
       puts
       puts "Commands:"
       puts "    help        Shows this help."
-      puts "    register    Registers a new user account."
+      puts "    login       Cache your dydra credenetials locally."
+      puts "    logout      Delete your local credenetials."
       puts "    list        Lists existing repositories."
       puts "    open        Opens an account or a repository in a web browser."
       puts "    url         Outputs the URL of an account or a repository."
@@ -46,8 +57,8 @@ module Dydra
       puts "    abort       Aborts a pending or running job."
     end
 
-    def register(account_name, password = nil)
-      Command::Register.new(@options).execute(account_name, password)
+    def login(username = nil, password = nil)
+      Command::Login.new(@options).execute(username, password)
     end
 
     def list(*resource_specs)
@@ -101,17 +112,13 @@ module Dydra
     def abort(job_uuid)
       Command::Abort.new(@options).execute(job_uuid)
     end
+
+    def method_missing(*args)
+      puts "unknown command: #{args.first}"
+      Kernel.abort help
+    end
   end
 end
 
 trap(:INT) { abort "" }
-
-Dydra::Client.setup!
-
-begin
-  Dydra::CLI.new.send(command = ARGV.shift, *ARGV)
-rescue Errno::ECONNREFUSED => e # Connection refused - connect(2)
-  RDF::CLI.abort e
-rescue NoMethodError => e
-  RDF::CLI.abort "unknown command `#{command}'"
-end
+Dydra::CLI.new(*ARGV)

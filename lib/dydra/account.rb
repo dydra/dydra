@@ -38,6 +38,13 @@ module Dydra
     end
 
     ##
+    # Returns basic account info
+    #
+    def info
+      Dydra::Client.get_json "#{@name}"
+    end
+
+    ##
     # Returns the given repository belonging to this account.
     #
     # @param  [String, #to_s] name
@@ -64,11 +71,5 @@ module Dydra
       name
     end
 
-    ##
-    # @private
-    # @return [Hash]
-    def info
-      Dydra::Client.rpc.call('dydra.account.info', name)
-    end
   end # Account
 end # Dydra
