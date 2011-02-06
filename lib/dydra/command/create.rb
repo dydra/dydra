@@ -8,8 +8,12 @@ module Dydra
       # @return [void]
       def execute(*repositories)
         repositories.each do |repository|
-          Repository.create!(repository)
-          puts "Repository #{repository.url} successfully created." if verbose?
+          begin
+            Repository.create!(repository)
+            puts "#{repository} created."
+          rescue RestClient::Forbidden
+            puts "Insufficient permissions to create #{repository}."
+          end
         end
       end
     end # Create
