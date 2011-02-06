@@ -195,7 +195,7 @@ module Dydra
     # @private
     # @return [Hash]
     def info
-      Dydra::Client.rpc.call('dydra.repository.info', path)
+      Dydra::Client.get_json("#{@account}/#{@name}/meta")
     end
 
     ##

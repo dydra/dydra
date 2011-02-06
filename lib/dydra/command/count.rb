@@ -6,12 +6,17 @@ module Dydra
       ##
       # @param  [Array<String>] repository_specs
       # @return [void]
-      def execute(*repository_specs)
-        repositories = validate_repository_specs(repository_specs)
-        count = repositories.inject(0) do |count, repository|
-          count += repository.count
+      def execute(*repositories)
+        sum = repositories.inject(0) do |sum , repository|
+          begin
+            count = Repository.new(repository).info['triple_count']
+            puts "#{count} #{repository}"
+            sum += count
+          rescue RestClient::ResourceNotFound
+            puts "#{repository} not found"
+          end
         end
-        puts count.to_s
+        puts "#{sum.to_i} total"
       end
     end # Count
   end # Command
