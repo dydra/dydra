@@ -17,7 +17,7 @@ module Dydra
             token = Account.new(user).info['authentication_token']
           rescue Exception => e
             # Special case ctrl-c
-            raise e if e.is_a?(SignalException)
+            raise e if (e.is_a?(SignalException) || e.is_a?(SystemExit) )
             puts "Invalid credentials: #{e.message}"
             Dydra::Client.reset!
             user = pass = nil
