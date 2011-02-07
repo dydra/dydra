@@ -74,6 +74,7 @@ module Dydra
           user = $dydra[:user]
         end
       end
+      raise AuthenticationError, "You must login before performing this action" if user.nil?
       @account = case user
         when Account then user
         else Account.new(user.to_s)
