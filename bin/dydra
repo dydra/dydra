@@ -9,7 +9,7 @@ module Dydra
 
     def initialize(*args)
       options = {}
-      optparser = RDF::CLI.options do
+      @optparser = RDF::CLI.options do
         self.banner = BANNER
         self.on('-d', '--debug',   'Enable debug output for troubleshooting.') do
           options[:debug] = true
@@ -36,7 +36,7 @@ module Dydra
     end
 
     def help(command = nil)
-      puts BANNER
+      puts @optparser
       puts
       puts "Commands:"
       puts "    help        Shows this help."
