@@ -16,32 +16,20 @@ module Dydra
         end
         @options[:result_format] ||= :parsed
         format = @options[:result_format] == :xml ? :xml : :json
-        result = repository.query(@query, format)
+        result = repository.query(@query, @options[:result_format])
         if @options[:result_format] == :parsed
-          require 'sparql/client'
-          bindings = ::SPARQL::Client.parse_json_bindings(result)
-          if bindings == true || bindings.nil?
-            puts !!bindings
-          else
-            if !(bindings.empty?)
-              variables = find_variables(bindings.first)
-              puts variables.join("\t")
-              bindings.each do |binding|
-                puts variables.map { |n| binding.to_hash[n] }.join("\t")
-              end
+          if result.respond_to?(:each)
+            variables = result.first.each_name.to_a
+            puts variables.join("\t")
+            result.each do |binding|
+              puts variables.map { |n| binding.to_hash[n] }.join("\t")
             end
+          else
+            puts bindings
           end
         else
           puts result
         end
-      end
-
-      ##
-      # Get a list of variables for this binding
-      # The variables should be obtained from the original query in the order they appear
-      def find_variables(binding)
-        variables = binding.each_name.to_a
-        variables.sort { |a, b| @query.index("?#{a}") <=> @query.index("?#{b}") }
       end
 
     end # Query
