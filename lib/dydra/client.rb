@@ -58,7 +58,7 @@ module Dydra
     # @param [String] where
     # @return [Any]
     def self.get(where, options = {})
-      resource(where).get({ :accept => :json }.merge(options))
+      resource(where).get({ :accept => :json, :user_agent => "Dydra API client #{Dydra::VERSION}" }.merge(options))
     end
 
     ##
@@ -67,7 +67,7 @@ module Dydra
     # @param [String] where
     # @return [Any]
     def self.delete(where)
-      resource(where).delete
+      resource(where).delete({ :user_agent => "Dydra API client #{Dydra::VERSION}" })
     end
 
     ##
@@ -76,7 +76,7 @@ module Dydra
     # @return [Any]
     def self.post(where, what, options = {})
       what = what.to_json unless options[:content_type]
-      resource(where).post what, { :content_type => 'application/json' }.merge(options)
+      resource(where).post what, { :content_type => 'application/json', :user_agent => "Dydra API client #{Dydra::VERSION}" }.merge(options)
     end
 
     ##
