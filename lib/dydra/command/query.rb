@@ -18,14 +18,14 @@ module Dydra
         format = @options[:result_format] == :xml ? :xml : :json
         result = repository.query(@query, @options[:result_format])
         if @options[:result_format] == :parsed
-          if result.respond_to?(:each)
+          if result.respond_to?(:empty?) && !result.empty?
             variables = result.first.each_name.to_a
             puts variables.join("\t")
             result.each do |binding|
               puts variables.map { |n| binding.to_hash[n] }.join("\t")
             end
           else
-            puts bindings
+            puts result
           end
         else
           puts result
