@@ -13,6 +13,8 @@ module Dydra
             puts "#{repository} created."
           rescue RestClient::Forbidden
             puts "Insufficient permissions to create #{repository}."
+          rescue RestClient::UnprocessableEntity
+            puts "#{repository} already exists."
           end
         end
       end
