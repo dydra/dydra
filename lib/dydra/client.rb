@@ -11,11 +11,14 @@ module Dydra
     #
     # @return [XMLRPC::Client]
     def self.rpc
-      url = Dydra::URL.join('rpc')
-      unless ENV['DYDRA_TOKEN'].to_s.empty?
-        url = url.join("?auth_token=#{ENV['DYDRA_TOKEN']}")
+      url = Dydra::URL.host.to_s.sub(/\/$/, '')
+      if $dydra[:token]
+        XMLRPC::Client.new3('host' => url, 'path' => "/rpc?auth_token=#{$dydra[:token]}")
+      elsif $dydra[:user]
+        XMLRPC::Client.new3('host' => url, 'path' => '/rpc', 'user' => $dydra[:user], 'password' => $dydra[:pass])
+      else
+        raise AuthenticationError, "You need to run Dydra::Client.setup! before performing an API operation"
       end
-      XMLRPC::Client.new2(url) # defaults to XML-RPC for now
     end
 
     ##

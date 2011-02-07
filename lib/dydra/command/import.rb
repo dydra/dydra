@@ -14,12 +14,12 @@ module Dydra
       # @param  [Array<String>] urls
       # @return [void]
       def execute(repository_spec, *urls)
-        repository = validate_repository_specs([repository_spec]).first
+        repository = Repository.new(repository_spec)
         urls.each do |input_url|
           stdout.puts "Importing #{input_url} into #{repository.path}..." if verbose?
-          job = repository.import!(input_url)
-          puts job.uuid
+          repository.import!(input_url).wait!
         end
+        puts "#{repository.account}/#{repository.name} has #{repository.info['triple_count']} triples"
       end
 
     end # Import
