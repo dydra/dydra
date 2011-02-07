@@ -18,14 +18,12 @@ module Dydra
           rescue Exception => e
             # Special case ctrl-c
             raise e if e.is_a?(SignalException)
-            raise e
             puts "Invalid credentials: #{e.message}"
             Dydra::Client.reset!
             user = pass = nil
             next
           end
         end
-
         save_credentials(user, token)
         puts "Credentials saved to ~/.dydra/credentials" if verbose?
       end
