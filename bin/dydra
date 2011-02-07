@@ -20,11 +20,17 @@ module Dydra
         self.on('-V', '--version', 'Display the Dydra CLI version and exit.') do
           puts Dydra::VERSION; exit
         end
+        self.on('-x', '--xml', 'Display XML SPARQL query results') do
+          options[:result_format] = :xml
+        end
+        self.on('-j', '--json', 'Display JSON SPARQL query results') do
+          options[:result_format] = :json
+        end
       end
       @options = options
       (help && Kernel.abort) if args.first.nil?
       setup unless args.first == 'login'
-      self.send(*args) unless args.empty?
+      self.send(*ARGV) unless args.empty?
     end
 
     def setup

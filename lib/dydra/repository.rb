@@ -162,10 +162,18 @@ module Dydra
     #
     # @param  [String] query
     # @return [Job]
-    def query(query)
+    def query(query, format = :json)
+      accept = case format 
+        when :json 
+          'application/sparql-results+json'
+        when :xml
+          'application/sparql-results+xml'
+        else
+          raise ArgumentError, "Unknown result format: #{format}"
+      end
       Dydra::Client.post "#{account}/#{name}/sparql", { :query => query },
          :content_type => 'application/x-www-form-urlencoded', 
-         :accept => 'application/sparql-results+json'
+         :accept => accept
     end
 
     ##
