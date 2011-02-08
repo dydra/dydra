@@ -44,6 +44,17 @@ Mailing List
 
 * <http://groups.google.com/group/dydra>
 
+Authors
+-------
+
+* [Arto Bendiken](http://github.com/bendiken) - <http://dydra.com/bendiken>
+* [Ben Lavender](http://github.com/bhuga) - <http://dydra.com/bhuga>
+
+Contributors
+------------
+
+* [Gabriel Horner](http://github.com/cldwalker) - <http://tagaholic.me/>
+
 License
 -------
 
