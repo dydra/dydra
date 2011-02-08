@@ -7,6 +7,7 @@ module Dydra
       # @param  [Array<String>] repository_specs
       # @return [void]
       def execute(*repositories)
+        puts "No repository specified" if repositories.empty?
         repositories.each do |repository|
           begin
             Repository.create!(repository)
@@ -15,6 +16,10 @@ module Dydra
             puts "Insufficient permissions to create #{repository}."
           rescue RestClient::UnprocessableEntity
             puts "#{repository} already exists."
+          rescue AuthenticationError => e
+            puts e
+          rescue RepositoryMisspecified => e
+            puts e
           end
         end
       end

@@ -7,16 +7,18 @@ module Dydra
       # @param  [Array<String>] repository_specs
       # @return [void]
       def execute(*repositories)
-        sum = repositories.inject(0) do |sum , repository|
-          begin
+        begin
+          sum = repositories.inject(0) do |sum , repository|
             count = Repository.new(repository).info['triple_count']
             puts "#{count} #{repository}"
             sum += count
-          rescue RestClient::ResourceNotFound
-            puts "#{repository} not found"
           end
+          puts "#{sum.to_i} total"
+        rescue RestClient::ResourceNotFound
+          puts "#{repository} not found"
+        rescue RepositoryMisspecified => e
+          puts e
         end
-        puts "#{sum.to_i} total"
       end
     end # Count
   end # Command

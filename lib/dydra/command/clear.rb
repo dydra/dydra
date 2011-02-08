@@ -7,10 +7,14 @@ module Dydra
       # @param  [Array<String>] repository_specs
       # @return [void]
       def execute(*repository_specs)
-        repositories = validate_repository_specs(repository_specs)
-        repositories.each do |repository|
-          job = repository.clear!
-          puts "Repository #{repository.url} successfully cleared." if verbose?
+        begin
+          repositories = validate_repository_specs(repository_specs)
+          repositories.each do |repository|
+            job = repository.clear!
+            puts "Repository #{repository.url} successfully cleared." if verbose?
+          end
+        rescue RepositoryMisspecified => e
+          e
         end
       end
     end # Clear

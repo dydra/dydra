@@ -13,6 +13,8 @@ module Dydra
           end
         rescue RestClient::ResourceNotFound
           puts "#{user || $dydra[:user]} not found"
+        rescue RepositoryMisspecified => e
+          puts e
         end
       end
     end # List

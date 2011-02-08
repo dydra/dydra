@@ -16,6 +16,8 @@ module Dydra
             puts "#{repository} not found."
           rescue RestClient::Forbidden
             puts "Insufficient permissions to delete #{repository}."
+          rescue RepositoryMisspecified => e
+            puts e
           end
         end
       end

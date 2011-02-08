@@ -7,12 +7,16 @@ module Dydra
       # @param  [Array<String>] resource_specs
       # @return [void]
       def execute(*resources)
-        resources.each do |resource|
-          if resource =~ /\//
-            puts Account.new(resource).url
-          else
-            puts Repository.new(resource).url
+        begin
+          resources.each do |resource|
+            if resource =~ /\//
+              puts Account.new(resource).url
+            else
+              puts Repository.new(resource).url
+            end
           end
+        rescue RepositoryMisspecified => e
+          puts e
         end
       end
     end # URL
