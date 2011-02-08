@@ -27,6 +27,7 @@ module Dydra
           options[:result_format] = :json
         end
       end
+      args = ARGV
       @options = options
       if args.empty?
         help
