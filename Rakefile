@@ -24,7 +24,7 @@ namespace :yardoc do
   desc "Rebuilds the YARD documentation in doc/yard/"
   task :build do
     sh "mkdir -p doc/yard"
-    sh "yardoc"
+    sh "bundle exec yardoc"
   end
 
   desc "Uploads the YARD documentation to http://dydra.rubyforge.org/"
