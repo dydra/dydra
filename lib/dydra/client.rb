@@ -32,14 +32,14 @@ module Dydra
       elsif options[:user]
         $dydra[:user] = options[:user]
         $dydra[:pass] = options[:password] || options[:pass] || raise(AuthenticationError, "You must supply a password")
-      elsif ENV['DYDRA_TOKEN']
-        $dydra[:token] = ENV['DYDRA_TOKEN']
       elsif File.exists?(credentials_file)
         require 'yaml'
         $dydra.merge!(YAML.load_file(credentials_file))
         if !$dydra[:user] && !($dydra[:pass] || $dydra[:token])
           raise AuthenticationError, "You need to specify :user and :pass or :token in #{credentials_file}"
         end
+      elsif ENV['DYDRA_TOKEN']
+        $dydra[:token] = ENV['DYDRA_TOKEN']
       else
         raise AuthenticationError, "You need to give either :user and :password, or :token, or set your ENV['DYDRA_TOKEN'] to authenticate."
       end
