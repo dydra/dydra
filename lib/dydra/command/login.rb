@@ -49,6 +49,7 @@ module Dydra
 
       def save_credentials(user, token)
         require 'yaml'
+        Dir.mkdir(File.dirname(Dydra::Client.credentials_file)) unless File.exists?(File.dirname(Dydra::Client.credentials_file))
         File.open(Dydra::Client.credentials_file, 'w+') { |f| f.write({ :user => user, :token => token }.to_yaml) } 
       end
     end # Register
