@@ -31,6 +31,24 @@ Should you wish to remove the library and binary from your system, do:
 
     $ [sudo] gem uninstall dydra
 
+Configuration
+-------------
+
+The first time you run the `dydra` command, you'll be asked to authenticate.
+When you type in your username and password, your API token will be fetched
+and stored in the the `~/.dydra/credentials` file in your home directory,
+enabling you to bypass the authentication step for future commands.
+
+Environment
+-----------
+
+Another way to specify the API token is to set the `DYDRA_TOKEN` environment
+variable, which takes precedence over any API token specified in the
+`~/.dydra/credentials` file. This can be handy, for example, when executing
+a command against another Dydra account you may have:
+
+    $ export DYDRA_TOKEN='R33l6sEnxiExJfOYnZHWs2v06yWd2FUiBZc874vTt6QUSPz96imMf48tqLsz'
+
 Download
 --------
 
