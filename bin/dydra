@@ -30,7 +30,12 @@ module Dydra
       @options = options
       return help if args.empty?
       setup unless args.first == 'login'
-      self.send(*ARGV) unless args.empty?
+      begin
+        self.send(*ARGV) unless args.empty?
+      rescue ArgumentError
+        raise unless $!.backtrace[0][%r{^bin/dydra}]
+        warn "`dydra #{args[0]}' was called incorrectly."
+      end
     end
 
     def setup
