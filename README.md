@@ -1,5 +1,9 @@
-Dydra.com API Client
-====================
+Dydra.com Software Development Kit (SDK) for Ruby
+=================================================
+
+This is the official command-line client (CLI) and Ruby software development
+kit (SDK) for [Dydra.com](http://dydra.com/), the cloud-hosted RDF & SPARQL
+database service.
 
 <https://github.com/dydra/dydra>
 
