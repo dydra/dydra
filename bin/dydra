@@ -28,7 +28,7 @@ module Dydra
         end
       end
       @options = options
-      (help && Kernel.abort) if args.first.nil?
+      return help if args.empty?
       setup unless args.first == 'login'
       self.send(*ARGV) unless args.empty?
     end
