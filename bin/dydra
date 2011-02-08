@@ -28,14 +28,22 @@ module Dydra
         end
       end
       @options = options
-      return help if args.empty?
-      setup unless args.first == 'login'
-      begin
-        self.send(*ARGV) unless args.empty?
-      rescue ArgumentError
-        raise unless $!.backtrace[0][%r{^bin/dydra}]
-        warn "`dydra #{args[0]}' was called incorrectly."
+      if args.empty?
+        help
+      elsif !public_methods(false).map(&:to_s).include?(args[0])
+        puts "unknown command: #{args.first}"
+        help
+      else
+        setup unless args.first == 'login'
+        run_command(args) unless args.empty?
       end
+    end
+
+    def run_command(args)
+      self.send(*args)
+    rescue ArgumentError
+      raise unless $!.backtrace[0][%r{^bin/dydra}]
+      warn "`dydra #{args[0]}' was called incorrectly."
     end
 
     def setup
@@ -121,12 +129,6 @@ module Dydra
 
     def abort(job_uuid)
       Command::Abort.new(@options).execute(job_uuid)
-    end
-
-    def method_missing(*args)
-      puts "unknown command: #{args.first}"
-      help
-      Kernel.abort
     end
   end
 end
