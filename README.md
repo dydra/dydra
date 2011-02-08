@@ -25,19 +25,23 @@ Installation
 The recommended installation method is via [RubyGems](http://rubygems.org/).
 To install the latest official release of the library, do:
 
-    % [sudo] gem install dydra
+    $ [sudo] gem install dydra
+
+Should you wish to remove the library and binary from your system, do:
+
+    $ [sudo] gem uninstall dydra
 
 Download
 --------
 
 To get a local working copy of the development repository, do:
 
-    % git clone git://github.com/dydra/dydra.git
+    $ git clone git://github.com/dydra/dydra.git
 
 Alternatively, download the latest development version as a tarball as
 follows:
 
-    % wget http://github.com/dydra/dydra/tarball/master
+    $ wget http://github.com/dydra/dydra/tarball/master
 
 Mailing List
 ------------
