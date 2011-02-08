@@ -74,7 +74,9 @@ module Dydra
           user = $dydra[:user]
         end
       end
-      raise AuthenticationError, "You must login before performing this action" if user.nil?
+      if user.nil? && !$dydra[:token].nil?
+        raise RepositoryMisspecified, "You must specify a repository owner name when using token-only authentication"
+      end
       @account = case user
         when Account then user
         else Account.new(user.to_s)
@@ -101,6 +103,7 @@ module Dydra
     # List of repository names. Will use the given user if supplied.
     def self.list(user = nil)
       user ||= $dydra[:user]
+      raise RepositoryMisspecified, "List requires a user in token-only authentication mode" if user.nil?
       Dydra::Client.get_json(user + "/repositories").map { |r| r['name'] }
     end
 
