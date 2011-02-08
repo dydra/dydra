@@ -15,6 +15,7 @@ module Dydra
             pass = ask_for_pass if pass.nil?
             Dydra::Client.setup!(:user => user, :pass => pass)
             token = Account.new(user).info['authentication_token']
+            raise AuthenticationError, "Incorrect password" if token.nil?
           rescue Exception => e
             # Special case ctrl-c
             raise e if (e.is_a?(SignalException) || e.is_a?(SystemExit) )
