@@ -19,3 +19,19 @@ task :package => ['VERSION', '.gemspec'] do
   sh "git archive --prefix=#{package}-#{version}/ --format=tar #{version} | bzip2 > pkg/#{package}-#{version}.tbz"
   sh "git archive --prefix=#{package}-#{version}/ --format=zip #{version} > pkg/#{package}-#{version}.zip"
 end
+
+namespace :yardoc do
+  desc "Rebuilds the YARD documentation in doc/yard/"
+  task :build do
+    sh "mkdir -p doc/yard"
+    sh "yardoc"
+  end
+
+  desc "Uploads the YARD documentation to http://dydra.rubyforge.org/"
+  task :upload do
+    host = ENV['HOST'] || 'rubyforge.org'
+    sh "rsync -azv doc/yard/ #{host}:/var/www/gforge-projects/dydra/"
+  end
+end
+desc "Rebuilds the YARD documentation in doc/yard/"
+task :yardoc => 'yardoc:build'
