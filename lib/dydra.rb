@@ -15,4 +15,7 @@ module Dydra
   autoload :VERSION,    'dydra/version'
 
   class AuthenticationError < StandardError ; end
+
+  # Used for specifying repositories without owner name, maybe one day queries too
+  class RepositoryMisspecified < ::ArgumentError ; end
 end
