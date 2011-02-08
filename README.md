@@ -60,11 +60,6 @@ To get a local working copy of the development repository, do:
 
     $ git clone git://github.com/dydra/dydra.git
 
-Alternatively, download the latest development version as a tarball as
-follows:
-
-    $ wget http://github.com/dydra/dydra/tarball/master
-
 Mailing List
 ------------
 
