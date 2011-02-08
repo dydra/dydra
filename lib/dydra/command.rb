@@ -29,7 +29,7 @@ module Dydra
     end
 
     def verbose?
-      @options[:verbose] || $VERBOSE
+      @options[:verbose] || $VERBOSE || @options[:debug] || $DEBUG
     end
 
     def debug?
