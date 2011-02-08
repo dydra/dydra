@@ -36,6 +36,17 @@ module Dydra
         help
       else
         setup unless args.first == 'login'
+        if @options[:debug] && args.first != 'login'
+          if $dydra[:token]
+            if $dydra[:user]
+              puts "Using #{$dydra[:user]} with an authentication token, #{$dydra[:token]}"
+            else
+              puts "Using userless authentication (token #{$dydra[:token]}), all repository identifiers must include their owner."
+            end
+          else
+            puts "Using #{$dydra[:user]} and password-based authentication"
+          end
+        end
         run_command(args) unless args.empty?
       end
     end
