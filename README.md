@@ -19,6 +19,10 @@ Dependencies
 * [RDF.rb](http://rubygems.org/gems/rdf) (>= 0.3.0)
 * [SPARQL::Client](http://rubygems.org/gems/sparql-client) (>= 0.0.9)
 
+Note: the instructions in this README, and the operation of the library
+itself, implicitly assume a Unix system (Mac OS X, Linux, or *BSD) at
+present. Patches improving Windows support are welcome.
+
 Installation
 ------------
 
