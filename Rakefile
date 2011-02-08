@@ -3,6 +3,11 @@ $:.unshift(File.expand_path(File.join(File.dirname(__FILE__), 'lib')))
 require 'rubygems'
 require 'dydra'
 
+desc "Executes RSpec on all specs in the spec/ directory"
+task :spec do
+  sh "bundle exec rspec spec/"
+end
+
 desc "Builds the dydra-x.y.z.gem binary"
 task :build do
   sh "mkdir -p pkg"
@@ -21,7 +26,7 @@ task :package => ['VERSION', '.gemspec'] do
 end
 
 namespace :yardoc do
-  desc "Rebuilds the YARD documentation in doc/yard/"
+  desc "Rebuilds the YARD documentation in the doc/yard/ directory"
   task :build do
     sh "mkdir -p doc/yard"
     sh "bundle exec yardoc"
