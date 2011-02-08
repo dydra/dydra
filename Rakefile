@@ -29,13 +29,13 @@ namespace :version do
   end
 end
 
-desc "Builds the dydra-#{VERSION_STRING}.gem binary"
+desc "Builds the pkg/dydra-#{VERSION_STRING}.gem binary"
 task :build do
   sh "mkdir -p pkg"
   sh "gem build .gemspec && mv *.gem pkg/"
 end
 
-desc "Builds the dydra-#{VERSION_STRING}.tgz, dydra-#{VERSION_STRING}.tbz and dydra-#{VERSION_STRING}.zip archives"
+desc "Builds the pkg/dydra-#{VERSION_STRING}.tgz, pkg/dydra-#{VERSION_STRING}.tbz and pkg/dydra-#{VERSION_STRING}.zip archives"
 task :package => ['VERSION', '.gemspec'] do
   gemspec = eval(File.read('.gemspec'))
   package = gemspec.name.to_s
@@ -44,6 +44,11 @@ task :package => ['VERSION', '.gemspec'] do
   sh "git archive --prefix=#{package}-#{version}/ --format=tar #{version} | gzip > pkg/#{package}-#{version}.tgz"
   sh "git archive --prefix=#{package}-#{version}/ --format=tar #{version} | bzip2 > pkg/#{package}-#{version}.tbz"
   sh "git archive --prefix=#{package}-#{version}/ --format=zip #{version} > pkg/#{package}-#{version}.zip"
+end
+
+desc "Pushes the pkg/dydra-#{VERSION_STRING}.gem binary to RubyGems.org"
+task :push => :build do
+  sh "gem push pkg/dydra-#{VERSION_STRING}.gem"
 end
 
 namespace :yardoc do
