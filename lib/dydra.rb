@@ -26,9 +26,18 @@ module Dydra
   class RepositoryMisspecified < ::ArgumentError; end
 
   ##
+  # @private
   # @see    Client.authenticate!
   # @return [void]
   def self.authenticate!(*args)
     Client.authenticate!(*args)
+  end
+
+  ##
+  # @private
+  # @see    Client.setup!
+  # @return [void]
+  def self.setup!(*args)
+    Client.setup!(*args)
   end
 end # Dydra
