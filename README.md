@@ -111,6 +111,18 @@ Contributors
 
 * [Gabriel Horner](http://github.com/cldwalker) - <http://tagaholic.me/>
 
+Contributing
+------------
+
+* Do your best to adhere to the existing coding conventions and idioms.
+* Don't use hard tabs, and don't leave trailing whitespace on any line.
+* Do document every method you add using [YARD][] annotations. Read the
+  [tutorial][YARD-GS] or just look at the existing code for examples.
+* Don't touch the `.gemspec`, `VERSION`, or `AUTHORS` files. If you need to
+  change them, do so on your private branch only.
+* Do feel free to add yourself to the `CREDITS` file and the corresponding
+  list in the `README`. Alphabetical order applies.
+
 License
 -------
 
