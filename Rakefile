@@ -5,13 +5,18 @@ require 'dydra'
 
 VERSION_STRING = ENV['VERSION'] || File.read('VERSION').chomp
 
-desc "Executes RSpec on all specs in the spec/ directory"
+desc "Open an IRB session with the Dydra SDK preloaded"
+task :irb do
+  sh "bundle exec irb -Ilib -rdydra"
+end
+
+desc "Execute RSpec on all specs in the spec/ directory"
 task :spec do
   sh "bundle exec rspec spec/"
 end
 
 namespace :version do
-  desc "Bumps the version number in the VERSION and lib/dydra/version.rb files"
+  desc "Bump the version number in the VERSION and lib/dydra/version.rb files"
   task :bump do
     new_version_string = VERSION_STRING.split('.').map(&:to_i)
     old_version_tiny   = new_version_string[-1]
@@ -23,19 +28,19 @@ namespace :version do
     sh "git ci -m 'Bumped the version to #{new_version_string}.' VERSION lib/dydra/version.rb"
   end
 
-  desc "Tags the current revision as release #{VERSION_STRING}"
+  desc "Tag the current revision as release #{VERSION_STRING}"
   task :tag do
     sh "git tag -s #{VERSION_STRING} -m 'Released version #{VERSION_STRING}.'"
   end
 end
 
-desc "Builds the pkg/dydra-#{VERSION_STRING}.gem binary"
+desc "Build the pkg/dydra-#{VERSION_STRING}.gem binary"
 task :build do
   sh "mkdir -p pkg"
   sh "gem build .gemspec && mv *.gem pkg/"
 end
 
-desc "Builds the pkg/dydra-#{VERSION_STRING}.tgz, pkg/dydra-#{VERSION_STRING}.tbz and pkg/dydra-#{VERSION_STRING}.zip archives"
+desc "Build the pkg/dydra-#{VERSION_STRING}.tgz, pkg/dydra-#{VERSION_STRING}.tbz and pkg/dydra-#{VERSION_STRING}.zip archives"
 task :package => ['VERSION', '.gemspec'] do
   gemspec = eval(File.read('.gemspec'))
   package = gemspec.name.to_s
@@ -46,23 +51,23 @@ task :package => ['VERSION', '.gemspec'] do
   sh "git archive --prefix=#{package}-#{version}/ --format=zip #{version} > pkg/#{package}-#{version}.zip"
 end
 
-desc "Pushes the pkg/dydra-#{VERSION_STRING}.gem binary to RubyGems.org"
+desc "Push the pkg/dydra-#{VERSION_STRING}.gem binary to RubyGems.org"
 task :push => :build do
   sh "gem push pkg/dydra-#{VERSION_STRING}.gem"
 end
 
 namespace :yardoc do
-  desc "Rebuilds the YARD documentation in the doc/yard/ directory"
+  desc "Rebuild the YARD documentation in the doc/yard/ directory"
   task :build do
     sh "mkdir -p doc/yard"
     sh "bundle exec yardoc"
   end
 
-  desc "Uploads the YARD documentation to http://dydra.rubyforge.org/"
+  desc "Upload the YARD documentation to http://dydra.rubyforge.org/"
   task :upload do
     host = ENV['HOST'] || 'rubyforge.org'
     sh "rsync -azv doc/yard/ #{host}:/var/www/gforge-projects/dydra/"
   end
 end
-desc "Rebuilds the YARD documentation in doc/yard/"
+desc "Rebuild the YARD documentation in doc/yard/"
 task :yardoc => 'yardoc:build'
