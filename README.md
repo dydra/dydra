@@ -13,6 +13,13 @@ Examples
 
     Dydra.authenticate!(:token => api_token)
 
+### Enumerating your repositories
+
+    account = Dydra::Account.new('jhacker')
+    account.each do |repository|
+      puts repository
+    end
+
 Documentation
 -------------
 
