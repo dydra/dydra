@@ -12,6 +12,7 @@ module Dydra
     # @return [XMLRPC::Client]
     def self.rpc
       url = Dydra::URL.host.to_s.sub(/\/$/, '')
+      $dydra ||= {}
       if $dydra[:token]
         XMLRPC::Client.new3('host' => url, 'path' => "/rpc?auth_token=#{$dydra[:token]}")
       elsif $dydra[:user]
@@ -100,6 +101,7 @@ module Dydra
     # @param  [String] location
     # @return [RestClient::Resource]
     def self.resource(location)
+      $dydra ||= {}
       if $dydra[:token]
         RestClient::Resource.new(Dydra::URL.join(location).to_s, $dydra[:token])
       elsif $dydra[:user]
@@ -125,6 +127,7 @@ module Dydra
           warn "WARNING: install the 'socksify' gem to use your configured SOCKS proxy (#{socks_server})."
         end
       end
+      $dydra ||= {}
       $dydra[:setup?] = true
     end
 
