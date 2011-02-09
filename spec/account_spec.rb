@@ -26,6 +26,18 @@ describe Dydra::Account do
     end
   end
 
+  context "Account#email" do
+    it "should return a string" do
+      @account.email.should be_a String
+    end
+  end
+
+  context "Account#fullname" do
+    it "should return a string" do
+      @account.fullname.should be_a String
+    end
+  end
+
   context "Account#repository(name)" do
     it "should require one argument" do
       lambda { @account.repository() }.should raise_error ArgumentError

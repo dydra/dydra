@@ -7,6 +7,11 @@ module Dydra
   #     puts repository.inspect
   #   end
   #
+  # @example Accessing account information
+  #   account = Dydra::Account.new('jhacker')
+  #   account.name      #=> "jhacker"
+  #   account.fullname  #=> "J. Random Hacker"
+  #
   # @example Accessing a repository belonging to an account
   #   repository = account[:foaf]
   #
@@ -20,7 +25,7 @@ module Dydra
     # Dydra.com.
     #
     # @param  [String, #to_s] name
-    # @return [Boolean]
+    # @return [Boolean] `true` or `false`
     def self.exists?(name)
       Account.new(name).exists?
     end
@@ -34,15 +39,50 @@ module Dydra
     # @option options [String] :password
     # @return [Account]
     def self.register!(name, options = {})
-      Dydra::Client.rpc.call('dydra.account.register', name, options[:email], options[:password]) # FIXME
-      self.new(name)
+      raise NotImplementedError, "#{self.class}.register!"
+      #Dydra::Client.rpc.call('dydra.account.register', name, options[:email], options[:password]) # FIXME
+      #self.new(name)
     end
 
+    ##
+    # The account name.
+    #
+    # @example
+    #   Dydra::Account.new('jhacker').name      #=> "jhacker"
+    #
     # @return [String]
     attr_reader :name
 
     ##
+    # The account holder's email address.
+    #
+    # Note that you can only access the email address associated with your
+    # own account(s); for any other accounts, this will always return `nil`.
+    #
+    # @example
+    #   Dydra::Account.new('jhacker').email     #=> "jhacker@dydra.com"
+    #
+    # @return [String]
+    attr_reader :email
+
+    ##
+    # The account holder's full name.
+    #
+    # @example
+    #   Dydra::Account.new('jhacker').fullname  #=> "J. Random Hacker"
+    #
+    # @return [String]
+    attr_reader :fullname
+
+    %w(email fullname).each do |attr_name|
+      class_eval(<<-EOS)
+        def #{attr_name}(); info['#{attr_name}']; end
+      EOS
+    end
+
+    ##
     # @param  [String, #to_s] name
+    #   a valid account name
     def initialize(name)
       @name = name.to_s
       super(Dydra::URL.join(@name))
@@ -57,7 +97,7 @@ module Dydra
     end
 
     ##
-    # Returns the given repository belonging to this account.
+    # Returns a given repository belonging to this account.
     #
     # @param  [String, #to_s] name
     # @return [Repository]
@@ -86,7 +126,7 @@ module Dydra
       if block_given?
         result = Dydra::Client.rpc.call('dydra.repository.list', name)
         result.each do |(account_name, repository_name)|
-          block.call(Repository.new(account_name, repository_name))
+          block.call(Repository.new(self, repository_name))
         end
       end
       enum_for(:each_repository, options)
