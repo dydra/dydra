@@ -4,7 +4,16 @@ module Dydra
   class Query < Resource
     SPEC = %r(^([^/\.]+)/([^/\.]+)/([^/\.]+)$) # /account/repository/query
 
+    ##
+    # The repository this query belongs to.
+    #
+    # @return [Repository]
     attr_reader :repository
+
+    ##
+    # The machine-readable name of the query.
+    #
+    # @return [String]
     attr_reader :name
 
     ##
@@ -21,12 +30,16 @@ module Dydra
 
     ##
     # Returns the path spec of this query.
+    #
+    # @return [String]
     def path
       [repository.to_s, name].join('/')
     end
 
     ##
     # Returns a string representation of the query name.
+    #
+    # @return [String]
     def to_s
       path
     end

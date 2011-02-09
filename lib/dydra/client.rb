@@ -1,6 +1,6 @@
 require 'xmlrpc/client'
-require 'rest_client'
-require 'json'
+require 'rest_client'   # @see http://rubygems.org/gems/rest-client
+require 'json'          # @see http://rubygems.org/gems/json
 
 module Dydra
   ##
@@ -22,9 +22,13 @@ module Dydra
     end
 
     ##
-    # Authenticate with dydra.com
+    # Authenticates with Dydra.com.
     #
-    # @return [Void]
+    # @param  [Hash{Symbol => Object}] options
+    # @option options [String] :token    (nil)
+    # @option options [String] :user     (nil)
+    # @option options [String] :password (nil)
+    # @return [void]
     def self.authenticate!(options = {})
       $dydra ||= {}
       if options[:token]
@@ -47,49 +51,57 @@ module Dydra
 
 
     ##
-    # GET parsed json from the dydra.com REST API
-    # @param [String] where
-    # @param [Hash] additional options
-    # @return [Any]
+    # GET parsed JSON from the Dydra.com REST API.
+    #
+    # @param  [String] where
+    # @param  [Hash{Symbol => Object}]
+    #   any additional options
+    # @return [Hash]
     def self.get_json(where, options = {})
       JSON.parse(get(where, options))
     end
 
     ##
-    # GET from the dydra.com REST API
-    # 
-    # @param [String] where
-    # @return [Any]
-    def self.get(where, options = {})
-      resource(where).get({ :accept => :json, :user_agent => "Dydra API client #{Dydra::VERSION}" }.merge(options))
-    end
-
-    ##
-    # DELETE from the dydra.com REST API
-    # 
-    # @param [String] where
-    # @return [Any]
-    def self.delete(where)
-      resource(where).delete({ :user_agent => "Dydra API client #{Dydra::VERSION}" })
-    end
-
-    ##
-    # POST to the Dydra.com REST API
+    # GET from the Dydra.com REST API.
     #
-    # @return [Any]
+    # @param  [String] where
+    # @param  [Hash{Symbol => Object}]
+    #   any additional options
+    # @return [Object]
+    def self.get(where, options = {})
+      resource(where).get({:accept => :json, :user_agent => "Dydra API client #{Dydra::VERSION}"}.merge(options))
+    end
+
+    ##
+    # DELETE from the Dydra.com REST API.
+    #
+    # @param  [String] where
+    # @return [Object]
+    def self.delete(where)
+      resource(where).delete({:user_agent => "Dydra API client #{Dydra::VERSION}"})
+    end
+
+    ##
+    # POST to the Dydra.com REST API.
+    #
+    # @param  [String] where
+    # @param  [Hash{Symbol => Object}]
+    #   any additional options
+    # @return [Object]
     def self.post(where, what, options = {})
       what = what.to_json unless options[:content_type]
-      resource(where).post what, { :content_type => 'application/json', :user_agent => "Dydra API client #{Dydra::VERSION}" }.merge(options)
+      resource(where).post what, {:content_type => 'application/json', :user_agent => "Dydra API client #{Dydra::VERSION}"}.merge(options)
     end
 
     ##
-    # Provides a RestClient::Resource configured with authentication
-    # information for the given URL fragment
+    # Provides a `RestClient::Resource` configured with authentication
+    # information for the given URL fragment.
     #
+    # @param  [String] location
     # @return [RestClient::Resource]
     def self.resource(location)
       if $dydra[:token]
-        RestClient::Resource.new Dydra::URL.join(location).to_s, $dydra[:token]
+        RestClient::Resource.new(Dydra::URL.join(location).to_s, $dydra[:token])
       elsif $dydra[:user]
         RestClient::Resource.new(Dydra::URL.join(location).to_s, :user => $dydra[:user], :password => $dydra[:pass])
       else
@@ -117,26 +129,30 @@ module Dydra
     end
 
     ##
-    # Returns true if setup has been run
+    # Returns `true` if `#setup!` has been run.
     #
-    # @return [Boolean]
+    # @return [Boolean] `true` or `false`
     def self.setup?
       $dydra ||= {}
       $dydra[:setup?]
     end
 
     ##
-    # Clear the current user state
+    # Clears the current user state.
+    #
+    # @return [void]
     def self.reset!
       $dydra = {}
     end
 
     ##
-    # The file which we'll read and write credentials to
+    # Returns the path of the file which we'll read and write credentials
+    # to.
+    #
+    # @return [String]
     def self.credentials_file
       File.join(ENV['HOME'], '.dydra', 'credentials')
     end
-
   end # Client
 end # Dydra
 

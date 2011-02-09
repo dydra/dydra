@@ -1,6 +1,10 @@
 require 'open-uri'
 require 'rdf'      # @see http://rubygems.org/gems/rdf
 
+##
+# Dydra.com software development kit (SDK) for Ruby.
+#
+# @see http://docs.dydra.com/sdk/ruby
 module Dydra
   URI = RDF::URI('http://api.dydra.com/')
   URL = RDF::URI(ENV['DYDRA_URL'] || URI)
@@ -14,8 +18,9 @@ module Dydra
   autoload :Resource,   'dydra/resource'
   autoload :VERSION,    'dydra/version'
 
-  class AuthenticationError < StandardError ; end
+  class AuthenticationError < StandardError; end
 
-  # Used for specifying repositories without owner name, maybe one day queries too
-  class RepositoryMisspecified < ::ArgumentError ; end
-end
+  # Used for specifying repositories without owner name, maybe one day
+  # queries too.
+  class RepositoryMisspecified < ::ArgumentError; end
+end # Dydra

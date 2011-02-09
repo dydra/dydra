@@ -1,5 +1,7 @@
 ##
 # Patches for Ruby's built-in XML-RPC client.
+#
+# @see http://www.ruby-doc.org/stdlib/libdoc/xmlrpc/rdoc/index.html
 class XMLRPC::Client
   alias_method :do_rpc_broken, :do_rpc
 

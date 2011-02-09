@@ -8,6 +8,8 @@ module Dydra
 
     include Comparable
 
+    ##
+    # @return [Resource]
     def self.new(*args, &block)
       if self == Resource
         case spec = args.first
@@ -82,6 +84,8 @@ module Dydra
 
     ##
     # Returns the RDF data for this resource.
+    #
+    # @return [RDF::Enumerable]
     def to_rdf
       get('.nt', 'Accept' => 'text/plain') do |response|
         case response

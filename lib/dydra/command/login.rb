@@ -1,8 +1,7 @@
 module Dydra
   class Command
     ##
-    # Login and cache credentials locally
-    #
+    # Logins and caches credentials locally.
     class Login < Command
       ##
       # @param  [String] account_name
@@ -23,7 +22,7 @@ module Dydra
           rescue SignalException, SystemExit => e
             # Special case ctrl-c at the command line
             puts "caught #{e}"
-            raise e 
+            raise e
           rescue Exception => e
             puts "Invalid credentials: #{e.message}"
           end
@@ -55,7 +54,7 @@ module Dydra
       def save_credentials(user, token)
         require 'yaml'
         Dir.mkdir(File.dirname(Dydra::Client.credentials_file)) unless File.exists?(File.dirname(Dydra::Client.credentials_file))
-        File.open(Dydra::Client.credentials_file, 'w+') { |f| f.write({ :user => user, :token => token }.to_yaml) } 
+        File.open(Dydra::Client.credentials_file, 'w+') { |f| f.write({ :user => user, :token => token }.to_yaml) }
       end
     end # Register
   end # Command

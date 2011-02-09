@@ -38,10 +38,11 @@ module Dydra
     end
 
     ##
-    # Returns basic account info
+    # Returns basic account info.
     #
+    # @return [Hash]
     def info
-      Dydra::Client.get_json "#{@name}"
+      Dydra::Client.get_json("#{@name}")
     end
 
     ##
@@ -70,6 +71,5 @@ module Dydra
     def to_s
       name
     end
-
   end # Account
 end # Dydra

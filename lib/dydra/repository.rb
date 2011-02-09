@@ -45,13 +45,13 @@ module Dydra
     attr_reader :description
 
     ##
-    # The time that the repository was first created.
+    # When the repository was first created.
     #
     # @return [DateTime]
     attr_reader :created
 
     ##
-    # The time that the repository was last updated.
+    # When the repository was last updated.
     #
     # @return [DateTime]
     attr_reader :updated
@@ -90,29 +90,31 @@ module Dydra
     end
 
     ##
-    # @param [String] repository_name
+    # Sugar for creating a repository, as `.new` instantiates an existing one.
     #
-    # Sugar for creating a repository, as .new instantiates an existing one.
+    # @param  [String] repository_name
+    # @return [Repository]
     def self.create!(account, name = nil)
       self.new(account, name).create!
     end
 
     ##
-    # @param [String] account
-    #
     # List of repository names. Will use the given user if supplied.
+    #
+    # @param  [String] account
+    # @return [Array<String>]
     def self.list(user = nil)
       user ||= $dydra[:user]
       raise RepositoryMisspecified, "List requires a user in token-only authentication mode" if user.nil?
-      Dydra::Client.get_json(user + "/repositories").map { |r| r['name'] }
+      Dydra::Client.get_json(user + '/repositories').map { |r| r['name'] }
     end
 
     ##
     # Creates this repository on Dydra.com.
     #
-    # @return [String] repository_name
+    # @return [void]
     def create!
-      Dydra::Client.post "#{account}/repositories", { :dydra_repository => { :name => name }}
+      Dydra::Client.post("#{account}/repositories", { :dydra_repository => { :name => name }})
     end
 
     ##
@@ -120,14 +122,15 @@ module Dydra
     #
     # @return [Job]
     def destroy!
-      Dydra::Client.delete "#{@account}/#{@name}" 
+      Dydra::Client.delete("#{@account}/#{@name}")
     end
 
     ##
     # Deletes all data from this repository.
-    # #FIXME server is not async for this method yet
+    #
     # @return [Job]
     def clear!
+      # FIXME: server is not async for this method yet.
       Dydra::Client.rpc.call('dydra.repository.clear', path)
     end
 
@@ -166,7 +169,7 @@ module Dydra
     # @param  [String] query
     # @return [Job]
     def query(query, format = :json)
-      accept = case format 
+      accept = case format
         when :json, :parsed
           'application/sparql-results+json'
         when :xml
@@ -175,10 +178,10 @@ module Dydra
           raise ArgumentError, "Unknown result format: #{format}"
       end
       result = Dydra::Client.post "#{account}/#{name}/sparql", { :query => query },
-         :content_type => 'application/x-www-form-urlencoded', 
+         :content_type => 'application/x-www-form-urlencoded',
          :accept => accept
       if format == :parsed
-        require 'sparql/client'
+        require 'sparql/client' # @see http://rubygems.org/gems/sparql-client
         bindings = ::SPARQL::Client.parse_json_bindings(result)
         if bindings == true || bindings.nil?
           !!bindings
@@ -196,7 +199,7 @@ module Dydra
     # @param  [String] query
     # @return [String] RDF-JSON query results
     def query_result(query_text)
-      # TODO: Separate behavior for construct/describe
+      # TODO: Separate behavior for CONSTRUCT/DESCRIBE
       uuid = query(query_text).wait!.uuid
       sparql_json = Dydra::Client.rpc.call('dydra.query.result.json', uuid)
       results = SPARQL::Client.new("").parse_json_bindings(sparql_json).map { | result | result.to_hash }
@@ -250,7 +253,7 @@ module Dydra
 
       # Params order is important to AWS.
       form_data = [["key", upload_params['key']],
-                   ["AWSAccessKeyId", upload_params['AWSAccessKeyId']], 
+                   ["AWSAccessKeyId", upload_params['AWSAccessKeyId']],
                    ["acl", upload_params['acl']],
                    ["policy", upload_params['policy']],
                    ["signature", upload_params['signature']]]
@@ -264,7 +267,7 @@ module Dydra
         params << "Content-Disposition: form-data; name=\"#{k}\"\r\n\r\n#{v}\r\n"
       end
 
-      # setup the file param, 
+      # setup the file param,
       File.open(filepath) do |file|
         params << "Content-Disposition: form-data; name=\"file\"; filename=\"#{ File.basename(filepath) }\"\r\n" +
                   "Content-Type: #{ content_type }\r\n\r\n#{ file.read }\r\n"
@@ -302,6 +305,5 @@ module Dydra
         when '.xml'  then 'application/trix'    # TriX
       end
     end
-
   end # Repository
 end # Dydra
