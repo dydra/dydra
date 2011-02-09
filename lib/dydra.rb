@@ -23,4 +23,11 @@ module Dydra
   # Used for specifying repositories without owner name, maybe one day
   # queries too.
   class RepositoryMisspecified < ::ArgumentError; end
+
+  ##
+  # @see    Client.authenticate!
+  # @return [void]
+  def self.authenticate!(*args)
+    Client.authenticate!(*args)
+  end
 end # Dydra
