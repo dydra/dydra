@@ -71,9 +71,9 @@ module Dydra
       puts
       puts "Commands:"
       puts "    help        Shows this help."
-      puts "    login       Cache your dydra credenetials locally."
-      puts "    logout      Delete your local credenetials."
-      puts "    list        List your repositories."
+      puts "    login       Caches your Dydra credentials locally."
+      puts "    logout      Deletes your local credentials."
+      puts "    list        Lists your repositories."
       puts "    open        Opens an account or a repository in a web browser."
       puts "    url         Outputs the URL of an account or a repository."
       puts "    create      Creates a new repository."
