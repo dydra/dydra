@@ -9,6 +9,7 @@ module Dydra
   #
   # @example Accessing account information
   #   account = Dydra::Account.new('jhacker')
+  #   account.url       #=> #<RDF::URI(http://api.dydra.com/jhacker)>
   #   account.name      #=> "jhacker"
   #   account.fullname  #=> "J. Random Hacker"
   #
@@ -42,6 +43,30 @@ module Dydra
       raise NotImplementedError, "#{self.class}.register!"
       #Dydra::Client.rpc.call('dydra.account.register', name, options[:email], options[:password]) # FIXME
       #self.new(name)
+    end
+
+    ##
+    # The account URL.
+    #
+    # @example
+    #   Dydra::Account.new('jhacker').url       #=> #<RDF::URI(http://api.dydra.com/jhacker)>
+    #
+    # @return [RDF::URI]
+    attr_reader :url
+    def url
+      super
+    end
+
+    ##
+    # The resource path, relative to <http://dydra.com/>.
+    #
+    # @example
+    #   Dydra::Account.new('jhacker').path      #=> "jhacker"
+    #
+    # @return [String]
+    attr_reader :path
+    def path
+      super
     end
 
     ##
@@ -81,6 +106,8 @@ module Dydra
     end
 
     ##
+    # Initializes an account instance.
+    #
     # @param  [String, #to_s] name
     #   a valid account name
     def initialize(name)
@@ -99,6 +126,11 @@ module Dydra
     ##
     # Returns a given repository belonging to this account.
     #
+    # @example
+    #   account = Dydra::Account.new('jhacker')
+    #   account.repository('foaf')              #=> #<Dydra::Repository(jhacker/foaf)>
+    #   account['foaf']                         #=> #<Dydra::Repository(jhacker/foaf)>
+    #
     # @param  [String, #to_s] name
     # @return [Repository]
     def repository(name)
@@ -109,6 +141,10 @@ module Dydra
     ##
     # Returns the list of repositories belonging to this account.
     #
+    # @example
+    #   account = Dydra::Account.new('jhacker')
+    #   account.repositories.count              #=> 1
+    #
     # @return [Array<Repository>]
     def repositories
       each_repository.to_a
@@ -116,6 +152,12 @@ module Dydra
 
     ##
     # Enumerates each repository belonging to this account.
+    #
+    # @example
+    #   account = Dydra::Account.new('jhacker')
+    #   account.each_repository do |repository|
+    #     puts repository.inspect
+    #   end
     #
     # @yield  [repository]
     # @yieldparam  [Repository] repository
@@ -135,6 +177,10 @@ module Dydra
 
     ##
     # Returns a string representation of the account name.
+    #
+    # @example
+    #   account = Dydra::Account.new('jhacker')
+    #   account.to_s                            #=> "jhacker"
     #
     # @return [String]
     def to_s

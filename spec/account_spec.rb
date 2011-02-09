@@ -16,6 +16,18 @@ describe Dydra::Account do
     end
   end
 
+  context "Account#url" do
+    it "should return a URL" do
+      @account.url.should be_a RDF::URI
+    end
+  end
+
+  context "Account#path" do
+    it "should return a string" do
+      @account.path.should be_a String
+    end
+  end
+
   context "Account#name" do
     it "should return a string" do
       @account.name.should be_a String
@@ -46,6 +58,12 @@ describe Dydra::Account do
 
     it "should return a repository" do
       @account.repository('foaf').should be_a Dydra::Repository
+    end
+  end
+
+  context "Account#[name]" do
+    it "should return a repository" do
+      @account['foaf'].should be_a Dydra::Repository
     end
   end
 
