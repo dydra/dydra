@@ -6,6 +6,13 @@ kit (SDK) for [Dydra.com][], the cloud-hosted RDF & SPARQL database service.
 
 <https://github.com/dydra/dydra>
 
+Examples
+--------
+
+### Authenticating with API token
+
+    Dydra.authenticate!(:token => api_token)
+
 Documentation
 -------------
 
