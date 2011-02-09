@@ -30,6 +30,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency     'rest-client',   '>= 1.6.1'
   gem.add_runtime_dependency     'sparql-client', '>= 0.0.9'
   gem.add_runtime_dependency     'rdf',           '~> 0.3.0'
+  gem.add_development_dependency 'bundler' ,      '>= 1.0.9'
   gem.add_development_dependency 'yard' ,         '>= 0.6.0'
   gem.add_development_dependency 'rspec',         '>= 2.4.0'
   gem.add_development_dependency 'rdf-spec',      '~> 0.3.0'
