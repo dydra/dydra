@@ -9,13 +9,14 @@ module Dydra
       def execute(*repositories)
         begin
           sum = repositories.inject(0) do |sum , repository|
+            @repository = repository
             count = Repository.new(repository).info['triple_count']
             puts "#{count} #{repository}"
             sum += count
           end
           puts "#{sum.to_i} total"
         rescue RestClient::ResourceNotFound
-          puts "#{repository} not found"
+          puts "#{@repository} not found"
         rescue RepositoryMisspecified => e
           puts e
         end
