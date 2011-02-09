@@ -20,6 +20,11 @@ Examples
       puts repository
     end
 
+### Accessing a repository belonging to your account
+
+    account = Dydra::Account.new('jhacker')
+    repository = account['foaf']
+
 Documentation
 -------------
 
