@@ -2,7 +2,8 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe Dydra::Account do
   before :all do
-    @account = Dydra::Account.new('jhacker') # the demo account
+    @account_name = ENV['ACCOUNT'] || 'jhacker' # the demo account
+    @account = Dydra::Account.new(@account_name)
   end
 
   context "Account#exists?" do
@@ -29,7 +30,7 @@ describe Dydra::Account do
     end
 
     it "should return the account name" do
-      @account.name.should == 'jhacker'
+      @account.name.should == @account_name
     end
   end
 
