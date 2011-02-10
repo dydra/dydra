@@ -91,7 +91,7 @@ module Dydra
     # @return [Object]
     def self.post(where, what, options = {})
       what = what.to_json unless options[:content_type]
-      resource(where).post what, {:content_type => 'application/json', :user_agent => "Dydra API client #{Dydra::VERSION}"}.merge(options)
+      resource(where).post(what, {:content_type => 'application/json', :user_agent => "Dydra API client #{Dydra::VERSION}"}.merge(options))
     end
 
     ##
