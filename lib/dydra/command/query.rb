@@ -37,6 +37,8 @@ module Dydra
           puts "Insufficient permissions to query #{repository_spec}"
         rescue RestClient::ResourceNotFound
           puts "#{repository_spec} not found"
+        rescue RestClient::InternalServerError => e
+          puts "Internal error: #{e.response.body}"
         end
       end
 
