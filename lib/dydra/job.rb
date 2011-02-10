@@ -65,6 +65,14 @@ module Dydra
     end
 
     ##
+    # Returns detailed information about this job.
+    #
+    # @return [Hash]
+    def info
+      Dydra::Client.rpc.call('dydra.job.info', uuid)
+    end
+
+    ##
     # Returns the time when this job was submitted for execution.
     #
     # @return [Time]

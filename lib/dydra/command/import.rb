@@ -18,16 +18,21 @@ module Dydra
           puts "No import URL or file specified"
           Kernel.abort
         end
-        begin
-          repository = Repository.new(repository_spec)
-          urls.each do |input_url|
+        repository = Repository.new(repository_spec)
+        something_suceeded = false
+        urls.each do |input_url|
+          begin
             stdout.puts "Importing #{input_url} into #{repository.path}..." if verbose?
-            repository.import!(input_url).wait!
+            info = repository.import!(input_url).wait!.info
+            something_suceeded = true if info[:status] == 'completed'
+            puts "#{info['status']}: #{info['message']}"
+          rescue RepositoryMisspecified => e
+            puts e
+          rescue XMLRPC::FaultException => e
+            puts e.message.sub(/Uncaught exception /,'')
           end
-          puts "#{repository.account}/#{repository.name} has #{repository.info['triple_count']} triples"
-        rescue RepositoryMisspecified => e
-          puts e
         end
+        puts "#{repository.account}/#{repository.name} has #{repository.info['triple_count']} triples" if something_suceeded
       end
 
     end # Import
