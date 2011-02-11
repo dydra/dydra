@@ -39,6 +39,8 @@ module Dydra
           puts "#{repository_spec} not found"
         rescue RestClient::InternalServerError => e
           puts "Internal error: #{e.response.body}"
+        rescue RestClient::BadRequest => e
+          puts "#{e.response.body}"
         end
       end
 
