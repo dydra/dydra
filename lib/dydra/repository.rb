@@ -194,22 +194,6 @@ module Dydra
     end
 
     ##
-    # Queries the repository, waits for the result, and returns it
-    #
-    # @param  [String] query
-    # @return [String] RDF-JSON query results
-    def query_result(query_text)
-      # TODO: Separate behavior for CONSTRUCT/DESCRIBE
-      uuid = query(query_text).wait!.uuid
-      sparql_json = Dydra::Client.rpc.call('dydra.query.result.json', uuid)
-      results = SPARQL::Client.new("").parse_json_bindings(sparql_json).map { | result | result.to_hash }
-      if results.size == 1 && results.first.keys.size == 1 && results.first.keys.first == :result
-        results = results.first[:result].object if results.first[:result].respond_to?(:object)
-      end
-      results
-    end
-
-    ##
     # Returns a string representation of the repository name.
     #
     # @return [String]
