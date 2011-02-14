@@ -26,6 +26,12 @@ module Dydra
         self.on('-j', '--json', 'Display JSON SPARQL query results') do
           options[:result_format] = :json
         end
+        self.on('-b', '--base_uri BASE_URI', 'Set the base URI for imports') do | base_uri |
+          options[:base_uri] = base_uri
+        end
+        self.on('-c', '--context CONTEXT', 'Set the context (named graph) for imports') do | context |
+          options[:context] = context
+        end
       end
       args = ARGV
       @options = options

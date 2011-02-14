@@ -147,12 +147,17 @@ module Dydra
     #
     # @param  [String, #to_s] url
     # @return [Job]
-    def import!(url)
-      url = case url
-        when %r(^(http|https|ftp)://) then url # already at a URL
-        else upload_local_file(self, url)            # local file to be uploaded
+    def import!(url, opts = {})
+      base_uri = opts[:base_uri] # || File.dirname(url)
+      context = opts[:context] || ''
+      if url =~ %r(^(http|https|ftp )://)
+        url = url                                     # already a url
+        base_uri = opts[:base_uri] || ''              # let the server determine base URI
+      else
+        base_uri = url                                # Base URI is the file itself
+        url = upload_local_file(self, url)            # local file to be uploaded
       end
-      Job.new(Dydra::Client.rpc.call('dydra.repository.import', path, url.to_s))
+      Job.new(Dydra::Client.rpc.call('dydra.repository.import', path, url.to_s, context.to_s, base_uri.to_s))
     end
 
     ##

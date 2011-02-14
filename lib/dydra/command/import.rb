@@ -23,7 +23,7 @@ module Dydra
         urls.each do |input_url|
           begin
             stdout.puts "Importing #{input_url} into #{repository.path}..." if verbose?
-            info = repository.import!(input_url).wait!.info
+            info = repository.import!(input_url, @options).wait!.info
             something_suceeded = true if info[:status] == 'completed'
             puts "#{info['status']}: #{info['message']}"
           rescue RepositoryMisspecified => e
