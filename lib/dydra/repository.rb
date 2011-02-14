@@ -4,6 +4,14 @@ module Dydra
   class Repository < Resource
     SPEC = %r(^([^/]+)/([^/]+)$) # /account/repository
 
+    FORMATS = { :json     => 'application/sparql-results+json',
+                :xml      => 'application/sparql-results+xml',
+                :rdf      => 'application/rdf+xml',
+                :ntriples => 'text/plain',
+                :n3       => 'text/rdf+n3',
+                :turtle   => 'text/turtle' }
+
+
     ##
     # @param  [Hash{Symbol => Object}] options
     # @option options [String] :account_name (nil)
@@ -168,29 +176,90 @@ module Dydra
     #
     # @param  [String] query
     # @return [Job]
-    def query(query, format = :json)
-      accept = case format
-        when :json, :parsed
-          'application/sparql-results+json'
-        when :xml
-          'application/sparql-results+xml'
+    def query(query, format = nil)
+      form = self.class.query_form(query)
+      if format.nil?
+        format = case form
+          when :select, :ask
+            :json
+          when :construct, :describe
+            :ntriples
+        end
+      end
+      accept = case
+        when FORMATS.has_key?(format)
+          FORMATS[format]
+        when :parsed
+          case form
+            when :select, :ask
+              FORMATS[:json]
+            when :construct, :describe
+              FORMATS[:ntriples]
+          end
         else
           raise ArgumentError, "Unknown result format: #{format}"
       end
       result = Dydra::Client.post "#{account}/#{name}/sparql", { :query => query },
          :content_type => 'application/x-www-form-urlencoded',
          :accept => accept
-      if format == :parsed
-        require 'sparql/client' # @see http://rubygems.org/gems/sparql-client
-        bindings = ::SPARQL::Client.parse_json_bindings(result)
-        if bindings == true || bindings.nil?
-          !!bindings
-        else
-          bindings
-        end
-      else
-        result
+      return result unless format == :parsed
+      case form
+        when :select, :ask
+          parse_bindings(result)
+        when :construct, :describe
+          parse_rdf(result)
       end
+    end
+
+    ##
+    # Parse ASK or SELECT bindings into true/false or RDF::Query::Solutions
+    #
+    # @return [true, false, RDF::Query::Solutions]
+    def parse_bindings(result)
+      require 'sparql/client' # @see http://rubygems.org/gems/sparql-client
+      bindings = ::SPARQL::Client.parse_json_bindings(result)
+      if bindings == true || bindings.nil?
+        !!bindings
+      else
+        bindings
+      end
+    end
+
+    ##
+    # Parse NTriples data into an RDF::Enumerable
+    #
+    # @return [RDF::Enumerable]
+    def parse_rdf(result)
+      require 'rdf/ntriples' unless defined?(RDF::NTriples)
+      if reader = RDF::Reader.for(:ntriples)
+        reader.new(result)
+      end
+    end
+
+    ##
+    # Determine if a query is an ASK, SELECT, CONSTRUCT, or DESCRIBE query.
+    #
+    # return [:construct, :ask, :select, :describe]
+    def self.query_form(query)
+      # This algorithm is maybe a little overkill, but tries to avoid weirdness
+      # like variables named the same as a query form by finding the first one
+      # that appears with a space after it. the space after it makes it an
+      # invalid URI in a prefix or base.
+      query_lines = query.lines.to_a
+      form_line = query_lines.shift while form_line !~ /(construct|ask|describe|select)/i
+      lowest_spot = result_form = nil
+      ['construct','select','ask','describe'].each do | form |
+        # catches the form on a line by itself
+        return form.to_sym if form_line.downcase == form
+
+        # otherwise, look for the form, followed by the space, and mark where it is...
+        if !(spot = form_line =~ /#{form} /i).nil?
+          result_form ||= form.to_sym
+          result_form = form if !lowest_spot.nil? && lowest_spot < spot
+          lowest_spot = spot if lowest_spot.nil? || spot < lowest_spot
+        end
+      end
+      result_form
     end
 
     ##
