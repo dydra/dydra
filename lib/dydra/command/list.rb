@@ -8,7 +8,7 @@ module Dydra
       # @return [void]
       def execute(user = nil)
         begin
-          Repository.list(user).each do |repository|
+          Repository.list(user).sort.each do |repository|
             puts repository
           end
         rescue RestClient::ResourceNotFound
