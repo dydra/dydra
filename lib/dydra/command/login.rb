@@ -13,6 +13,7 @@ module Dydra
           user = pass = nil
           begin
             user = ask_for_user if user.nil?
+            raise AuthenticationError, "Username cannot be blank" if user.nil? || user.empty?
             pass = ask_for_pass if pass.nil?
             Dydra::Client.setup!(:user => user, :pass => pass)
             token = Account.new(user).info['authentication_token']
