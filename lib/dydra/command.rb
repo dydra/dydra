@@ -69,6 +69,8 @@ module Dydra
         puts "Internal error: #{e.response.body}"
       rescue RestClient::BadRequest => e
         puts "#{e.response.body}"
+      rescue RestClient::RequestTimeout
+        puts "No response from server"
       end
     end
 
