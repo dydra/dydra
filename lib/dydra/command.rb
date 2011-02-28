@@ -71,6 +71,8 @@ module Dydra
         puts "#{e.response.body}"
       rescue RestClient::RequestTimeout
         puts "No response from server"
+      rescue Errno::ECONNREFUSED
+        puts "Connection refused by server"
       end
     end
 
