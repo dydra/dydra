@@ -25,6 +25,8 @@ module Dydra
   # queries too.
   class RepositoryMisspecified < ::ArgumentError; end
 
+  class MalformedQuery < :: StandardError; end
+
   ##
   # @private
   # @see    Client.authenticate!

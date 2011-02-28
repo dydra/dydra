@@ -241,7 +241,6 @@ module Dydra
       end
     end
 
-    ##
     # Determine if a query is an ASK, SELECT, CONSTRUCT, or DESCRIBE query.
     #
     # return [:construct, :ask, :select, :describe]
@@ -250,20 +249,23 @@ module Dydra
       # like variables named the same as a query form by finding the first one
       # that appears with a space after it. the space after it makes it an
       # invalid URI in a prefix or base.
-      query_lines = query.lines.to_a
-      form_line = query_lines.shift while form_line !~ /(construct|ask|describe|select)/i
+      raise MalformedQuery, "Missing query text" if query.nil? || query.empty?
+      query_lines = query.to_s.lines.to_a
+      form_line = query_lines.shift while form_line !~ /(construct|ask|describe|select)/i && query_lines.length > 0
+
       lowest_spot = result_form = nil
       ['construct','select','ask','describe'].each do | form |
         # catches the form on a line by itself
-        return form.to_sym if form_line.downcase == form
+        return form.to_sym if form_line.downcase.chomp == form
 
         # otherwise, look for the form, followed by the space, and mark where it is...
         if !(spot = form_line =~ /#{form} /i).nil?
-          result_form ||= form.to_sym
+          result_form = form.to_sym
           result_form = form if !lowest_spot.nil? && lowest_spot < spot
           lowest_spot = spot if lowest_spot.nil? || spot < lowest_spot
         end
       end
+      raise MalformedQuery, "Could not determine query form" if result_form.nil?
       result_form
     end
 
