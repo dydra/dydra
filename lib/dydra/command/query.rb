@@ -35,16 +35,6 @@ module Dydra
           else
             puts result
           end
-        rescue RepositoryMisspecified => e
-          puts e
-        rescue RestClient::Forbidden
-          puts "Insufficient permissions to query #{repository_spec}"
-        rescue RestClient::ResourceNotFound
-          puts "#{repository_spec} not found"
-        rescue RestClient::InternalServerError => e
-          puts "Internal error: #{e.response.body}"
-        rescue RestClient::BadRequest => e
-          puts "#{e.response.body}"
         rescue RestClient::NotAcceptable
           puts "Invalid result format: #{@options[:result_format]} for #{Repository.query_form(query)}"
         end
