@@ -21,8 +21,7 @@ module Dydra
             puts "User #{user} not found"
           rescue SignalException, SystemExit => e
             # Special case ctrl-c at the command line
-            puts "caught #{e}"
-            raise e
+            abort
           rescue Exception => e
             puts "Invalid credentials: #{e.message}"
           end
