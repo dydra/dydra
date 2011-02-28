@@ -56,6 +56,28 @@ module Dydra
       end
     end
 
+    def catch_errors
+      begin
+        yield
+      rescue RepositoryMisspecified => e
+        puts e
+      rescue RestClient::Forbidden
+        puts "Insufficient permissions to perform the requested action"
+      rescue RestClient::ResourceNotFound => e
+        puts "Not Found"
+      rescue RestClient::InternalServerError => e
+        puts "Internal error: #{e.response.body}"
+      rescue RestClient::BadRequest => e
+        puts "#{e.response.body}"
+      end
+    end
+
+    def wrap_errors(*args)
+      catch_errors do
+        execute(*args)
+      end
+    end
+
     def validate_repository_specs(resource_specs)
       resources = validate_resource_specs(resource_specs)
       resources.each do |resource|

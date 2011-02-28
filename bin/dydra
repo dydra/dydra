@@ -68,7 +68,7 @@ module Dydra
       begin
         Dydra::Client.setup!
       rescue Dydra::AuthenticationError
-        Dydra::Command::Login.new.execute
+        Dydra::Command::Login.new.wrap_errors
       end
     end
 
@@ -94,59 +94,59 @@ module Dydra
     end
 
     def login(username = nil, password = nil)
-      Command::Login.new(@options).execute(username, password)
+      Command::Login.new(@options).wrap_errors(username, password)
     end
 
     def logout(*args)
-      Command::Logout.new(@options).execute
+      Command::Logout.new(@options).wrap_errors
     end
 
     def list(*resource_specs)
-      Command::List.new(@options).execute(resource_specs.first)
+      Command::List.new(@options).wrap_errors(resource_specs.first)
     end
 
     def open(*resource_specs)
-      Command::Open.new(@options).execute(*resource_specs)
+      Command::Open.new(@options).wrap_errors(*resource_specs)
     end
 
     def url(*resource_specs)
-      Command::URL.new(@options).execute(*resource_specs)
+      Command::URL.new(@options).wrap_errors(*resource_specs)
     end
 
     def create(*repository_specs)
-      Command::Create.new(@options).execute(*repository_specs)
+      Command::Create.new(@options).wrap_errors(*repository_specs)
     end
 
     def drop(*repository_specs)
-      Command::Drop.new(@options).execute(*repository_specs)
+      Command::Drop.new(@options).wrap_errors(*repository_specs)
     end
 
     def clear(*repository_specs)
-      Command::Clear.new(@options).execute(*repository_specs)
+      Command::Clear.new(@options).wrap_errors(*repository_specs)
     end
 
     def count(*repository_specs)
-      Command::Count.new(@options).execute(*repository_specs)
+      Command::Count.new(@options).wrap_errors(*repository_specs)
     end
 
     def query(repository_spec, query = nil)
-      Command::Query.new(@options).execute(repository_spec, query)
+      Command::Query.new(@options).wrap_errors(repository_spec, query)
     end
 
     def import(repository_spec, *urls)
-      Command::Import.new(@options).execute(repository_spec, *urls)
+      Command::Import.new(@options).wrap_errors(repository_spec, *urls)
     end
 
     def export(*resource_specs)
-      Command::Export.new(@options).execute(*resource_specs)
+      Command::Export.new(@options).wrap_errors(*resource_specs)
     end
 
     def status(job_uuid = nil)
-      Command::Status.new(@options).execute(job_uuid)
+      Command::Status.new(@options).wrap_errors(job_uuid)
     end
 
     def abort(job_uuid)
-      Command::Abort.new(@options).execute(job_uuid)
+      Command::Abort.new(@options).wrap_errors(job_uuid)
     end
   end
 end
