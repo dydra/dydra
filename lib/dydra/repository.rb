@@ -122,7 +122,7 @@ module Dydra
     #
     # @return [void]
     def create!
-      Dydra::Client.post("#{account}/repositories", { :dydra_repository => { :name => name }})
+      Dydra::Client.post("#{account}/repositories", { :repository => { :name => name }})
     end
 
     ##
