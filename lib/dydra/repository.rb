@@ -6,6 +6,7 @@ module Dydra
 
     FORMATS = { :json     => 'application/sparql-results+json',
                 :xml      => 'application/sparql-results+xml',
+                :columns  => 'application/json',
                 :rdf      => 'application/rdf+xml',
                 :ntriples => 'text/plain',
                 :n3       => 'text/rdf+n3',
@@ -197,7 +198,7 @@ module Dydra
         when :parsed
           case form
             when :select, :ask
-              FORMATS[:json]
+              FORMATS[:columns]
             when :construct, :describe
               FORMATS[:ntriples]
           end
@@ -221,12 +222,43 @@ module Dydra
     #
     # @return [true, false, RDF::Query::Solutions]
     def parse_bindings(result)
-      require 'sparql/client' # @see http://rubygems.org/gems/sparql-client
-      bindings = ::SPARQL::Client.parse_json_bindings(result)
+      if (!defined?(JSON))
+        begin
+          require 'json'
+        rescue LoadError
+          require 'json_pure'
+        end
+      end
+      results = JSON.parse(result)
+      variables = results["columns"].map(&:to_sym)
+      nodes = {}
+      bindings = results["rows"].map do | row |
+        solution = RDF::Query::Solution.new        
+        row.each_with_index do | binding, index |
+          solution[variables[index]] = parse_json_value(binding, nodes)
+        end
+        solution
+      end
       if bindings == true || bindings.nil?
         !!bindings
       else
         bindings
+      end
+    end
+
+    ##
+    # Parse JSON column result values
+    def parse_json_value(value, nodes = {})
+      case value['type'].to_sym
+        when :bnode
+          nodes[id = value['value']] ||= RDF::Node.new(id)
+        when :uri
+          RDF::URI.new(value['value'])
+        when :literal
+          RDF::Literal.new(value['value'], :language => value['xml:lang'])
+        when :'typed-literal'
+          RDF::Literal.new(value['value'], :datatype => value['datatype'])
+        else nil
       end
     end
 

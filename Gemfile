@@ -1,8 +1,8 @@
 source 'http://rubygems.org'
 
 gem 'rdf',           '~> 0.3.0'
-gem 'sparql-client', '>= 0.0.9'
 gem 'rest-client',   '>= 1.6.1'
+gem 'json_pure'
 
 group :development, :test do
   gem 'yard',        '>= 0.6.0'
