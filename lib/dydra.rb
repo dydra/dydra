@@ -1,3 +1,11 @@
+if (!defined?(JSON))
+  begin
+    require 'json'
+  rescue LoadError
+    require 'json_pure'
+  end
+end
+
 require 'open-uri'
 require 'rdf'      # @see http://rubygems.org/gems/rdf
 

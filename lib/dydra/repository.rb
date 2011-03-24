@@ -222,13 +222,6 @@ module Dydra
     #
     # @return [true, false, RDF::Query::Solutions]
     def parse_bindings(result)
-      if (!defined?(JSON))
-        begin
-          require 'json'
-        rescue LoadError
-          require 'json_pure'
-        end
-      end
       results = JSON.parse(result)
       variables = results["columns"].map(&:to_sym)
       nodes = {}
