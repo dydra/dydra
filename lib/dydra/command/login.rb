@@ -30,7 +30,7 @@ module Dydra
           Dydra::Client.reset! unless token
         end
         save_credentials(user, token)
-        puts "Credentials saved to ~/.dydra/credentials" if verbose?
+        puts "Credentials saved to #{Dydra::Client.credentials_file}" if verbose?
       end
 
       def ask_for_user
