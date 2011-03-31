@@ -7,10 +7,11 @@ module Dydra
       # @param  [String] account_name
       # @param  [String] password
       # @return [void]
-      def execute(user = nil, pass = nil)
+      def execute(given_user = nil, given_pass = nil)
         while !Dydra::Client.setup?
           Dydra::Client.reset!
-          user = pass = nil
+          user = given_user
+          pass = given_pass
           begin
             user = ask_for_user if user.nil?
             raise AuthenticationError, "Username cannot be blank" if user.nil? || user.empty?
