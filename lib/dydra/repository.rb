@@ -8,6 +8,7 @@ module Dydra
                 :xml      => 'application/sparql-results+xml',
                 :columns  => 'application/json',
                 :rdf      => 'application/rdf+xml',
+                :sse      => 'application/sparql-query+sse',
                 :ntriples => 'text/plain',
                 :n3       => 'text/rdf+n3',
                 :turtle   => 'text/turtle' }

@@ -151,6 +151,10 @@ module Dydra
     def abort(job_uuid)
       Command::Abort.new(@options).wrap_errors(job_uuid)
     end
+
+    def describe(repository_spec, query = nil)
+      Command::Query.new(@options.merge({ :result_format => :sse })).wrap_errors(repository_spec, query)
+    end
   end
 end
 
