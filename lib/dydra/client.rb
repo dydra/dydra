@@ -103,10 +103,12 @@ module Dydra
     # @return [RestClient::Resource]
     def self.resource(location)
       $dydra ||= {}
+      opts = {}
+      opts[:timeout] = ENV['DYDRA_REQUEST_TIMEOUT'].to_i if ENV['DYDRA_REQUEST_TIMEOUT']
       if $dydra[:token]
-        RestClient::Resource.new(Dydra::URL.join(location).to_s, $dydra[:token])
+        RestClient::Resource.new(Dydra::URL.join(location).to_s, opts.merge(:user => $dydra[:token]))
       elsif $dydra[:user]
-        RestClient::Resource.new(Dydra::URL.join(location).to_s, :user => $dydra[:user], :password => $dydra[:pass])
+        RestClient::Resource.new(Dydra::URL.join(location).to_s, opts.merge(:user => $dydra[:user], :password => $dydra[:pass]))
       else
         raise AuthenticationError, "You need to run Dydra::Client.setup! before performing an API operation"
       end
