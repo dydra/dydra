@@ -25,7 +25,7 @@ namespace :version do
     new_version_string = new_version_string.map(&:to_s).join('.')
     sh "echo '#{new_version_string}' > VERSION"
     sh "sed -i '' 's/TINY  = #{old_version_tiny}/TINY  = #{new_version_tiny}/' lib/dydra/version.rb"
-    sh "git ci -m 'Bumped the version to #{new_version_string}.' VERSION lib/dydra/version.rb"
+    sh "git commit -m 'Bumped the version to #{new_version_string}.' VERSION lib/dydra/version.rb"
   end
 
   desc "Tag the current revision as release #{VERSION_STRING}"
