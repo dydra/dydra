@@ -234,7 +234,7 @@ module Dydra
         solution
       end
 
-      if results["total"] == 1 &&  bindings.first.result.respond_to?(:object) && [true, false].include?(bindings.first.result.object)
+      if results["total"] == 1 &&  bindings.first.respond_to?(:result) && [true, false].include?(bindings.first.result.object)
         bindings.first.result.object
       else
         bindings
