@@ -156,7 +156,7 @@ module Dydra
         url = url                                     # already a url
         base_uri = opts[:base_uri] || ''              # let the server determine base URI
       else
-        base_uri = url                                # Base URI is the file itself
+        base_uri = opts[:base_uri] || url             # Base URI is the file itself unless specified
         url = upload_local_file(self, url)            # local file to be uploaded
       end
       Job.new(Dydra::Client.rpc.call('dydra.repository.import', path, url.to_s, context.to_s, base_uri.to_s))
