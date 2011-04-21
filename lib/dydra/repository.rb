@@ -206,9 +206,26 @@ module Dydra
         else
           raise ArgumentError, "Unknown result format: #{format}"
       end
-      result = Dydra::Client.post "#{account}/#{name}/sparql", { :query => query },
-         :content_type => 'application/x-www-form-urlencoded',
-         :accept => accept
+
+      begin
+
+        result = Dydra::Client.post "#{account}/#{name}/sparql", { :query => query },
+           :content_type => 'application/x-www-form-urlencoded',
+           :accept => accept
+
+      # Query failure messages should come back JSON encoded. If we can't parse
+      # the response as JSON, some other error was raised on the server that we
+      # supress here.
+      rescue Exception => e
+        begin
+          puts JSON.parse(e.response)['error']
+          exit
+        rescue
+          puts "A server error was encountered."
+          exit
+        end
+      end
+
       return result unless format == :parsed
       case form
         when :select, :ask

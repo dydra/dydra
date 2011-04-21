@@ -103,8 +103,9 @@ Mailing List
 Authors
 -------
 
-* [Arto Bendiken](http://github.com/bendiken) - <http://dydra.com/bendiken>
-* [Ben Lavender](http://github.com/bhuga) - <http://dydra.com/bhuga>
+* [Arto Bendiken](https://github.com/bendiken) - <http://dydra.com/bendiken>
+* [Ben Lavender](https://github.com/bhuga) - <http://dydra.com/bhuga>
+* [Josh Huckabee](https://github.com/jhuckabee) - <http://dydra.com/jhuckabee>
 
 Contributors
 ------------
