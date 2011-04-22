@@ -31,14 +31,6 @@ module Dydra
     end
 
     ##
-    # Returns `true` if this job was aborted for any reason.
-    #
-    # @return [Boolean]
-    def aborted?
-      status.eql?(:aborted)
-    end
-
-    ##
     # Returns `true` if this job has already completed.
     #
     # @return [Boolean]
@@ -46,6 +38,22 @@ module Dydra
       status.eql?(:completed)
     end
     alias_method :finished?, :completed?
+
+    ##
+    # Returns `true` if this job failed for some reason.
+    #
+    # @return [Boolean]
+    def failed?
+      status.eql?(:failed)
+    end
+
+    ##
+    # Returns `true` if this job was aborted for any reason.
+    #
+    # @return [Boolean]
+    def aborted?
+      status.eql?(:aborted)
+    end
 
     ##
     # Returns `true` if this job has completed or was aborted, and
