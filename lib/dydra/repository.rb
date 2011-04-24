@@ -261,6 +261,8 @@ module Dydra
     ##
     # Parse JSON column result values
     def parse_json_value(value, nodes = {})
+      # This catches successful queries with no bound variables
+      return nil unless value['type']
       case value['type'].to_sym
         when :bnode
           nodes[id = value['value']] ||= RDF::Node.new(id)
