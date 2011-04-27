@@ -1,9 +1,14 @@
 module Dydra
   ##
   # Represents a Dydra.com job.
+  #
+  # @see http://docs.dydra.com/sdk/ruby
   class Job < Resource
     SPEC = %r(^([^/]+)$) # /uuid
 
+    ##
+    # The job UUID.
+    #
     # @return [String]
     attr_reader :uuid
 

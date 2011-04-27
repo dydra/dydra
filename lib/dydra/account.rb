@@ -16,6 +16,7 @@ module Dydra
   # @example Accessing a repository belonging to an account
   #   repository = account[:foaf]
   #
+  # @see http://docs.dydra.com/sdk/ruby
   class Account < Resource
     include Enumerable
 

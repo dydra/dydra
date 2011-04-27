@@ -2,7 +2,13 @@ require 'net/http'
 
 module Dydra
   ##
-  # Base class for Dydra.com resources.
+  # Represents a Dydra.com resource.
+  #
+  # This is the base class for all classes that represent dereferenceable
+  # HTTP resources on Dydra.com.
+  #
+  # @see http://docs.dydra.com/sdk/ruby
+  # @see http://docs.dydra.com/api/rest
   class Resource
     HEADERS = {'Accept' => 'text/plain'} # N-Triples
 

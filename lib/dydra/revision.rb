@@ -2,7 +2,7 @@ module Dydra
   ##
   # Represents a Dydra.com repository revision.
   #
-  # @since 0.0.4
+  # @see http://docs.dydra.com/sdk/ruby
   class Revision < Resource
     # TODO
   end # Revision

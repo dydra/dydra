@@ -1,6 +1,8 @@
 module Dydra
   ##
   # Represents a Dydra.com SPARQL query.
+  #
+  # @see http://docs.dydra.com/sdk/ruby
   class Query < Resource
     SPEC = %r(^([^/\.]+)/([^/\.]+)/([^/\.]+)$) # /account/repository/query
 

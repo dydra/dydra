@@ -1,6 +1,8 @@
 module Dydra
   ##
   # Represents a Dydra.com RDF repository.
+  #
+  # @see http://docs.dydra.com/sdk/ruby
   class Repository < Resource
     SPEC = %r(^([^/]+)/([^/]+)$) # /account/repository
 
@@ -136,7 +138,7 @@ module Dydra
     end
 
     ##
-    # Deletes all data from this repository.
+    # Deletes all data in this repository.
     #
     # @return [Job]
     def clear!

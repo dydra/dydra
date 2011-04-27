@@ -4,7 +4,10 @@ require 'json'          # @see http://rubygems.org/gems/json
 
 module Dydra
   ##
-  # Dydra.com API client library.
+  # Implements a Dydra.com XML-RPC API client.
+  #
+  # @see http://docs.dydra.com/sdk/ruby
+  # @see http://docs.dydra.com/api/rpc
   module Client
     ##
     # Returns a Dydra.com RPC API client.
