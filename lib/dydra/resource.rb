@@ -52,12 +52,11 @@ module Dydra
     #
     # @return [Boolean]
     def exists?
-      head do |response|
-        case response
-          when Net::HTTPSuccess     then true
-          when Net::HTTPClientError then false
-          else true # FIXME: dubious default, for now
-        end
+      # to bangbang or not to bangbang...
+      begin
+        !!info
+      rescue RestClient::ResourceNotFound
+        return false
       end
     end
 
