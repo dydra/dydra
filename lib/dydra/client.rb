@@ -22,7 +22,7 @@ module Dydra
       elsif $dydra[:user]
         XMLRPC::Client.new3('host' => url, 'port' => port, 'path' => '/rpc', 'user' => $dydra[:user], 'password' => $dydra[:pass])
       else
-        raise AuthenticationError, "You need to run Dydra::Client.setup! before performing an API operation"
+        raise AuthenticationError, "You need to run Dydra.setup! before performing an API operation"
       end
     end
 
@@ -113,7 +113,7 @@ module Dydra
       elsif $dydra[:user]
         RestClient::Resource.new(Dydra::URL.join(location).to_s, opts.merge(:user => $dydra[:user], :password => $dydra[:pass]))
       else
-        raise AuthenticationError, "You need to run Dydra::Client.setup! before performing an API operation"
+        raise AuthenticationError, "You need to run Dydra.setup! before performing an API operation"
       end
     end
 
