@@ -147,6 +147,17 @@ module Dydra
     end
 
     ##
+    # Insert RDF data into this repository
+    #
+    def insert(*statements)
+      Dydra::Client.post "repositories/#{@account}/#{@name}/statements",
+                         RDF::Writer.for(:ntriples).dump(statements),
+                         :content_type => 'text/plain'
+
+    end
+
+
+    ##
     # Imports data from a URL into this repository.
     #
     # @param  [String, #to_s] url
