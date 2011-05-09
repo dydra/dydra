@@ -14,9 +14,18 @@ module Dydra
 
     ##
     # @param  [String, #to_s] uuid
+    #   a valid job UUID
     def initialize(uuid)
       @uuid = uuid.to_s
       super(Dydra::URL.join(@uuid)) # FIXME
+    end
+
+    ##
+    # Returns a string representation of the job UUID.
+    #
+    # @return [String]
+    def to_s
+      uuid
     end
 
     ##
@@ -90,7 +99,7 @@ module Dydra
     #
     # @return [Time]
     def submitted_at
-      # TODO
+      raise NotImplementedError # TODO
     end
 
     ##
@@ -99,11 +108,11 @@ module Dydra
     #
     # @return [Time]
     def completed_at
-      # TODO
+      raise NotImplementedError # TODO
     end
 
     ##
-    # Aborts this job.
+    # Aborts this job if it is currently pending or running.
     #
     # @return [void]
     def abort!
@@ -126,12 +135,6 @@ module Dydra
         sleep delay unless delay.zero?
       end
       self
-    end
-
-    ##
-    # Returns a string representation of the job ID.
-    def to_s
-      uuid
     end
   end # Job
 end # Dydra
