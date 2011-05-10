@@ -6,6 +6,13 @@ module Dydra
   class Job < Resource
     SPEC = %r(^([^/]+)$) # /uuid
 
+    STATUS_UNKNOWN   = :unknown
+    STATUS_PENDING   = :pending
+    STATUS_RUNNING   = :running
+    STATUS_COMPLETED = :completed
+    STATUS_FAILED    = :failed
+    STATUS_ABORTED   = :aborted
+
     ##
     # The job UUID.
     #
@@ -13,6 +20,8 @@ module Dydra
     attr_reader :uuid
 
     ##
+    # Initializes the job instance.
+    #
     # @param  [String, #to_s] uuid
     #   a valid job UUID
     def initialize(uuid)
@@ -112,6 +121,26 @@ module Dydra
     end
 
     ##
+    # Waits until this job is done, meanwhile calling the given `block`
+    # at regular intervals.
+    #
+    # @param  [Hash{Symbol => Object} options
+    # @option options [Float] :timeout (nil)
+    # @option options [Float] :sleep (0.5)
+    #   how many seconds to sleep before re-polling the job status
+    # @return [void] self
+    def wait!(options = {}, &block)
+      timeout = options[:timeout] # TODO
+      delay   = options[:sleep] || 0.5
+      until done?
+        yield if block_given?
+        sleep delay unless delay.zero?
+      end
+      self
+    end
+    alias_method :wait, :wait!
+
+    ##
     # Aborts this job if it is currently pending or running.
     #
     # @return [void]
@@ -119,22 +148,6 @@ module Dydra
       Dydra::Client.rpc.call('dydra.job.abort', uuid)
       self
     end
-
-    ##
-    # Waits until this job is done, meanwhile calling the given `block`
-    # at regular intervals.
-    #
-    # @param  [Hash{Symbol => Object} options
-    # @option options [Float] :sleep (0.5)
-    #   how many seconds to sleep before re-polling the job status
-    # @return [void] self
-    def wait!(options = {}, &block)
-      delay = options[:sleep] || 0.5
-      until done?
-        yield if block_given?
-        sleep delay unless delay.zero?
-      end
-      self
-    end
+    alias_method :abort, :abort!
   end # Job
 end # Dydra
