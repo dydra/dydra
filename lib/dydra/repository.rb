@@ -196,15 +196,13 @@ module Dydra
     #
     # @param  [String] query
     # @return [Job]
-    def query(query, format = nil)
+    def query(query, opts = {})
       form = self.class.query_form(query)
-      if format.nil?
-        format = case form
+      format = opts[:format] || case form
           when :select, :ask
             :json
           when :construct, :describe
             :ntriples
-        end
       end
       accept = case
         when FORMATS.has_key?(format)

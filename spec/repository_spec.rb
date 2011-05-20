@@ -72,7 +72,7 @@ describe Dydra::Repository do
       lambda { @repository.created }.should_not raise_error
     end
 
-    it "should return a time" do
+    pending "should return a time" do
       @repository.created.should be_a(XMLRPC::DateTime) # FIXME
     end
   end
@@ -82,8 +82,22 @@ describe Dydra::Repository do
       lambda { @repository.updated }.should_not raise_error
     end
 
-    it "should return a time" do
+    pending "should return a time" do
       @repository.created.should be_a(XMLRPC::DateTime) # FIXME
+    end
+  end
+
+  context "Repository#query" do
+    before :all do
+      @query = 'select * where { ?s ?p ?o }'
+    end
+
+    it "should not raise an exception" do
+      lambda { @repository.query(@query, :format => :parsed) }.should_not raise_error
+    end
+
+    it "should return correct results" do
+      @repository.query(@query, :format => :parsed).size.should == 10
     end
   end
 end

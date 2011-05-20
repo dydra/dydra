@@ -24,7 +24,7 @@ module Dydra
               :turtle
           end
 
-          result = repository.query(@query, @options[:result_format])
+          result = repository.query(@query, :format => @options[:result_format])
 
           if @options[:result_format] == :parsed && result.respond_to?(:empty?) && !result.empty?
             variables = result.first.each_name.to_a
