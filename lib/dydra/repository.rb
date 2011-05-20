@@ -219,8 +219,8 @@ module Dydra
       end
 
       begin
-
-        result = Dydra::Client.post "#{account}/#{name}/sparql", { :query => query },
+        query_params = { :query => query, :user_id => opts[:user_query_id] }
+        result = Dydra::Client.post "#{account}/#{name}/sparql", query_params,
            :content_type => 'application/x-www-form-urlencoded',
            :accept => accept
 
