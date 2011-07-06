@@ -104,7 +104,6 @@ describe Dydra::Repository do
     end
 
     it "should pass through a user query id" do
-      puts "running the right query"
       @repository.query(@query, :format => :parsed, :user_query_id => "rpsec-test-query").size.should == 10
     end
   end
