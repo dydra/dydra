@@ -150,10 +150,12 @@ module Dydra
     # Insert RDF data into this repository
     #
     def insert(*statements)
-      Dydra::Client.post "repositories/#{@account}/#{@name}/statements",
-                         RDF::Writer.for(:ntriples).dump(statements),
-                         :content_type => 'text/plain'
-
+      repo = RDF::Repository.new.insert(*statements)
+      (repo.each_context.to_a << nil).each do |context|
+        Dydra::Client.post "#{@account}/#{@name}/statements?context=#{context}",
+                           RDF::Writer.for(:ntriples).dump(repo.query(:context => context)),
+                           :content_type => 'text/plain'
+      end
     end
 
 
