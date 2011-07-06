@@ -2,7 +2,9 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe Dydra::Repository do
   before :all do
-    @repository = Dydra::Repository.new('jhacker', 'foaf') # a demo repository
+    @user = 'jhacker' || ENV['DYDRA-TEST-USER']
+    @repo_name = 'foaf' || ENV['DYDRA-TEST-REPO']
+    @repository = Dydra::Repository.new(@user, @repo_name) # a demo repository
   end
 
   context "Repository#exists?" do
@@ -15,7 +17,7 @@ describe Dydra::Repository do
     end
 
     it "should return false if the repository does not exist" do
-      Dydra::Repository.new('jhacker', 'fooabar').exists?.should == false
+      Dydra::Repository.new(@user, 'asdfajsdflajsdfasldkfjasdlkf').exists?.should == false
     end
   end
 
@@ -29,7 +31,7 @@ describe Dydra::Repository do
     end
 
     it "should return the correct account" do
-      @repository.account.should == Dydra::Account.new('jhacker')
+      @repository.account.should == Dydra::Account.new(@user)
     end
   end
 
@@ -43,7 +45,7 @@ describe Dydra::Repository do
     end
 
     it "should return the account name" do
-      @repository.name.should == 'foaf'
+      @repository.name.should == @repo_name
     end
   end
 
