@@ -142,7 +142,7 @@ describe Dydra::Repository do
       @import.clear!.wait!
     end
 
-    it "should insert a smashed array of statements" do
+    it "should insert an array of statements" do
       statements = [RDF::Statement.new(RDF::SIOC.type, RDF::FOAF.name, 'sioc-type'),
                     RDF::Statement.new(RDF::SIOC.subject, RDF::FOAF.name, 'sioc-subject')]
       @import.insert(*statements)
@@ -151,11 +151,21 @@ describe Dydra::Repository do
       result.first.p.should == RDF::FOAF.name
     end
 
-    it "should insert a smashed array of statements with a correct graphs" do
+    it "should insert an array of statements with correct graphs" do
+      statements = [RDF::Statement.new(RDF::SIOC.type, RDF::FOAF.name, 'sioc-type', :context => RDF::FOAF.context),
+                    RDF::Statement.new(RDF::SIOC.subject, RDF::FOAF.name, 'sioc-subject', :context => RDF::FOAF.another_context),
+                    RDF::Statement.new(RDF::SIOC.name, RDF::FOAF.name, 'sioc-name')]
+      @import.insert(*statements)
+      result = @import.query('select * where { { graph ?g { ?s ?p ?o }} union { ?s ?p ?o }}', :format => :parsed)
+      result.size.should == 3
+      result.map { |r| r.g }.should =~ [RDF::FOAF.another_context, RDF::FOAF.context, nil]
+    end
+
+    it "should insert an array of statements without a default graph" do
       statements = [RDF::Statement.new(RDF::SIOC.type, RDF::FOAF.name, 'sioc-type', :context => RDF::FOAF.context),
                     RDF::Statement.new(RDF::SIOC.subject, RDF::FOAF.name, 'sioc-subject', :context => RDF::FOAF.another_context)]
       @import.insert(*statements)
-      result = @import.query('select * where { graph ?g { ?s ?p ?o }}', :format => :parsed)
+      result = @import.query('select * where { { graph ?g { ?s ?p ?o }} union { ?s ?p ?o }}', :format => :parsed)
       result.size.should == 2
       result.map { |r| r.g }.should =~ [RDF::FOAF.another_context, RDF::FOAF.context]
     end

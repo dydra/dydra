@@ -151,9 +151,12 @@ module Dydra
     #
     def insert(*statements)
       repo = RDF::Repository.new.insert(*statements)
-      (repo.each_context.to_a << nil).each do |context|
-        Dydra::Client.post "#{@account}/#{@name}/statements?context=#{context}",
-                           RDF::Writer.for(:ntriples).dump(repo.query(:context => context)),
+      (repo.each_context.to_a << false).each do |context|
+        context_argument = context == false ? "" : "?context=#{context}"
+        statements = repo.query(:context => context)
+        next if statements.empty?
+        Dydra::Client.post "#{@account}/#{@name}/statements#{context_argument}",
+                           RDF::Writer.for(:ntriples).dump(statements),
                            :content_type => 'text/plain'
       end
     end
