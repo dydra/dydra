@@ -143,7 +143,7 @@ module Dydra
     # @return [Job]
     def clear!
       # FIXME: server is not async for this method yet.
-      Dydra::Client.rpc.call('dydra.repository.clear', path)
+      Job.new(Dydra::Client.rpc.call('dydra.repository.clear', path))
     end
 
     ##
