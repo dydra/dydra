@@ -107,4 +107,57 @@ describe Dydra::Repository do
       @repository.query(@query, :format => :parsed, :user_query_id => "rpsec-test-query").size.should == 10
     end
   end
+
+  context "Repository#delete and Repository#create" do
+
+    before :all do
+      @create = Dydra::Repository.new(@user, 'test-create')
+      @create.exists?.should == false
+    end
+
+    it "should be createable" do
+      @create.create!
+      @create.exists?.should == true
+    end
+
+    it "should be empty on creation" do
+      @create.count.should == 0
+    end
+
+    it "should return a 422 if it already exists" do
+      lambda { @create.create! }.should raise_error(RestClient::UnprocessableEntity)
+    end
+
+    it "should be deleteable" do
+      @create.destroy!
+      @create.exists?.should == false
+    end
+  end
+
+  context "Repository#insert" do
+
+    before :each do
+      @import = Dydra::Repository.new(@user, 'test-importer')
+      begin @import.create! rescue RestClient::UnprocessableEntity end
+      @import.clear!.wait!
+    end
+
+    it "should insert a smashed array of statements" do
+      statements = [RDF::Statement.new(RDF::SIOC.type, RDF::FOAF.name, 'sioc-type'),
+                    RDF::Statement.new(RDF::SIOC.subject, RDF::FOAF.name, 'sioc-subject')]
+      @import.insert(*statements)
+      result = @import.query('select * where { ?s ?p ?o }', :format => :parsed)
+      result.size.should == 2
+      result.first.p.should == RDF::FOAF.name
+    end
+
+    it "should insert a smashed array of statements with a correct graphs" do
+      statements = [RDF::Statement.new(RDF::SIOC.type, RDF::FOAF.name, 'sioc-type', :context => RDF::FOAF.context),
+                    RDF::Statement.new(RDF::SIOC.subject, RDF::FOAF.name, 'sioc-subject', :context => RDF::FOAF.another_context)]
+      @import.insert(*statements)
+      result = @import.query('select * where { graph ?g { ?s ?p ?o }}', :format => :parsed)
+      result.size.should == 2
+      result.map { |r| r.g }.should =~ [RDF::FOAF.another_context, RDF::FOAF.context]
+    end
+  end
 end
