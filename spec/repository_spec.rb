@@ -2,6 +2,7 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe Dydra::Repository do
   before :all do
+    warn "Running tests against production...not very wise" if ENV['DYDRA_URL'].nil? || ENV['DYDRA_URL'].empty?
     @user = 'jhacker' || ENV['DYDRA-TEST-USER']
     @repo_name = 'foaf' || ENV['DYDRA-TEST-REPO']
     @repository = Dydra::Repository.new(@user, @repo_name) # a demo repository
