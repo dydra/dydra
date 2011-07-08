@@ -237,8 +237,7 @@ module Dydra
           puts JSON.parse(e.response)['error']
           exit
         rescue
-          puts "A server error was encountered."
-          exit
+          raise e
         end
       end
 
