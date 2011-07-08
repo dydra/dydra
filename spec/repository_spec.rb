@@ -106,6 +106,10 @@ describe Dydra::Repository do
     it "should pass through a user query id" do
       @repository.query(@query, :format => :parsed, :user_query_id => "rpsec-test-query").size.should == 10
     end
+
+    it "should recognize 1.1 update query forms" do
+      lambda { @repository.query('INSERT DATA { :s :p :o }', :format => :parsed) }.should_not raise_error Dydra::MalformedQuery
+    end
   end
 
   context "Repository#delete and Repository#create" do

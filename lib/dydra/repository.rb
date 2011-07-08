@@ -312,10 +312,11 @@ module Dydra
       # invalid URI in a prefix or base.
       raise MalformedQuery, "Missing query text" if query.nil? || query.empty?
       query_lines = query.to_s.lines.to_a
-      form_line = query_lines.shift while form_line !~ /(construct|ask|describe|select)/i && query_lines.length > 0
+      forms = %w{construct ask describe select create clear drop delete insert load}
+      form_line = query_lines.shift while form_line !~ /(#{forms.join('|')})/i && query_lines.length > 0
 
       lowest_spot = result_form = nil
-      ['construct','select','ask','describe'].each do | form |
+      forms.each do | form |
         # catches the form on a line by itself
         return form.to_sym if form_line.downcase.chomp == form
 
