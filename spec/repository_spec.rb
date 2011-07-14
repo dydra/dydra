@@ -124,7 +124,7 @@ describe Dydra::Repository do
     end
   end
 
-  context "Repository#delete and Repository#create" do
+  context "Repository#destroy and Repository#create" do
 
     before :all do
       @create = Dydra::Repository.new(@user, 'test-create')
@@ -144,7 +144,7 @@ describe Dydra::Repository do
       lambda { @create.create! }.should raise_error(RestClient::UnprocessableEntity)
     end
 
-    it "should be deleteable" do
+    it "should be destroyable" do
       @create.destroy!
       @create.exists?.should == false
     end
