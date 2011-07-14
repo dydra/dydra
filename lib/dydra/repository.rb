@@ -204,7 +204,7 @@ module Dydra
     def query(query, opts = {})
       form = self.class.query_form(query)
       format = opts[:format] || case form
-          when :select, :ask
+          when :select, :ask, :insert, :delete, :clear, :drop, :load, :create
             :json
           when :construct, :describe
             :ntriples
@@ -214,7 +214,7 @@ module Dydra
           FORMATS[format]
         when :parsed
           case form
-            when :select, :ask
+            when :select, :ask, :insert, :delete, :clear, :drop, :load, :create
               FORMATS[:columns]
             when :construct, :describe
               FORMATS[:ntriples]
@@ -243,7 +243,7 @@ module Dydra
 
       return result unless format == :parsed
       case form
-        when :select, :ask
+        when :select, :ask, :insert, :delete, :clear, :drop, :load, :create
           parse_bindings(result)
         when :construct, :describe
           parse_rdf(result)
