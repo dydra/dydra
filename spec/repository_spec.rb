@@ -110,6 +110,18 @@ describe Dydra::Repository do
     it "should recognize 1.1 update query forms" do
       lambda { @repository.query('INSERT DATA { :s :p :o }', :format => :parsed) }.should_not raise_error Dydra::MalformedQuery
     end
+
+    it "should correctly parse optional results" do
+      @repository = Dydra::Repository.new(@user, 'test-optional')
+      begin @repository.create! rescue RestClient::UnprocessableEntity end
+      statements = [RDF::Statement.new(RDF::SIOC.type, RDF::FOAF.name, 'sioc-type', :context => RDF::FOAF.context),
+                    RDF::Statement.new(RDF::SIOC.subject, RDF::FOAF.name, 'sioc-subject', :context => RDF::FOAF.another_context),
+                    RDF::Statement.new(RDF::SIOC.name, RDF::FOAF.name, 'sioc-name')]
+      @repository.insert(*statements)
+
+      result = @repository.query('select * where { { ?s ?p ?o } union { graph ?g { ?s ?p ?o} } }', :format => :parsed)
+      puts result.first.to_hash
+    end
   end
 
   context "Repository#delete and Repository#create" do
