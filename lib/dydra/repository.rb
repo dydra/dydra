@@ -299,6 +299,8 @@ module Dydra
     ##
     # Parse JSON column result values
     def parse_json_value(value, nodes = {})
+      # ASK queries in json-columns look like this
+      return value if value.equal?(true) || value.equal?(false)
       # This catches successful queries with no bound variables
       return nil unless value['type']
       case value['type'].to_sym

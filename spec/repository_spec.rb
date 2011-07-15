@@ -122,6 +122,14 @@ describe Dydra::Repository do
 
       result = @repository.query('select * where { { ?s ?p ?o } union { graph ?g { ?s ?p ?o} } }', :format => :parsed)
     end
+
+    context "result parsing" do
+      it "should parse json-columns ASK results" do
+        Dydra::Client.should_receive(:post).and_return('{"columns": ["result"], "rows": [ [true] ], "total": 1}')
+        result = @repository.query('INSERT DATA { :s :p :o }', :format => :parsed)
+        result.should be_true
+      end
+    end
   end
 
   context "Repository#destroy and Repository#create" do
