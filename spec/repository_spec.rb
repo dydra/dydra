@@ -111,6 +111,7 @@ describe Dydra::Repository do
       lambda { @repository.query('INSERT DATA { :s :p :o }', :format => :parsed) }.should_not raise_error Dydra::MalformedQuery
     end
 
+    # FIXME: working 1.1 update query
     it "should correctly parse optional results" do
       @repository = Dydra::Repository.new(@user, 'test-optional')
       begin @repository.create! rescue RestClient::UnprocessableEntity end
@@ -120,7 +121,6 @@ describe Dydra::Repository do
       @repository.insert(*statements)
 
       result = @repository.query('select * where { { ?s ?p ?o } union { graph ?g { ?s ?p ?o} } }', :format => :parsed)
-      puts result.first.to_hash
     end
   end
 
@@ -185,5 +185,35 @@ describe Dydra::Repository do
       result.size.should == 2
       result.map { |r| r.g }.should =~ [RDF::FOAF.another_context, RDF::FOAF.context]
     end
+  end
+
+  context "Repository#delete" do
+    before :each do
+      @delete = Dydra::Repository.new(@user, 'test-deletion')
+      begin @delete.create! rescue RestClient::UnprocessableEntity end
+      statements = [RDF::Statement.new(RDF::SIOC.type, RDF::FOAF.name, 'sioc-type', :context => RDF::FOAF.context),
+                    RDF::Statement.new(RDF::SIOC.subject, RDF::FOAF.name, 'sioc-subject', :context => RDF::FOAF.another_context),
+                    RDF::Statement.new(RDF::SIOC.name, RDF::FOAF.name, 'sioc-name')]
+      @delete.insert(*statements)
+    end
+
+    it "should delete a particular statement from a hash" do
+      @delete.delete(:subject => RDF::SIOC.name, :predicate => RDF::FOAF.name, :object => 'sioc-name')
+      @delete.query("select * where { <#{RDF::SIOC.name}> <#{RDF::FOAF.name}> 'sioc-name' }", :format => :parsed).size.should == 0
+      @delete.count.should == 2
+    end
+
+    pending "should delete a particular statement from a triple" do
+      @delete.delete([RDF::SIOC.name, RDF::FOAF.name, 'sioc-name'])
+      @delete.query("select * where { <#{RDF::SIOC.name}>, <#{RDF::FOAF.name}>, 'sioc-name' }").size.should == 0
+      @delete.size.should == 2
+    end
+
+    pending "should delete a pattern from a hash" do
+      @delete.delete(:subject => RDF::SIOC.name)
+      @delete.query("select * where { <#{RDF::SIOC.name}> ?p ?o }").size.should == 0
+      @delete.size.should == 2
+    end
+
   end
 end

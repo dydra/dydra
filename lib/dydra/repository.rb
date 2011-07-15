@@ -161,6 +161,28 @@ module Dydra
       end
     end
 
+    ##
+    # Delete RDF data from this repository
+    #
+    def delete(pattern)
+      pattern = case pattern
+        when Hash
+          pattern
+        when RDF::Query::Pattern, RDF::Statement
+          delete(:subject => pattern.subject, :predicate => pattern.predicate, :object => pattern.object, :context => pattern.context)
+        when Array
+          delete(:subject => pattern[0], :predicate => pattern[1], :object => pattern[2], :context => pattern[3])
+        else raise ArgumentError, "Expected Hash, RDF::Query::Pattern, RDF::Statement, or Array, but got #{pattern.class}"
+      end
+
+      arguments = []
+      arguments << ::URI.escape("subject=#{pattern[:subject]}") if pattern[:subject]
+      arguments << ::URI.escape("predicate=#{pattern[:predicate]}") if pattern[:predicate]
+      arguments << ::URI.escape("object=#{pattern[:object]}") if pattern[:object]
+      arguments << ::URI.escape("context=#{pattern[:context]}") if pattern[:context]
+
+      Dydra::Client.delete "#{@account}/#{@name}/statements?" + arguments.join('&')
+    end
 
     ##
     # Imports data from a URL into this repository.
@@ -234,6 +256,7 @@ module Dydra
       # supress here.
       rescue Exception => e
         begin
+          # FIXME raise correctly, not just puts
           puts JSON.parse(e.response)['error']
           exit
         rescue
