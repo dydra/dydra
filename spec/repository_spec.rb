@@ -124,6 +124,11 @@ describe Dydra::Repository do
       lambda { @repository.query("CONSTRUCT{ ?P foaf:name ?FullName } where { ?P ?pred ?FullName}", :format => :parsed) }.should_not raise_error Dydra::MalformedQuery
     end
 
+    it "should raise a query error instead of an HTTP error for bad queries" do
+      # note un-prefixed :, sparql endpoint will cry about undeclared prefixes
+      lambda { @repository.query('select * where { :s :p :o }', :format => :parsed) }.should raise_error Dydra::QueryError
+    end
+
     # FIXME: working 1.1 update query
     it "should correctly parse optional results" do
       @repository = Dydra::Repository.new(@user, 'test-optional')

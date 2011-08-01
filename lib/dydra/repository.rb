@@ -256,10 +256,11 @@ module Dydra
       # supress here.
       rescue Exception => e
         begin
-          # FIXME raise correctly, not just puts
-          puts JSON.parse(e.response)['error']
-          exit
-        rescue
+          # FIXME: what about xml?
+          # errors from the server: bad query format of some sort or another
+          raise QueryError, JSON.parse(e.response)['error']
+        rescue JSON::ParserError
+          # errors from network timesout and that kind of thing. RestClient errors are fine.
           raise e
         end
       end

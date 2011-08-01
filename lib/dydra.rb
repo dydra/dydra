@@ -33,7 +33,11 @@ module Dydra
   # queries too.
   class RepositoryMisspecified < ::ArgumentError; end
 
-  class MalformedQuery < :: StandardError; end
+  class MalformedQuery < ::StandardError; end
+
+  # Used for query errors that come back over HTTP but that the client library
+  # catches
+  class QueryError < ::StandardError; end
 
   ##
   # @private
