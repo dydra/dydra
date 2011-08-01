@@ -346,7 +346,7 @@ module Dydra
         return form.to_sym if form_line.downcase.chomp == form
 
         # otherwise, look for the form, followed by the space, and mark where it is...
-        if !(spot = form_line =~ /#{form} /i).nil?
+        if !(spot = form_line =~ /#{form}(\s|{)/i).nil?
           result_form = form.to_sym
           result_form = form if !lowest_spot.nil? && lowest_spot < spot
           lowest_spot = spot if lowest_spot.nil? || spot < lowest_spot

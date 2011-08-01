@@ -111,6 +111,19 @@ describe Dydra::Repository do
       lambda { @repository.query('INSERT DATA { :s :p :o }', :format => :parsed) }.should_not raise_error Dydra::MalformedQuery
     end
 
+    it "should recognize query forms on a line by themselves" do
+      @repository.query("select\n* where {?s ?p ?o }", :format => :parsed)
+      lambda { @repository.query("select\n* where {:s :p :o }", :format => :parsed) }.should_not raise_error Dydra::MalformedQuery
+    end
+
+    it "should recognize insert data query forms on a line by themselves" do
+      lambda { @repository.query("INSERT DATA\n{:s :p :o }", :format => :parsed) }.should_not raise_error Dydra::MalformedQuery
+    end
+
+    it "should recognize query forms without trailing whitespace" do
+      lambda { @repository.query("CONSTRUCT{ ?P foaf:name ?FullName } where { ?P ?pred ?FullName}", :format => :parsed) }.should_not raise_error Dydra::MalformedQuery
+    end
+
     # FIXME: working 1.1 update query
     it "should correctly parse optional results" do
       @repository = Dydra::Repository.new(@user, 'test-optional')
