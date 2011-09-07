@@ -225,7 +225,7 @@ module Dydra
     def query(query, opts = {})
       form = self.class.query_form(query)
       format = opts[:format] || case form
-          when :select, :ask, :insert, :delete, :clear, :drop, :load, :create
+          when :select, :ask, :insert, :delete, :clear, :drop, :load, :create, :copy, :move, :add
             :json
           when :construct, :describe
             :ntriples
@@ -337,7 +337,7 @@ module Dydra
       # invalid URI in a prefix or base.
       raise MalformedQuery, "Missing query text" if query.nil? || query.empty?
       query_lines = query.to_s.lines.to_a
-      forms = %w{construct ask describe select create clear drop delete insert load}
+      forms = %w{construct ask describe select create clear drop delete insert load copy move add}
       form_line = query_lines.shift while form_line !~ /(#{forms.join('|')})/i && query_lines.length > 0
 
       lowest_spot = result_form = nil
