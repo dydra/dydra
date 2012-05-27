@@ -130,7 +130,7 @@ module Dydra
           TCPSocket::socks_port   = port.to_i
           nil
         rescue LoadError => e
-          warn "WARNING: install the 'socksify' gem to use your configured SOCKS proxy (#{socks_server})."
+          warn "WARNING: install the 'socksify' gem to use your configured SOCKS proxy (#{socks_server})." if $VERBOSE
         end
       end
       $dydra ||= {}
