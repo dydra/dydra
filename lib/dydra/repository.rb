@@ -283,7 +283,7 @@ module Dydra
       variables = results["columns"].map(&:to_sym)
       nodes = {}
       bindings = results["rows"].map do | row |
-        solution = RDF::Query::Solution.new        
+        solution = RDF::Query::Solution.new
         row.each_with_index do | binding, index |
           solution[variables[index]] = parse_json_value(binding, nodes)
         end
