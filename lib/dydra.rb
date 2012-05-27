@@ -27,6 +27,7 @@ module Dydra
   autoload :Repository, 'dydra/repository'
   autoload :Resource,   'dydra/resource'
   autoload :Revision,   'dydra/revision'
+  autoload :RPC,        'dydra/rpc'
   autoload :VERSION,    'dydra/version'
 
   class AuthenticationError < StandardError; end
