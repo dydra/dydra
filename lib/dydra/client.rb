@@ -1,3 +1,5 @@
+# This is free and unencumbered software released into the public domain.
+
 require 'xmlrpc/client'
 require 'rest_client'   # @see http://rubygems.org/gems/rest-client
 require 'json'          # @see http://rubygems.org/gems/json

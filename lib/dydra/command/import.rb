@@ -1,3 +1,5 @@
+# This is free and unencumbered software released into the public domain.
+
 require 'uri'
 require 'net/http'
 require 'net/https'

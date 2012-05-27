@@ -1,5 +1,8 @@
 #!/usr/bin/env ruby
+# This is free and unencumbered software released into the public domain.
+
 $:.unshift(File.expand_path(File.join(File.dirname(__FILE__), 'lib')))
+
 require 'rubygems'
 require 'dydra'
 

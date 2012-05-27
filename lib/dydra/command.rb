@@ -1,3 +1,5 @@
+# This is free and unencumbered software released into the public domain.
+
 module Dydra
   ##
   # Base class for CLI commands.
