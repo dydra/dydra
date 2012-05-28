@@ -54,6 +54,14 @@ module Dydra::RPC
     attr_reader :id
 
     ##
+    # Determines whether this RPC message is idempotent.
+    #
+    # @return [Boolean]
+    def idempotent?
+      false # a safe default
+    end
+
+    ##
     # Returns the string representation of this RPC message.
     #
     # @return [String]
