@@ -24,6 +24,19 @@ module Dydra::RPC
     end
 
     ##
+    # Invokes an RPC operation on the server.
+    #
+    # @param  [Symbol, #to_s] operator
+    # @param  [Hash, Array, #to_a] operands
+    # @yield  [result]
+    # @yieldparam  [Object] result
+    # @yieldreturn [void]
+    # @return [Object] the result
+    def self.call(operator, operands)
+      self.new.call(operator, operands)
+    end
+
+    ##
     # @param  [#to_s] base_url
     # @param  [Hash] options
     def initialize(base_url = Dydra::URL, options = nil)
