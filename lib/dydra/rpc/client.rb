@@ -11,6 +11,11 @@ module Dydra::RPC
     USER_AGENT = "Dydra/#{Dydra::VERSION} (Ruby #{RUBY_VERSION}p#{RUBY_PATCHLEVEL}; #{RUBY_PLATFORM})"
 
     ##
+    # The number of times to retry idempotent RPC requests in case of a
+    # terminated connection to the RPC endpoint.
+    RECONNECT_COUNT = 1
+
+    ##
     # Returns the `User-Agent` header to send with RPC requests.
     #
     # @return [String]
@@ -20,10 +25,18 @@ module Dydra::RPC
 
     ##
     # @param  [#to_s] base_url
-    def initialize(base_url = Dydra::URL)
+    # @param  [Hash] options
+    def initialize(base_url = Dydra::URL, options = nil)
       # TODO: support authentication.
       @url = RDF::URI(base_url) / "/rpc/#{Protocol::API_VERSION}"
+      @options = options || {}
     end
+
+    ##
+    # Any additional options.
+    #
+    # @return [Hash]
+    attr_reader :options
 
     ##
     # The RPC endpoint URL.
@@ -98,19 +111,91 @@ module Dydra::RPC
     end
 
     ##
+    # The HTTP client instance used to communicate with the RPC endpoint.
+    #
+    # @return [Net:HTTP] the HTTP client
+    # @!parse attr_reader :http
+    def http
+      @http ||= begin
+        http = Net::HTTP.new(self.host, self.port)
+        http.set_debug_output($stderr) if self.options[:debug]
+        http
+      end
+    end
+
+    ##
+    # Checks whether the connection to the RPC endpoint is active.
+    #
+    # @return [Boolean]
+    def connected?
+      (self.http && self.http.started?) || false
+    end
+
+    ##
+    # Establishes the connection to the RPC endpoint.
+    #
+    # @yield  [client]
+    # @yieldparam  [Client] client `self`
+    # @yieldreturn [void]
+    # @return [void] `self`
+    def connect(&block)
+      self.http.start unless self.http.started?
+      if block_given?
+        block.call
+      else
+        self
+      end
+    end
+    alias_method :connect!, :connect
+
+    ##
+    # Terminates the connection from the RPC endpoint.
+    #
+    # @return [void] `self`
+    def disconnect
+      if self.http
+        begin
+          self.http.finish if self.http.started?
+        rescue IOError
+        end
+      end
+      self
+    end
+    alias_method :disconnect!, :disconnect
+
+    ##
     # Invokes an RPC operation on the server.
     #
     # @param  [Symbol, #to_s] operator
     # @param  [Hash, Array, #to_a] operands
     # @yield  [result]
-    # @yieldparam [Object] result
+    # @yieldparam  [Object] result
+    # @yieldreturn [void]
     # @return [Object] the result
     def call(operator, operands = nil, &block)
       request  = Request.new(nil, operator, operands)
-      response = execute(request)
+      response = execute_with_reconnect(request)
       case response
         when Error    then raise response
         when Response then response.result
+      end
+    end
+
+    ##
+    # @private
+    def execute_with_reconnect(request, &block)
+      reconnect_count = 0
+      begin
+        execute(request, &block)
+      rescue EOFError, Errno::ECONNRESET => e
+        if request.idempotent? && reconnect_count < RECONNECT_COUNT
+          reconnect_count += 1
+          self.http.finish
+          self.http.start
+          retry
+        else
+          raise
+        end
       end
     end
 
@@ -119,12 +204,13 @@ module Dydra::RPC
     #
     # @param  [Request] the client request
     # @yield  [response]
-    # @yieldparam [Response] response the server response
+    # @yieldparam  [Response] response the server response
+    # @yieldreturn [void]
     # @return [Response] the server response
     def execute(request, &block)
       data = Message.serialize(request)
-      Net::HTTP.start(self.host, self.port) do |http|
-        case http_response = http.post(self.path, data, self.headers)
+      connect do
+        case http_response = self.http.post(self.path, data, self.headers)
           when Net::HTTPSuccess
             response = Message.parse(http_response.body)
             if block_given?
