@@ -222,5 +222,22 @@ module Dydra::RPC
         end
       end
     end
+
+    ##
+    # Returns a developer-friendly representation of this RPC client.
+    #
+    # @return [String]
+    def inspect
+      Kernel.sprintf("#<%s:%#0x(%s)>", self.class.name, self.__id__, self.url.to_s)
+    end
+
+    ##
+    # Outputs a developer-friendly representation of this RPC client to the
+    # standard error stream.
+    #
+    # @return [void]
+    def inspect!
+      Kernel.warn(self.inspect)
+    end
   end # Client
 end # Dydra::RPC
