@@ -6,7 +6,7 @@ module Dydra::RPC
   ##
   # Base functionality for Dydra.com RPC messages.
   module Message
-    CONTENT_TYPE = 'application/json'
+    CONTENT_TYPE = 'application/json; charset=UTF-8'.freeze
 
     ##
     # Parses a serialized RPC message, returning an instance of the

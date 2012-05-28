@@ -8,7 +8,7 @@ module Dydra::RPC
   module Protocol
     ##
     # The Dydra.com RPC interface version.
-    API_VERSION = '2012-06-01'
+    API_VERSION = '2012-06-01'.freeze
 
     ##
     # The JSON-RPC protocol version to use.
