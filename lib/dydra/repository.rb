@@ -120,7 +120,7 @@ module Dydra
     def self.list(user = nil)
       user ||= $dydra[:user]
       raise RepositoryMisspecified, "List requires a user in token-only authentication mode" if user.nil?
-      Dydra::Client.get_json(user + '/repositories').map { |r| r['name'] }
+      RPC::Client.call(:ListRepositories, [user.to_s])
     end
 
     ##
