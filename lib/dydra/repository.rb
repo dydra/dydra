@@ -128,7 +128,7 @@ module Dydra
     #
     # @return [Operation]
     def create
-      Operation.new(RPC::Client.call(:CreateRepository, ["#{account}/#{name}"]))
+      Operation.new(RPC::Client.call(:CreateRepository, [path]))
     end
     alias_method :create!, :create
 
@@ -137,7 +137,7 @@ module Dydra
     #
     # @return [Operation]
     def destroy
-      Operation.new(RPC::Client.call(:DestroyRepository, ["#{account}/#{name}"]))
+      Operation.new(RPC::Client.call(:DestroyRepository, [path]))
     end
     alias_method :destroy!, :destroy
 
@@ -146,7 +146,7 @@ module Dydra
     #
     # @return [Operation]
     def clear!
-      Operation.new(RPC::Client.call(:ClearRepository, ["#{account}/#{name}"]))
+      Operation.new(RPC::Client.call(:ClearRepository, [path]))
     end
 
     ##
@@ -218,7 +218,7 @@ module Dydra
     #
     # @return [Integer]
     def count
-      Dydra::Client.rpc.call('dydra.repository.count', path)
+      RPC::Client.call(:CountStatements, [path])
     end
 
     ##

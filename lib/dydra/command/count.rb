@@ -12,7 +12,7 @@ module Dydra
         begin
           sum = repositories.inject(0) do |sum , repository|
             @repository = repository
-            count = Repository.new(repository).info['triple_count']
+            count = Repository.new(repository).count
             puts "#{count} #{repository}"
             sum += count
           end

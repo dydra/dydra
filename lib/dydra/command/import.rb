@@ -34,9 +34,8 @@ module Dydra
             puts e.message.sub(/Uncaught exception /,'')
           end
         end
-        puts "#{repository.account}/#{repository.name} has #{repository.info['triple_count']} triples" if something_suceeded
+        puts "#{repository.account}/#{repository.name} has #{repository.count} statements" if something_suceeded
       end
-
     end # Import
   end # Command
 end # Dydra
