@@ -14,8 +14,10 @@ module Dydra
     ##
     # Returns a Dydra.com RPC API client.
     #
+    # @deprecated
     # @return [XMLRPC::Client]
     def self.rpc
+      warn "WARNING: using the deprecated RPC interface..."
       url = Dydra::URL.host.to_s.sub(/\/$/, '')
       port = Dydra::URL.port || 80
       $dydra ||= {}

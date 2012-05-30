@@ -158,7 +158,7 @@ module Dydra
         context_argument = context == false ? "" : "?context=#{context}"
         statements = repo.query(:context => context)
         next if statements.empty?
-        Dydra::Client.post "#{@account}/#{@name}/statements#{context_argument}",
+        Dydra::Client.post "#{@account}/#{@name}/statements#{context_argument}", # FIXME
                            RDF::Writer.for(:ntriples).dump(statements),
                            :content_type => 'text/plain'
       end
@@ -184,7 +184,7 @@ module Dydra
       arguments << ::URI.escape("object=#{pattern[:object]}") if pattern[:object]
       arguments << ::URI.escape("context=#{pattern[:context]}") if pattern[:context]
 
-      Dydra::Client.delete "#{@account}/#{@name}/statements?" + arguments.join('&')
+      Dydra::Client.delete "#{@account}/#{@name}/statements?" + arguments.join('&') # FIXME
     end
 
     ##
@@ -202,7 +202,7 @@ module Dydra
         base_uri = opts[:base_uri] || url             # Base URI is the file itself unless specified
         url = upload_local_file(self, url)            # local file to be uploaded
       end
-      Operation.new(Dydra::Client.rpc.call('dydra.repository.import', path, url.to_s, context.to_s, base_uri.to_s))
+      Operation.new(Dydra::Client.rpc.call('dydra.repository.import', path, url.to_s, context.to_s, base_uri.to_s)) # FIXME
     end
 
     ##
@@ -210,7 +210,7 @@ module Dydra
     #
     # @return [Hash]
     def s3_upload_params
-      Dydra::Client.rpc.call('dydra.repository.upload.params', path)
+      Dydra::Client.rpc.call('dydra.repository.upload.params', path) # FIXME
     end
 
     ##
@@ -251,7 +251,7 @@ module Dydra
       begin
         query_params = { :query => query, :user_id => opts[:user_query_id],
                          :ruleset => opts[:ruleset] }
-        result = Dydra::Client.post "#{account}/#{name}/sparql", query_params,
+        result = Dydra::Client.post "#{account}/#{name}/sparql", query_params, # FIXME
            :content_type => 'application/x-www-form-urlencoded',
            :accept => accept
 

@@ -123,7 +123,7 @@ module Dydra
     #
     # @return [Hash]
     def info
-      Dydra::Client.get_json(name)
+      Dydra::Client.get_json(name) # FIXME
     end
 
     ##
@@ -169,7 +169,7 @@ module Dydra
     # @since  0.0.4
     def each_repository(options = {}, &block)
       if block_given?
-        result = Dydra::Client.rpc.call('dydra.repository.list', name)
+        result = Dydra::Client.rpc.call('dydra.repository.list', name) # FIXME
         result.each do |(account_name, repository_name)|
           block.call(Repository.new(self, repository_name))
         end

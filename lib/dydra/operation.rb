@@ -94,7 +94,7 @@ module Dydra
     #
     # @return [Symbol]
     def status
-      Dydra::Client.rpc.call('dydra.job.status', uuid).to_sym
+      Dydra::Client.rpc.call('dydra.job.status', uuid).to_sym # FIXME
     end
 
     ##
@@ -102,7 +102,7 @@ module Dydra
     #
     # @return [Hash]
     def info
-      Dydra::Client.rpc.call('dydra.job.info', uuid)
+      Dydra::Client.rpc.call('dydra.job.info', uuid) # FIXME
     end
 
     ##
@@ -147,7 +147,7 @@ module Dydra
     #
     # @return [void]
     def abort!
-      Dydra::Client.rpc.call('dydra.job.abort', uuid)
+      Dydra::Client.rpc.call('dydra.job.abort', uuid) # FIXME
       self
     end
     alias_method :abort, :abort!
