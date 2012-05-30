@@ -11,7 +11,7 @@ module Dydra
       def execute(*repositories)
         begin
           repositories.each do |repository|
-            job = Repository.new(repository).clear!
+            op = Repository.new(repository).clear!
             puts "Repository #{repository.url} successfully cleared." if verbose?
           end
         rescue RepositoryMisspecified => e

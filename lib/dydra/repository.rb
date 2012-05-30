@@ -134,7 +134,7 @@ module Dydra
     ##
     # Destroys this repository from Dydra.com.
     #
-    # @return [Job]
+    # @return [Operation]
     def destroy!
       Dydra::Client.delete("#{@account}/#{@name}")
     end
@@ -142,7 +142,7 @@ module Dydra
     ##
     # Deletes all data in this repository.
     #
-    # @return [Job]
+    # @return [Operation]
     def clear!
       Dydra::Client.delete("#{@account}/#{@name}/statements")
     end
@@ -189,7 +189,7 @@ module Dydra
     # Imports data from a URL into this repository.
     #
     # @param  [String, #to_s] url
-    # @return [Job]
+    # @return [Operation]
     def import!(url, opts = {})
       base_uri = opts[:base_uri] # || File.dirname(url)
       context = opts[:context] || ''
@@ -200,7 +200,7 @@ module Dydra
         base_uri = opts[:base_uri] || url             # Base URI is the file itself unless specified
         url = upload_local_file(self, url)            # local file to be uploaded
       end
-      Job.new(Dydra::Client.rpc.call('dydra.repository.import', path, url.to_s, context.to_s, base_uri.to_s))
+      Operation.new(Dydra::Client.rpc.call('dydra.repository.import', path, url.to_s, context.to_s, base_uri.to_s))
     end
 
     ##
@@ -223,7 +223,7 @@ module Dydra
     # Queries this repository.
     #
     # @param  [String] query
-    # @return [Job]
+    # @return [Operation]
     def query(query, opts = {})
       form = self.class.query_form(query)
       format = opts[:format] || case form

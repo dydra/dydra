@@ -2,10 +2,10 @@
 
 module Dydra
   ##
-  # Represents a Dydra.com job.
+  # Represents a Dydra.com operation.
   #
   # @see http://docs.dydra.com/sdk/ruby
-  class Job < Resource
+  class Operation < Resource
     SPEC = %r(^([^/]+)$) # /uuid
 
     STATUS_UNKNOWN   = :unknown
@@ -16,23 +16,23 @@ module Dydra
     STATUS_ABORTED   = :aborted
 
     ##
-    # The job UUID.
+    # The operation UUID.
     #
     # @return [String]
     attr_reader :uuid
 
     ##
-    # Initializes the job instance.
+    # Initializes the operation instance.
     #
     # @param  [String, #to_s] uuid
-    #   a valid job UUID
+    #   a valid operation UUID
     def initialize(uuid)
       @uuid = uuid.to_s
       super(Dydra::URL.join(@uuid)) # FIXME
     end
 
     ##
-    # Returns a string representation of the job UUID.
+    # Returns a string representation of the operation UUID.
     #
     # @return [String]
     def to_s
@@ -40,7 +40,7 @@ module Dydra
     end
 
     ##
-    # Returns `true` if this job is currently pending to run.
+    # Returns `true` if this operation is currently pending to run.
     #
     # @return [Boolean]
     def pending?
@@ -48,7 +48,7 @@ module Dydra
     end
 
     ##
-    # Returns `true` if this job is currently running.
+    # Returns `true` if this operation is currently running.
     #
     # @return [Boolean]
     def running?
@@ -56,7 +56,7 @@ module Dydra
     end
 
     ##
-    # Returns `true` if this job has already completed.
+    # Returns `true` if this operation has already completed.
     #
     # @return [Boolean]
     def completed?
@@ -65,7 +65,7 @@ module Dydra
     alias_method :finished?, :completed?
 
     ##
-    # Returns `true` if this job failed for some reason.
+    # Returns `true` if this operation failed for some reason.
     #
     # @return [Boolean]
     def failed?
@@ -73,7 +73,7 @@ module Dydra
     end
 
     ##
-    # Returns `true` if this job was aborted for any reason.
+    # Returns `true` if this operation was aborted for any reason.
     #
     # @return [Boolean]
     def aborted?
@@ -81,7 +81,7 @@ module Dydra
     end
 
     ##
-    # Returns `true` if this job has completed or was aborted, and
+    # Returns `true` if this operation has completed or was aborted, and
     # `false` if it's currently pending or running.
     #
     # @return [Boolean]
@@ -90,7 +90,7 @@ module Dydra
     end
 
     ##
-    # Returns the current status of this job.
+    # Returns the current status of this operation.
     #
     # @return [Symbol]
     def status
@@ -98,7 +98,7 @@ module Dydra
     end
 
     ##
-    # Returns detailed information about this job.
+    # Returns detailed information about this operation.
     #
     # @return [Hash]
     def info
@@ -106,7 +106,7 @@ module Dydra
     end
 
     ##
-    # Returns the time when this job was submitted for execution.
+    # Returns the time when this operation was submitted for execution.
     #
     # @return [Time]
     def submitted_at
@@ -114,7 +114,7 @@ module Dydra
     end
 
     ##
-    # Returns the time when this job finished executing, or `nil` if it
+    # Returns the time when this operation finished executing, or `nil` if it
     # hasn't completed yet.
     #
     # @return [Time]
@@ -123,13 +123,13 @@ module Dydra
     end
 
     ##
-    # Waits until this job is done, meanwhile calling the given `block`
+    # Waits until this operation is done, meanwhile calling the given `block`
     # at regular intervals.
     #
     # @param  [Hash{Symbol => Object} options
     # @option options [Float] :timeout (nil)
     # @option options [Float] :sleep (0.5)
-    #   how many seconds to sleep before re-polling the job status
+    #   how many seconds to sleep before re-polling the operation status
     # @return [void] self
     def wait!(options = {}, &block)
       timeout = options[:timeout] # TODO
@@ -143,7 +143,7 @@ module Dydra
     alias_method :wait, :wait!
 
     ##
-    # Aborts this job if it is currently pending or running.
+    # Aborts this operation if it is currently pending or running.
     #
     # @return [void]
     def abort!
@@ -151,5 +151,5 @@ module Dydra
       self
     end
     alias_method :abort, :abort!
-  end # Job
+  end # Operation
 end # Dydra

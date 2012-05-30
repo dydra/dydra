@@ -95,8 +95,8 @@ module Dydra
       puts "    query       Queries a repository."
       puts "    import      Imports data into a repository."
       puts "    export      Exports data from a repository in N-Triples format."
-      puts "    status      Shows pending, running, and completed jobs."
-      puts "    abort       Aborts a pending or running job."
+      puts "    status      Shows pending, running, and completed operations."
+      puts "    abort       Aborts a pending or running operation."
     end
 
     def login(username = nil, password = nil)
@@ -147,12 +147,12 @@ module Dydra
       Command::Export.new(@options).wrap_errors(*resource_specs)
     end
 
-    def status(job_uuid = nil)
-      Command::Status.new(@options).wrap_errors(job_uuid)
+    def status(op_uuid = nil)
+      Command::Status.new(@options).wrap_errors(op_uuid)
     end
 
-    def abort(job_uuid)
-      Command::Abort.new(@options).wrap_errors(job_uuid)
+    def abort(op_uuid)
+      Command::Abort.new(@options).wrap_errors(op_uuid)
     end
 
     def describe(repository_spec, query = nil)

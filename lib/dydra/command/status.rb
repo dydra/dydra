@@ -3,30 +3,30 @@
 module Dydra
   class Command
     ##
-    # Shows pending, running, and completed jobs.
+    # Shows pending, running, and completed operations.
     class Status < Command
       ##
-      # @param  [String] job_uuid
+      # @param  [String] op_uuid
       # @return [void]
-      def execute(job_uuid = nil)
-        if job_uuid
-          job = Job.new(job_uuid)
-          case status = job.status
+      def execute(op_uuid = nil)
+        if op_uuid
+          op = Operation.new(op_uuid)
+          case status = op.status
             when :pending
-              puts "The job #{job} is currently pending to run."
+              puts "The operation #{op} is currently pending to run."
             when :running
-              puts "The job #{job} is currently running."
+              puts "The operation #{op} is currently running."
             when :aborted
-              puts "The job #{job} was aborted."
+              puts "The operation #{op} was aborted."
             when :failed
-              puts "The job #{job} failed."
+              puts "The operation #{op} failed."
             when :completed
-              puts "The job #{job} has completed."
+              puts "The operation #{op} has completed."
             else
-              puts "The job #{job} has a status of '#{status}'."
+              puts "The operation #{op} has a status of '#{status}'."
           end
         else
-          # TODO: show the status for all jobs
+          # TODO: show the status for all operations
         end
       end
     end # Status

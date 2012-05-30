@@ -22,7 +22,7 @@ module Dydra
   autoload :Account,    'dydra/account'
   autoload :Client,     'dydra/client'
   autoload :Command,    'dydra/command'
-  autoload :Job,        'dydra/job'
+  autoload :Operation,  'dydra/operation'
   autoload :Query,      'dydra/query'
   autoload :Repository, 'dydra/repository'
   autoload :Resource,   'dydra/resource'
