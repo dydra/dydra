@@ -146,7 +146,7 @@ module Dydra
     #
     # @return [Operation]
     def clear!
-      Dydra::Client.delete("#{@account}/#{@name}/statements")
+      Operation.new(RPC::Client.call(:ClearRepository, ["#{account}/#{name}"]))
     end
 
     ##
