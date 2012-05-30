@@ -126,10 +126,11 @@ module Dydra
     ##
     # Creates this repository on Dydra.com.
     #
-    # @return [void]
-    def create!
-      Dydra::Client.post("#{account}/repositories", { :repository => { :name => name }})
+    # @return [Operation]
+    def create
+      Operation.new(RPC::Client.call(:CreateRepository, ["#{account}/#{name}"]))
     end
+    alias_method :create!, :create
 
     ##
     # Destroys this repository from Dydra.com.
