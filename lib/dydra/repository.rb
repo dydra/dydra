@@ -26,8 +26,8 @@ module Dydra
     # @return [Enumerator]
     def self.each(options = {}, &block)
       if block_given?
-        result = Dydra::Client.rpc.call('dydra.repository.list', $dydra[:user] || '')
-        result.each do |(account_name, repository_name)|
+        result = RPC::Client.call(:ListRepositories, $dydra[:user] || nil)
+        result.each do |(account_name, repository_name)| # FIXME
           block.call(Repository.new(account_name, repository_name))
         end
       end
@@ -373,7 +373,7 @@ module Dydra
     # @private
     # @return [Hash]
     def info
-      Dydra::Client.get_json("#{@account}/#{@name}/meta")
+      RPC::Client.call(:DescribeRepository, [path])
     end
 
     ##
