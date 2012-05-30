@@ -136,9 +136,10 @@ module Dydra
     # Destroys this repository from Dydra.com.
     #
     # @return [Operation]
-    def destroy!
-      Dydra::Client.delete("#{@account}/#{@name}")
+    def destroy
+      Operation.new(RPC::Client.call(:DestroyRepository, ["#{account}/#{name}"]))
     end
+    alias_method :destroy!, :destroy
 
     ##
     # Deletes all data in this repository.
