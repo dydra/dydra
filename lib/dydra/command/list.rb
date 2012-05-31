@@ -15,7 +15,7 @@ class Dydra::Command
           puts repository
         end
       rescue RestClient::ResourceNotFound
-        puts "#{user || $dydra[:user]} not found"
+        puts "#{user || ENV['DYDRA_ACCOUNT']} not found"
       rescue RepositoryMisspecified => e
         puts e
       end

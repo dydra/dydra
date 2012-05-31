@@ -20,11 +20,10 @@ module Dydra
       warn "WARNING: using the deprecated RPC interface..."
       url = Dydra::URL.host.to_s.sub(/\/$/, '')
       port = Dydra::URL.port || 80
-      $dydra ||= {}
-      if $dydra[:token]
-        XMLRPC::Client.new3('host' => url, 'port' => port, 'path' => "/rpc?auth_token=#{$dydra[:token]}")
-      elsif $dydra[:user]
-        XMLRPC::Client.new3('host' => url, 'port' => port, 'path' => '/rpc', 'user' => $dydra[:user], 'password' => $dydra[:pass])
+      if ENV['DYDRA_TOKEN']
+        XMLRPC::Client.new3('host' => url, 'port' => port, 'path' => "/rpc?auth_token=#{ENV['DYDRA_TOKEN']}")
+      elsif ENV['DYDRA_ACCOUNT']
+        XMLRPC::Client.new3('host' => url, 'port' => port, 'path' => '/rpc', 'user' => ENV['DYDRA_ACCOUNT'], 'password' => ENV['DYDRA_PASSWORD'])
       else
         raise AuthenticationError, "You need to run Dydra.setup! before performing an API operation"
       end
@@ -39,25 +38,24 @@ module Dydra
     # @option options [String] :password (nil)
     # @return [void]
     def self.authenticate!(options = {})
-      $dydra ||= {}
       if options[:token]
-        $dydra[:token] = options[:token]
+        ENV['DYDRA_TOKEN'] = options[:token]
       elsif options[:user]
-        $dydra[:user] = options[:user]
-        $dydra[:pass] = options[:password] || options[:pass] || raise(AuthenticationError, "You must supply a password")
+        ENV['DYDRA_ACCOUNT'] = options[:user]
+        ENV['DYDRA_PASSWORD'] = options[:password] || options[:pass] || raise(AuthenticationError, "You must supply a password")
       elsif File.exists?(credentials_file)
         require 'yaml'
-        $dydra.merge!(YAML.load_file(credentials_file))
-        if !$dydra[:user] && !($dydra[:pass] || $dydra[:token])
+        yaml = YAML.load_file(credentials_file)
+        ENV['DYDRA_ACCOUNT'] = yaml[:user] if yaml.has_key?(:user)
+        ENV['DYDRA_PASSWORD'] = yaml[:password] if yaml.has_key?(:password)
+        ENV['DYDRA_TOKEN'] = yaml[:token] if yaml.has_key?(:token)
+        if !ENV['DYDRA_ACCOUNT'] && !(ENV['DYDRA_PASSWORD'] || ENV['DYDRA_TOKEN'])
           raise AuthenticationError, "You need to specify :user and :pass or :token in #{credentials_file}"
         end
-      elsif ENV['DYDRA_TOKEN']
-        $dydra[:token] = ENV['DYDRA_TOKEN']
       else
         raise AuthenticationError, "You need to give either :user and :password, or :token, or set your ENV['DYDRA_TOKEN'] to authenticate."
       end
     end
-
 
     ##
     # GET parsed JSON from the Dydra.com REST API.
@@ -109,13 +107,12 @@ module Dydra
     # @param  [String] location
     # @return [RestClient::Resource]
     def self.resource(location)
-      $dydra ||= {}
       opts = {}
       opts[:timeout] = ENV['DYDRA_REQUEST_TIMEOUT'].to_i if ENV['DYDRA_REQUEST_TIMEOUT']
-      if $dydra[:token]
-        RestClient::Resource.new(Dydra::URL.join(location).to_s, opts.merge(:user => $dydra[:token]))
-      elsif $dydra[:user]
-        RestClient::Resource.new(Dydra::URL.join(location).to_s, opts.merge(:user => $dydra[:user], :password => $dydra[:pass]))
+      if ENV['DYDRA_TOKEN']
+        RestClient::Resource.new(Dydra::URL.join(location).to_s, opts.merge(:user => ENV['DYDRA_TOKEN']))
+      elsif ENV['DYDRA_ACCOUNT']
+        RestClient::Resource.new(Dydra::URL.join(location).to_s, opts.merge(:user => ENV['DYDRA_ACCOUNT'], :password => ENV['DYDRA_PASSWORD']))
       else
         raise AuthenticationError, "You need to run Dydra.setup! before performing an API operation"
       end
@@ -137,8 +134,6 @@ module Dydra
           warn "WARNING: install the 'socksify' gem to use your configured SOCKS proxy (#{socks_server})." if $VERBOSE
         end
       end
-      $dydra ||= {}
-      $dydra[:setup?] = true
     end
 
     ##
@@ -146,8 +141,7 @@ module Dydra
     #
     # @return [Boolean] `true` or `false`
     def self.setup?
-      $dydra ||= {}
-      $dydra[:setup?]
+      true # FIXME
     end
 
     ##
@@ -155,7 +149,7 @@ module Dydra
     #
     # @return [void]
     def self.reset!
-      $dydra = {}
+      # TODO
     end
 
     ##
@@ -164,7 +158,7 @@ module Dydra
     #
     # @return [String]
     def self.credentials_file
-      File.join(ENV['HOME'], '.dydra', 'credentials')
+      File.join(ENV['HOME'], '.dydra', 'credentials') # FIXME
     end
   end # Client
 end # Dydra

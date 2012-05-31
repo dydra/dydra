@@ -26,7 +26,7 @@ module Dydra
     # @return [Enumerator]
     def self.each(options = {}, &block)
       if block_given?
-        result = RPC::Client.call(:ListRepositories, $dydra[:user] || nil)
+        result = RPC::Client.call(:ListRepositories, ENV['DYDRA_ACCOUNT'])
         result.each do |(account_name, repository_name)| # FIXME
           block.call(Repository.new(account_name, repository_name))
         end
@@ -85,10 +85,10 @@ module Dydra
           (user, name) = user.split(/\//)
         else
           name = user
-          user = $dydra[:user]
+          user = ENV['DYDRA_ACCOUNT']
         end
       end
-      if user.nil? && !$dydra[:token].nil?
+      if user.nil? && !(ENV['DYDRA_TOKEN'].nil?)
         raise RepositoryMisspecified, "You must specify a repository owner name when using token-only authentication"
       end
       @account = case user
@@ -118,9 +118,9 @@ module Dydra
     # @param  [String] account
     # @return [Array<String>]
     def self.list(user = nil)
-      user ||= $dydra[:user]
+      user ||= ENV['DYDRA_ACCOUNT']
       raise RepositoryMisspecified, "List requires a user in token-only authentication mode" if user.nil?
-      RPC::Client.call(:ListRepositories, [user.to_s])
+      RPC::Client.call(:ListRepositories, [user])
     end
 
     ##
