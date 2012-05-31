@@ -1,28 +1,26 @@
 # This is free and unencumbered software released into the public domain.
 
-module Dydra
-  class Command
+class Dydra::Command
+  ##
+  # Outputs the number of statements in a repository.
+  class Count < Command
     ##
-    # Outputs the number of statements in a repository.
-    class Count < Command
-      ##
-      # @param  [Array<String>] repository_specs
-      # @return [void]
-      def execute(*repositories)
-        begin
-          sum = repositories.inject(0) do |sum , repository|
-            @repository = repository
-            count = Repository.new(repository).count
-            puts "#{count} #{repository}"
-            sum += count
-          end
-          puts "#{sum.to_i} total"
-        rescue RestClient::ResourceNotFound
-          puts "#{@repository} not found"
-        rescue RepositoryMisspecified => e
-          puts e
+    # @param  [Array<String>] repository_specs
+    # @return [void]
+    def execute(*repositories)
+      begin
+        sum = repositories.inject(0) do |sum, repository|
+          @repository = repository
+          count = Repository.new(repository).count
+          puts "#{count} #{repository}"
+          sum += count
         end
+        puts "#{sum.to_i} total"
+      rescue RestClient::ResourceNotFound
+        puts "#{@repository} not found"
+      rescue RepositoryMisspecified => e
+        puts e
       end
-    end # Count
-  end # Command
-end # Dydra
+    end
+  end # Count
+end # Dydra::Command

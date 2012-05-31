@@ -2,12 +2,13 @@
 
 class Dydra::Command
   ##
-  # Deletes local credentials
-  class Logout < Command
+  # ...
+  class Help < Command
     ##
+    # @param  [String] command
     # @return [void]
-    def execute(*args)
-      File.delete(Dydra::Client.credentials_file)
+    def execute(command = nil)
+      # TODO
     end
-  end # Logout
+  end # Help
 end # Dydra::Command

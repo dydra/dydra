@@ -1,24 +1,22 @@
 # This is free and unencumbered software released into the public domain.
 
-module Dydra
-  class Command
+class Dydra::Command
+  ##
+  # Lists existing repositories.
+  class List < Command
     ##
-    # Lists existing repositories.
-    class List < Command
-      ##
-      # @param  [Array<String>] resource_specs
-      # @return [void]
-      def execute(user = nil)
-        begin
-          Repository.list(user).sort.each do |repository|
-            puts repository
-          end
-        rescue RestClient::ResourceNotFound
-          puts "#{user || $dydra[:user]} not found"
-        rescue RepositoryMisspecified => e
-          puts e
+    # @param  [Array<String>] resource_specs
+    # @return [void]
+    def execute(user = nil)
+      begin
+        Repository.list(user).sort.each do |repository|
+          puts repository
         end
+      rescue RestClient::ResourceNotFound
+        puts "#{user || $dydra[:user]} not found"
+      rescue RepositoryMisspecified => e
+        puts e
       end
-    end # List
-  end # Command
-end # Dydra
+    end
+  end # List
+end # Dydra::Command

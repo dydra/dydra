@@ -1,17 +1,15 @@
 # This is free and unencumbered software released into the public domain.
 
-module Dydra
-  class Command
+class Dydra::Command
+  ##
+  # Aborts a pending or running operation.
+  class Abort < Command
     ##
-    # Aborts a pending or running operation.
-    class Abort < Command
-      ##
-      # @param  [String] op_uuid
-      # @return [void]
-      def execute(op_uuid)
-        (op = Operation.new(op_uuid)).abort!
-        puts "The operation #{op} was successfully aborted." if verbose?
-      end
-    end # Abort
-  end # Command
-end # Dydra
+    # @param  [String] op_uuid
+    # @return [void]
+    def execute(op_uuid)
+      (op = Operation.new(op_uuid)).abort!
+      puts "The operation #{op} was successfully aborted." if verbose?
+    end
+  end # Abort
+end # Dydra::Command

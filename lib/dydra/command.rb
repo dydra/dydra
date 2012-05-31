@@ -10,6 +10,7 @@ module Dydra
     autoload :Create,   'dydra/command/create'
     autoload :Drop,     'dydra/command/drop'
     autoload :Export,   'dydra/command/export'
+    autoload :Help,     'dydra/command/help'
     autoload :Import,   'dydra/command/import'
     autoload :List,     'dydra/command/list'
     autoload :Login,    'dydra/command/login'
@@ -20,6 +21,7 @@ module Dydra
     autoload :Status,   'dydra/command/status'
     autoload :URL,      'dydra/command/url'
 
+    include Dydra
     include Dydra::Client
 
     def initialize(options = {})

@@ -1,26 +1,24 @@
 # This is free and unencumbered software released into the public domain.
 
-module Dydra
-  class Command
+class Dydra::Command
+  ##
+  # Outputs the URL of an account or a repository.
+  class URL < Command
     ##
-    # Outputs the URL of an account or a repository.
-    class URL < Command
-      ##
-      # @param  [Array<String>] resource_specs
-      # @return [void]
-      def execute(*resources)
-        begin
-          resources.each do |resource|
-            if resource =~ /\//
-              puts Account.new(resource).url
-            else
-              puts Repository.new(resource).url
-            end
+    # @param  [Array<String>] resource_specs
+    # @return [void]
+    def execute(*resources)
+      begin
+        resources.each do |resource|
+          if resource =~ /\//
+            puts Account.new(resource).url
+          else
+            puts Repository.new(resource).url
           end
-        rescue RepositoryMisspecified => e
-          puts e
         end
+      rescue RepositoryMisspecified => e
+        puts e
       end
-    end # URL
-  end # Command
-end # Dydra
+    end
+  end # URL
+end # Dydra::Command
