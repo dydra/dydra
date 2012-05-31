@@ -162,5 +162,3 @@ module Dydra
     end
   end # Client
 end # Dydra
-
-require 'dydra/patches/xmlrpc'
