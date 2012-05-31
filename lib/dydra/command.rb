@@ -24,34 +24,69 @@ module Dydra
     include Dydra
     include Dydra::Client
 
+    ##
+    # @param  [Hash] options
     def initialize(options = {})
       @options = options.dup
     end
 
-    def basename
-      RDF::CLI.basename
-    end
-
+    ##
+    # @return [Boolean]
     def verbose?
       @options[:verbose] || $VERBOSE || debug?
     end
 
+    ##
+    # @return [Boolean]
     def debug?
       @options[:debug] || $DEBUG
     end
 
+    ##
+    # @return [String]
+    # @!parse attr_reader :basename
+    def basename
+      RDF::CLI.basename
+    end
+
+    ##
+    # @return [IO]
+    # @!parse attr_reader :stdout
     def stdout
-      $stdout
+      @stdout ||= @options[:stdout] || $stdout
     end
 
+    ##
+    # @return [IO]
+    # @!parse attr_reader :stderr
     def stderr
-      $stderr
+      @stderr ||= @options[:stderr] || $stderr
     end
 
+    ##
+    # @param  [Array<#to_s>] msgs
+    # @return [void]
+    def puts(*msgs)
+      self.stdout.puts(*msgs)
+    end
+
+    ##
+    # @param  [#to_s] msg
+    # @return [void]
+    def warn(msg)
+      self.stderr.warn(msg)
+    end
+
+    ##
+    # @param  [#to_s] msg
+    # @return [void]
     def abort(msg)
-      RDF::CLI.abort(msg)
+      RDF::CLI.abort(msg.to_s)
     end
 
+    ##
+    # @param  [#to_s] gem
+    # @return [void]
     def require_gem!(gem, msg)
       begin
         require gem
@@ -60,6 +95,9 @@ module Dydra
       end
     end
 
+    ##
+    # @deprecated
+    # @private
     def catch_errors
       begin
         yield
@@ -80,12 +118,17 @@ module Dydra
       end
     end
 
+    ##
+    # @deprecated
+    # @private
     def wrap_errors(*args)
       catch_errors do
         execute(*args)
       end
     end
 
+    ##
+    # @private
     def validate_repository_specs(resource_specs)
       resources = validate_resource_specs(resource_specs)
       resources.each do |resource|
@@ -96,6 +139,8 @@ module Dydra
       resources
     end
 
+    ##
+    # @private
     def validate_resource_specs(resource_specs)
       resources = parse_resource_specs(resource_specs)
       resources.each do |resource|
@@ -110,6 +155,8 @@ module Dydra
       resources
     end
 
+    ##
+    # @private
     def parse_repository_specs(resource_specs)
       resources = parse_resource_specs(resource_specs)
       resources.each do |resource|
@@ -120,6 +167,8 @@ module Dydra
       resources
     end
 
+    ##
+    # @private
     def parse_resource_specs(resource_specs)
       resources = []
       resource_specs.each do |resource_spec|
