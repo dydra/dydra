@@ -4,6 +4,8 @@ class Dydra::Command
   ##
   # Opens an account or a repository in a web browser.
   class Open < Command
+    HELP = "Opens an account or a repository in a web browser."
+
     ##
     # @param  [Array<String>] resource_specs
     # @return [void]

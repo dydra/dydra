@@ -4,6 +4,8 @@ class Dydra::Command
   ##
   # Renames a repository.
   class Rename < Command
+    HELP = nil # TODO
+
     ##
     # @param  [String] old_repository_spec
     # @param  [String] new_repository_spec

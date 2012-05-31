@@ -4,6 +4,8 @@ class Dydra::Command
   ##
   # Outputs the URL of an account or a repository.
   class URL < Command
+    HELP = "Outputs the URL of an account or a repository."
+
     ##
     # @param  [Array<String>] resource_specs
     # @return [void]

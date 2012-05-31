@@ -4,11 +4,13 @@ class Dydra::Command
   ##
   # Queries a repository.
   class Query < Command
+    HELP = "Queries a repository."
+
     ##
     # @param  [String] repository_spec
     # @param  [String, #to_s] query
     # @return [void]
-    def execute(repository_spec, query)
+    def execute(repository_spec, query = nil)
       begin
         repository = Repository.new(repository_spec)
 

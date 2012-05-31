@@ -4,6 +4,8 @@ class Dydra::Command
   ##
   # Lists existing repositories.
   class List < Command
+    HELP = "Lists your repositories."
+
     ##
     # @param  [Array<String>] resource_specs
     # @return [void]

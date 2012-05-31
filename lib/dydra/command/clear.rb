@@ -4,6 +4,8 @@ class Dydra::Command
   ##
   # Deletes all data from a repository.
   class Clear < Command
+    HELP = "Deletes all data from a repository."
+
     ##
     # @param  [Array<String>] repository_specs
     # @return [void]

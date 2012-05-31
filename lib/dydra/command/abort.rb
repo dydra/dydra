@@ -4,6 +4,8 @@ class Dydra::Command
   ##
   # Aborts a pending or running operation.
   class Abort < Command
+    HELP = "Aborts a pending or running operation."
+
     ##
     # @param  [String] op_uuid
     # @return [void]

@@ -4,6 +4,8 @@ class Dydra::Command
   ##
   # Outputs the number of statements in a repository.
   class Count < Command
+    HELP = "Outputs the number of statements in a repository."
+
     ##
     # @param  [Array<String>] repository_specs
     # @return [void]

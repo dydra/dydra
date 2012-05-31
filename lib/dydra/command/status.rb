@@ -4,6 +4,8 @@ class Dydra::Command
   ##
   # Shows pending, running, and completed operations.
   class Status < Command
+    HELP = "Shows pending, running, and completed operations."
+
     ##
     # @param  [String] op_uuid
     # @return [void]

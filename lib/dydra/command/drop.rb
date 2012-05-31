@@ -4,6 +4,8 @@ class Dydra::Command
   ##
   # Destroys a repository permanently.
   class Drop < Command
+    HELP = "Destroys a repository permanently."
+
     ##
     # @param  [Array<String>] repository_specs
     # @return [void]

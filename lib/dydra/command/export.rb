@@ -4,6 +4,8 @@ class Dydra::Command
   ##
   # Exports data from a repository in N-Triples format.
   class Export < Command
+    HELP = "Exports data from a repository in N-Triples format."
+
     ##
     # @param  [Array<String>] resource_specs
     # @return [void]

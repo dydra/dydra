@@ -4,6 +4,8 @@ class Dydra::Command
   ##
   # Logins and caches credentials locally.
   class Login < Command
+    HELP = "Caches your Dydra credentials locally."
+
     ##
     # @param  [String] account_name
     # @param  [String] password

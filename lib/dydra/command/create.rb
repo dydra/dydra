@@ -4,6 +4,8 @@ class Dydra::Command
   ##
   # Creates a new repository.
   class Create < Command
+    HELP = "Creates a new repository."
+
     ##
     # @param  [Array<String>] repository_specs
     # @return [void]

@@ -8,6 +8,7 @@ class Dydra::Command
   ##
   # Imports data into a repository.
   class Import < Command
+    HELP = "Imports data into a repository."
     BUCKET = 'tmp.datagraph.org' # an Amazon S3 bucket for temporary file uploads
 
     ##
