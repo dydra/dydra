@@ -103,13 +103,14 @@ Authors
 -------
 
 * [Arto Bendiken](https://github.com/bendiken) - <http://dydra.com/bendiken>
-* [Ben Lavender](https://github.com/bhuga) - <http://dydra.com/bhuga>
 * [Josh Huckabee](https://github.com/jhuckabee) - <http://dydra.com/jhuckabee>
 
 Contributors
 ------------
 
+* [Ben Lavender](https://github.com/bhuga) - <http://bhuga.net/>
 * [Gabriel Horner](http://github.com/cldwalker) - <http://tagaholic.me/>
+* [Gregg Kellogg](http://github.com/gkellogg) - <http://kellogg-assoc.com/>
 
 Contributing
 ------------
