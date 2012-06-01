@@ -28,6 +28,14 @@ module Dydra
     include Dydra
 
     ##
+    # Returns the arity of this command class.
+    #
+    # @return [Integer]
+    def self.arity
+      self.instance_method(:execute).arity
+    end
+
+    ##
     # @param  [Hash] options
     def initialize(options = {})
       @options = options.dup
@@ -43,6 +51,15 @@ module Dydra
     # @return [Boolean]
     def debug?
       @options[:debug] || $DEBUG
+    end
+
+    ##
+    # The arity of this command.
+    #
+    # @return [Integer]
+    # @!parse attr_reader :arity
+    def arity
+      self.method(:execute).arity
     end
 
     ##
