@@ -2,7 +2,7 @@
 
 module Dydra
   ##
-  # Represents a Dydra.com operation.
+  # Represents a Dydra.com API operation.
   #
   # @see http://docs.dydra.com/sdk/ruby
   class Operation < Resource
@@ -36,7 +36,7 @@ module Dydra
     #
     # @return [String]
     def to_s
-      uuid
+      self.uuid
     end
 
     ##
@@ -44,7 +44,7 @@ module Dydra
     #
     # @return [Boolean]
     def pending?
-      status.eql?(:pending)
+      self.status.eql?(:pending)
     end
 
     ##
@@ -52,7 +52,7 @@ module Dydra
     #
     # @return [Boolean]
     def running?
-      status.eql?(:running)
+      self.status.eql?(:running)
     end
 
     ##
@@ -60,7 +60,7 @@ module Dydra
     #
     # @return [Boolean]
     def completed?
-      status.eql?(:completed)
+      self.status.eql?(:completed)
     end
     alias_method :finished?, :completed?
 
@@ -69,7 +69,7 @@ module Dydra
     #
     # @return [Boolean]
     def failed?
-      status.eql?(:failed)
+      self.status.eql?(:failed)
     end
 
     ##
@@ -77,7 +77,7 @@ module Dydra
     #
     # @return [Boolean]
     def aborted?
-      status.eql?(:aborted)
+      self.status.eql?(:aborted)
     end
 
     ##
@@ -86,7 +86,7 @@ module Dydra
     #
     # @return [Boolean]
     def done?
-      [:completed, :aborted, :failed].include?(status)
+      [:completed, :aborted, :failed].include?(self.status)
     end
 
     ##
@@ -94,7 +94,7 @@ module Dydra
     #
     # @return [Symbol]
     def status
-      Dydra::Client.rpc.call('dydra.job.status', uuid).to_sym # FIXME
+      self.info['status'].to_sym
     end
 
     ##
@@ -102,7 +102,7 @@ module Dydra
     #
     # @return [Hash]
     def info
-      Dydra::Client.rpc.call('dydra.job.info', uuid) # FIXME
+      RPC::Client.call(:DescribeOperation, [self.uuid])
     end
 
     ##
@@ -147,7 +147,7 @@ module Dydra
     #
     # @return [void]
     def abort!
-      Dydra::Client.rpc.call('dydra.job.abort', uuid) # FIXME
+      RPC::Client.call(:AbortOperation, [self.uuid])
       self
     end
     alias_method :abort, :abort!
