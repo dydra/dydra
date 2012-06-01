@@ -14,8 +14,8 @@ class Dydra::Command
         Repository.list(user).sort.each do |repository|
           puts repository
         end
-      rescue RestClient::ResourceNotFound
-        puts "#{user || ENV['DYDRA_ACCOUNT']} not found"
+      #rescue RestClient::ResourceNotFound
+      #  puts "#{user || ENV['DYDRA_ACCOUNT']} not found"
       rescue RepositoryMisspecified => e
         puts e
       end

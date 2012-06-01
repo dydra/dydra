@@ -1,7 +1,6 @@
 source 'http://rubygems.org'
 
 gem 'rdf',           '~> 0.3.0'
-gem 'rest-client',   '>= 1.6.7'
 gem 'json_pure'
 
 group :development, :test do

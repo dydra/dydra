@@ -54,12 +54,7 @@ module Dydra
     #
     # @return [Boolean]
     def exists?
-      # to bangbang or not to bangbang...
-      begin
-        !!info
-      rescue RestClient::ResourceNotFound
-        return false
-      end
+      true # TODO
     end
 
     ##

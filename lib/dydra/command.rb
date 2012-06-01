@@ -123,16 +123,16 @@ module Dydra
         yield
       rescue RepositoryMisspecified => e
         puts e
-      rescue RestClient::Forbidden
-        puts "Insufficient permissions to perform the requested action"
-      rescue RestClient::ResourceNotFound => e
-        puts "Not Found"
-      rescue RestClient::InternalServerError => e
-        puts "Internal error: #{e.response.body}"
-      rescue RestClient::BadRequest => e
-        puts "#{e.response.body}"
-      rescue RestClient::RequestTimeout
-        puts "No response from server"
+      #rescue RestClient::Forbidden
+      #  puts "Insufficient permissions to perform the requested action"
+      #rescue RestClient::ResourceNotFound => e
+      #  puts "Not Found"
+      #rescue RestClient::InternalServerError => e
+      #  puts "Internal error: #{e.response.body}"
+      #rescue RestClient::BadRequest => e
+      #  puts "#{e.response.body}"
+      #rescue RestClient::RequestTimeout
+      #  puts "No response from server"
       rescue Errno::ECONNREFUSED
         puts "Connection refused by server"
       end

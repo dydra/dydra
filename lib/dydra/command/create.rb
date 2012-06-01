@@ -15,10 +15,10 @@ class Dydra::Command
         begin
           Repository.create!(repository)
           puts "#{repository} created."
-        rescue RestClient::Forbidden
-          puts "Insufficient permissions to create #{repository}."
-        rescue RestClient::UnprocessableEntity
-          puts "#{repository} already exists."
+        #rescue RestClient::Forbidden
+        #  puts "Insufficient permissions to create #{repository}."
+        #rescue RestClient::UnprocessableEntity
+        #  puts "#{repository} already exists."
         rescue AuthenticationError => e
           puts e
         rescue RepositoryMisspecified => e

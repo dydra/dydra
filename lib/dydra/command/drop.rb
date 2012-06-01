@@ -15,10 +15,10 @@ class Dydra::Command
         begin
           Repository.new(repository).destroy!
           puts "#{repository} deleted."
-        rescue RestClient::ResourceNotFound
-          puts "#{repository} not found."
-        rescue RestClient::Forbidden
-          puts "Insufficient permissions to delete #{repository}."
+        #rescue RestClient::ResourceNotFound
+        #  puts "#{repository} not found."
+        #rescue RestClient::Forbidden
+        #  puts "Insufficient permissions to delete #{repository}."
         rescue RepositoryMisspecified => e
           puts e
         end

@@ -11,22 +11,22 @@ class Dydra::Command
     # @param  [String, #to_s] query
     # @return [void]
     def execute(repository_spec, query = nil)
-      begin
-        repository = Repository.new(repository_spec)
+      repository = Repository.new(repository_spec)
 
-        @query = case query
-          when nil       then $stdin.read             # < filename.rq
-          when /^@(.*)$/ then open($1) { |f| f.read } # @filename.rq, @url.rq
-          else query.to_s                             # 'SELECT ...'
-        end
+      @query = case query
+        when nil       then $stdin.read             # < filename.rq
+        when /^@(.*)$/ then open($1) { |f| f.read } # @filename.rq, @url.rq
+        else query.to_s                             # 'SELECT ...'
+      end
 
-        @options[:result_format] ||= case Repository.query_form(query)
-          when :select, :ask
-            :parsed
-          when :construct, :describe
-            :turtle
-        end
+      @options[:result_format] ||= case Repository.query_form(query)
+        when :select, :ask
+          :parsed
+        when :construct, :describe
+          :turtle
+      end
 
+      #begin
         result = repository.query(@query, :format => @options[:result_format])
 
         if @options[:result_format] == :parsed && result.respond_to?(:empty?) && !result.empty?
@@ -38,9 +38,9 @@ class Dydra::Command
         else
           puts result
         end
-      rescue RestClient::NotAcceptable
-        puts "Invalid result format: #{@options[:result_format]} for #{Repository.query_form(query)}"
-      end
+      #rescue RestClient::NotAcceptable
+      #  puts "Invalid result format: #{@options[:result_format]} for #{Repository.query_form(query)}"
+      #end
     end
   end # Query
 end # Dydra::Command

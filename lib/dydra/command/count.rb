@@ -18,8 +18,8 @@ class Dydra::Command
           sum += count
         end
         puts "#{sum.to_i} total"
-      rescue RestClient::ResourceNotFound
-        puts "#{@repository} not found"
+      #rescue RestClient::ResourceNotFound
+      #  puts "#{@repository} not found"
       rescue RepositoryMisspecified => e
         puts e
       end
