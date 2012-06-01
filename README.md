@@ -9,7 +9,7 @@ kit (SDK) for [Dydra.com][], the cloud-hosted RDF & SPARQL database service.
 Examples
 --------
 
-### Authenticating with API token
+### Authenticating with an API token
 
     Dydra.authenticate!(:token => api_token)
 
@@ -38,7 +38,7 @@ Dependencies
 
 Note: the instructions in this README, and the operation of the library
 itself, implicitly assume a Unix system (Mac OS X, Linux, or *BSD) at
-present. Patches improving Windows support are most welcome.
+this time. Patches improving Windows support are most welcome.
 
 Installation
 ------------
@@ -55,11 +55,11 @@ Should you wish to remove the SDK and CLI from your system, do:
 Configuration
 -------------
 
-### ~/.dydra/credentials
+### ~/.dydra/environment
 
 The first time you run the `dydra` command, you'll be asked to authenticate.
-When you type in your username and password, your API token will be fetched
-and stored in the the `~/.dydra/credentials` file in your home directory,
+When you type in your account name and password, your API token will be
+fetched and stored in the `~/.dydra/environment` file in your home directory,
 enabling you to bypass the authentication step for future commands.
 
 Environment
@@ -69,17 +69,17 @@ Environment
 
 Another way to specify the API token is to set the `DYDRA_TOKEN` environment
 variable, which takes precedence over any API token specified in the
-`~/.dydra/credentials` file. This can be handy, for example, when executing
+`~/.dydra/environment` file. This can be handy, for example, when executing
 a one-off command against another Dydra account you may have:
 
-    $ export DYDRA_TOKEN='R33l6sEnxiExJfOYnZHWs2v06yWd2FUiBZc874vTt6QUSPz96imMf48tqLsz'
+    $ export DYDRA_TOKEN='R33l6sEnxiExJfOYnZHW'
 
 ### Using a SOCKS proxy
 
 The command-line client optionally supports using a [SOCKS][] proxy to
 access [Dydra.com][]. To make use of this functionality, install the
 [Socksify][] library for Ruby and set the `SOCKS_SERVER` environment
-variable to point to your local SOCKS proxy:
+variable to point to your local SOCKS proxy; for example:
 
     $ [sudo] gem install socksify
     $ export SOCKS_SERVER='127.0.0.1:1080'
