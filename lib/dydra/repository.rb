@@ -158,9 +158,10 @@ module Dydra
         context_argument = context == false ? "" : "?context=#{context}"
         statements = repo.query(:context => context)
         next if statements.empty?
-        Dydra::Client.post "#{@account}/#{@name}/statements#{context_argument}", # FIXME
-                           RDF::Writer.for(:ntriples).dump(statements),
-                           :content_type => 'text/plain'
+        raise NotImplementedError, "#{self.class}#insert" # TODO
+        #Dydra::Client.post "#{@account}/#{@name}/statements#{context_argument}",
+        #                   RDF::Writer.for(:ntriples).dump(statements),
+        #                   :content_type => 'text/plain'
       end
     end
 
@@ -184,7 +185,8 @@ module Dydra
       arguments << ::URI.escape("object=#{pattern[:object]}") if pattern[:object]
       arguments << ::URI.escape("context=#{pattern[:context]}") if pattern[:context]
 
-      Dydra::Client.delete "#{@account}/#{@name}/statements?" + arguments.join('&') # FIXME
+      raise NotImplementedError, "#{self.class}#delete" # TODO
+      #Dydra::Client.delete "#{@account}/#{@name}/statements?" + arguments.join('&')
     end
 
     ##
@@ -202,7 +204,8 @@ module Dydra
         base_uri = opts[:base_uri] || url             # Base URI is the file itself unless specified
         url = upload_local_file(self, url)            # local file to be uploaded
       end
-      Operation.new(Dydra::Client.rpc.call('dydra.repository.import', path, url.to_s, context.to_s, base_uri.to_s)) # FIXME
+      options = {:context => context.to_s, :base_uri => base_uri.to_s} # TODO
+      Operation.new(RPC::Client.call(:Import, path, url.to_s, options))
     end
 
     ##
@@ -210,7 +213,7 @@ module Dydra
     #
     # @return [Hash]
     def s3_upload_params
-      Dydra::Client.rpc.call('dydra.repository.upload.params', path) # FIXME
+      raise NotImplementedError, "#{self.class}#s3_upload_params" # TODO
     end
 
     ##
@@ -251,9 +254,10 @@ module Dydra
       begin
         query_params = { :query => query, :user_id => opts[:user_query_id],
                          :ruleset => opts[:ruleset] }
-        result = Dydra::Client.post "#{account}/#{name}/sparql", query_params, # FIXME
-           :content_type => 'application/x-www-form-urlencoded',
-           :accept => accept
+        raise NotImplementedError, "#{self.class}#query" # TODO
+        #result = Dydra::Client.post "#{account}/#{name}/sparql", query_params,
+        #   :content_type => 'application/x-www-form-urlencoded',
+        #   :accept => accept
 
       # Query failure messages should come back JSON encoded. If we can't parse
       # the response as JSON, some other error was raised on the server that we

@@ -22,7 +22,6 @@ module Dydra
     autoload :URL,      'dydra/command/url'
 
     include Dydra
-    include Dydra::Client
 
     ##
     # @param  [Hash] options

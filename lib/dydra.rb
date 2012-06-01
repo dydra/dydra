@@ -20,7 +20,6 @@ module Dydra
   URL = RDF::URI(ENV['DYDRA_URL'] || URI)
 
   autoload :Account,    'dydra/account'
-  autoload :Client,     'dydra/client'
   autoload :Command,    'dydra/command'
   autoload :Operation,  'dydra/operation'
   autoload :Query,      'dydra/query'

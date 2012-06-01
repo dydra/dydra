@@ -9,7 +9,8 @@ class Dydra::Command
     ##
     # @return [void]
     def execute
-      File.delete(Dydra::Client.credentials_file)
+      File.delete(File.join(ENV['HOME'], '.dydra', 'credentials'))
+      File.delete(File.join(ENV['HOME'], '.dydra', 'environment'))
     end
   end # Logout
 end # Dydra::Command

@@ -44,7 +44,7 @@ module Dydra
     # @return [Account]
     def self.register!(name, options = {})
       raise NotImplementedError, "#{self.class}.register!"
-      #Dydra::Client.rpc.call('dydra.account.register', name, options[:email], options[:password]) # FIXME
+      #RPC::Client.call(:RegisterAccount, [name, options]) # TODO
       #self.new(name)
     end
 
@@ -55,7 +55,7 @@ module Dydra
     #   Dydra::Account.new('jhacker').url       #=> #<RDF::URI(http://api.dydra.com/jhacker)>
     #
     # @return [RDF::URI]
-    attr_reader :url
+    # @!parse attr_reader :url
     def url
       super
     end
@@ -67,7 +67,7 @@ module Dydra
     #   Dydra::Account.new('jhacker').path      #=> "jhacker"
     #
     # @return [String]
-    attr_reader :path
+    # @!parse attr_reader :path
     def path
       super
     end
@@ -123,7 +123,7 @@ module Dydra
     #
     # @return [Hash]
     def info
-      Dydra::Client.get_json(name) # FIXME
+      RPC::Client.call(:DescribeAccount, [self.name])
     end
 
     ##
@@ -136,8 +136,8 @@ module Dydra
     #
     # @param  [String, #to_s] name
     # @return [Repository]
-    def repository(name)
-      Repository.new(self, name)
+    def repository(repository_name)
+      Repository.new(self, repository_name)
     end
     alias_method :[], :repository
 
@@ -166,11 +166,10 @@ module Dydra
     # @yieldparam  [Repository] repository
     # @yieldreturn [void]
     # @return [Enumerator]
-    # @since  0.0.4
     def each_repository(options = {}, &block)
       if block_given?
-        result = Dydra::Client.rpc.call('dydra.repository.list', name) # FIXME
-        result.each do |(account_name, repository_name)|
+        result = RPC::Client.call(:ListRepositories, self.name)
+        result.each do |(account_name, repository_name)| # FIXME
           block.call(Repository.new(self, repository_name))
         end
       end
@@ -187,7 +186,7 @@ module Dydra
     #
     # @return [String]
     def to_s
-      name
+      self.name
     end
   end # Account
 end # Dydra
