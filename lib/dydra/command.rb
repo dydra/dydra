@@ -6,6 +6,8 @@ module Dydra
   class Command
     autoload :Abort,    'dydra/command/abort'
     autoload :Clear,    'dydra/command/clear'
+    autoload :Clone,    'dydra/command/clone'
+    autoload :Config,   'dydra/command/config'
     autoload :Count,    'dydra/command/count'
     autoload :Create,   'dydra/command/create'
     autoload :Drop,     'dydra/command/drop'
@@ -17,7 +19,9 @@ module Dydra
     autoload :Logout,   'dydra/command/logout'
     autoload :Open,     'dydra/command/open'
     autoload :Query,    'dydra/command/query'
+    autoload :Register, 'dydra/command/register'
     autoload :Rename,   'dydra/command/rename'
+    autoload :Size,     'dydra/command/size'
     autoload :Status,   'dydra/command/status'
     autoload :URL,      'dydra/command/url'
 

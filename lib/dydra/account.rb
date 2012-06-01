@@ -43,8 +43,8 @@ module Dydra
     # @option options [String] :password
     # @return [Account]
     def self.register!(name, options = {})
-      raise NotImplementedError, "#{self.class}.register!"
-      #RPC::Client.call(:RegisterAccount, [name, options]) # TODO
+      raise NotImplementedError, "#{self}.register!" # TODO
+      #RPC::Client.call(:RegisterAccount, [name, options])
       #self.new(name)
     end
 

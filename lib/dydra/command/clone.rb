@@ -2,8 +2,8 @@
 
 class Dydra::Command
   ##
-  # Renames a repository.
-  class Rename < Command
+  # Clones a repository.
+  class Clone < Command
     HELP = nil # TODO
 
     ##
@@ -11,9 +11,7 @@ class Dydra::Command
     # @param  [String] new_repository_spec
     # @return [void]
     def execute(old_repository_spec, new_repository_spec)
-      #old_repository = validate_repository_specs([old_repository_spec]).first
-      #new_repository = parse_repository_specs([new_repository_spec]).first
       raise NotImplementedError, "#{self.class}#execute" # TODO
     end
-  end # Rename
+  end # Clone
 end # Dydra::Command
