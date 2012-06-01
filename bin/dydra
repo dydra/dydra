@@ -75,7 +75,7 @@ module Dydra
 
     def setup
       begin
-        Dydra::Client.setup!
+        Dydra.setup!
       rescue Dydra::AuthenticationError
         Dydra::Command::Login.new.wrap_errors
       end
