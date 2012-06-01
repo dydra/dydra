@@ -42,20 +42,20 @@ module Dydra
       args = ARGV
       @options = options
 
-      command, args = args.shift, args
-      if command.nil?
+      command_name, args = args.shift, args
+      if command_name.nil?
         help; exit
       end
 
       begin
-        require "dydra/command/#{command}"
+        require "dydra/command/#{command_name}"
       rescue LoadError => e
-        warn "unknown command: #{command}"
+        warn "#{$0}: unknown command: #{command_name}"
         help
         abort
       end
 
-      setup unless args.first == 'login'
+      Dydra.setup! unless args.first == 'login'
       if @options[:debug] && args.first != 'login'
         if $dydra[:token]
           if $dydra[:user]
@@ -68,17 +68,14 @@ module Dydra
         end
       end
 
-      klass_name = Dydra::Command.constants.find { |klass_name| klass_name.to_s.downcase == command }
+      klass_name = Dydra::Command.constants.find { |klass_name| klass_name.to_s.downcase == command_name }
       klass = Dydra::Command.const_get(klass_name)
-      klass.new(@options).execute(*args)
-    end
-
-    def setup
-      begin
-        Dydra.setup!
-      rescue Dydra::AuthenticationError
-        Dydra::Command::Login.new.wrap_errors
+      command = klass.new(@options)
+      if (arity = command.arity) >= 0
+        abort "#{$0}: missing arguments for `#{command_name}'" if args.size < arity
+        abort "#{$0}: too many arguments for `#{command_name}'" if args.size > arity
       end
+      command.execute(*args)
     end
 
     def help(command = nil)
