@@ -6,6 +6,8 @@ module Dydra::RPC
   ##
   # Implements an RPC client for Dydra.com.
   class Client
+    include Dydra::Inspectable
+
     ##
     # The `User-Agent` header to send with RPC requests.
     USER_AGENT = "Dydra/#{Dydra::VERSION} (Ruby #{RUBY_VERSION}p#{RUBY_PATCHLEVEL}; #{RUBY_PLATFORM})"
@@ -237,20 +239,11 @@ module Dydra::RPC
     end
 
     ##
-    # Returns a developer-friendly representation of this RPC client.
+    # Returns a string representation of this RPC client.
     #
     # @return [String]
-    def inspect
-      Kernel.sprintf("#<%s:%#0x(%s)>", self.class.name, self.__id__, self.url.to_s)
-    end
-
-    ##
-    # Outputs a developer-friendly representation of this RPC client to the
-    # standard error stream.
-    #
-    # @return [void]
-    def inspect!
-      Kernel.warn(self.inspect)
+    def to_s
+      self.url.to_s
     end
   end # Client
 end # Dydra::RPC

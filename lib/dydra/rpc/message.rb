@@ -6,6 +6,8 @@ module Dydra::RPC
   ##
   # Base functionality for Dydra.com RPC messages.
   module Message
+    include Dydra::Inspectable
+
     CONTENT_TYPE = 'application/json; charset=UTF-8'.freeze
 
     ##
@@ -62,7 +64,7 @@ module Dydra::RPC
     end
 
     ##
-    # Returns the string representation of this RPC message.
+    # Returns a string representation of this RPC message.
     #
     # @return [String]
     def to_s
@@ -83,26 +85,6 @@ module Dydra::RPC
     # @return [Hash]
     def to_hash
       {:jsonrpc => self.version.to_s, :id => self.id}
-    end
-
-    ##
-    # Returns a developer-friendly representation of this RPC message.
-    #
-    # The result will be of the format `#<RPC::Message::0x12345678(...)>`,
-    # where `...` is the string returned by `#to_s`.
-    #
-    # @return [String]
-    def inspect
-      Kernel.sprintf("#<%s:%#0x(%s)>", self.class.name, self.__id__, self.to_s)
-    end
-
-    ##
-    # Outputs a developer-friendly representation of this RPC message to the
-    # standard error stream.
-    #
-    # @return [void]
-    def inspect!
-      Kernel.warn(self.inspect)
     end
   end # Message
 end # Dydra::RPC

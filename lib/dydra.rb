@@ -19,15 +19,16 @@ module Dydra
   URI = RDF::URI('http://api.dydra.com/')
   URL = RDF::URI(ENV['DYDRA_URL'] || URI)
 
-  autoload :Account,    'dydra/account'
-  autoload :Command,    'dydra/command'
-  autoload :Operation,  'dydra/operation'
-  autoload :Query,      'dydra/query'
-  autoload :Repository, 'dydra/repository'
-  autoload :Resource,   'dydra/resource'
-  autoload :Revision,   'dydra/revision'
-  autoload :RPC,        'dydra/rpc'
-  autoload :VERSION,    'dydra/version'
+  autoload :Account,     'dydra/account'
+  autoload :Command,     'dydra/command'
+  autoload :Inspectable, 'dydra/inspectable'
+  autoload :Operation,   'dydra/operation'
+  autoload :Query,       'dydra/query'
+  autoload :Repository,  'dydra/repository'
+  autoload :Resource,    'dydra/resource'
+  autoload :Revision,    'dydra/revision'
+  autoload :RPC,         'dydra/rpc'
+  autoload :VERSION,     'dydra/version'
 
   class AuthenticationError < StandardError; end
 

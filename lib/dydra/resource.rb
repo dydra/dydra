@@ -12,9 +12,10 @@ module Dydra
   # @see http://docs.dydra.com/sdk/ruby
   # @see http://docs.dydra.com/api/rest
   class Resource
-    HEADERS = {'Accept' => 'text/plain'} # N-Triples
-
+    include Inspectable
     include Comparable
+
+    HEADERS = {'Accept' => 'text/plain'} # N-Triples
 
     ##
     # @return [Resource]
@@ -46,7 +47,7 @@ module Dydra
     #
     # @return [String]
     def path
-      url.path[1..-1]
+      self.url.path[1..-1]
     end
 
     ##
@@ -81,7 +82,7 @@ module Dydra
     #
     # @return [RDF::URI]
     def to_uri
-      url
+      self.url
     end
 
     ##
@@ -99,23 +100,6 @@ module Dydra
     end
 
     ##
-    # Returns a developer-friendly representation of this resource.
-    #
-    # @return [String]
-    def inspect
-      sprintf("#<%s:%#0x(%s)>", self.class.name, object_id, to_s)
-    end
-
-    ##
-    # Outputs a developer-friendly representation of this resource to
-    # `stderr`.
-    #
-    # @return [void]
-    def inspect!
-      warn(inspect)
-    end
-
-    ##
     # Performs an HTTP HEAD request on this resource.
     #
     # @param  [String, #to_s]          format
@@ -124,6 +108,7 @@ module Dydra
     # @yieldparam [Net::HTTPResponse] response
     # @return [Net::HTTPResponse]
     def head(format = nil, headers = {}, &block)
+      url = self.url
       Net::HTTP.start(url.host, url.port) do |http|
         response = http.head(url.path.to_s + format.to_s, HEADERS.merge(headers))
         if block_given?
@@ -143,6 +128,7 @@ module Dydra
     # @yieldparam [Net::HTTPResponse] response
     # @return [Net::HTTPResponse]
     def get(format = nil, headers = {}, &block)
+      url = self.url
       Net::HTTP.start(url.host, url.port) do |http|
         response = http.get(url.path.to_s + format.to_s, HEADERS.merge(headers))
         if block_given?
