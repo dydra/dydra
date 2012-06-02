@@ -5,8 +5,8 @@ module Dydra
   # Represents a Dydra.com API operation.
   #
   # @see http://docs.dydra.com/sdk/ruby
-  class Operation < Resource
-    SPEC = %r(^([^/]+)$) # /uuid
+  class Operation
+    include Inspectable
 
     STATUS_UNKNOWN   = :unknown
     STATUS_PENDING   = :pending
@@ -56,16 +56,7 @@ module Dydra
     # @param  [String, #to_s] uuid
     #   a valid operation UUID
     def initialize(uuid)
-      @uuid = uuid.to_s
-      super(Dydra::URL.join(@uuid)) # FIXME
-    end
-
-    ##
-    # Returns a string representation of the operation UUID.
-    #
-    # @return [String]
-    def to_s
-      self.uuid
+      @uuid = uuid.to_s.downcase.freeze
     end
 
     ##
@@ -180,5 +171,21 @@ module Dydra
       self
     end
     alias_method :abort, :abort!
+
+    ##
+    # Returns a string representation of the operation UUID.
+    #
+    # @return [String]
+    def to_s
+      self.uuid
+    end
+
+    ##
+    # Returns the URN representation of the operation UUID.
+    #
+    # @return [RDF::URI]
+    def to_uri
+      @urn ||= RDF::URI('urn:uuid:' + self.uuid)
+    end
   end # Operation
 end # Dydra
