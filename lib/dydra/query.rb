@@ -37,7 +37,7 @@ module Dydra
     #
     # @return [String]
     def path
-      [repository.to_s, name].join('/')
+      [self.repository.path, self.name].join('/')
     end
 
     ##
@@ -45,7 +45,7 @@ module Dydra
     #
     # @return [String]
     def to_s
-      path
+      self.path
     end
   end # Query
 end # Dydra

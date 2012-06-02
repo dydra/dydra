@@ -150,7 +150,7 @@ module Dydra
     #
     # @return [Array<Repository>]
     def repositories
-      each_repository.to_a
+      self.each_repository.to_a
     end
 
     ##
