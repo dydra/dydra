@@ -32,7 +32,7 @@ module Dydra::RPC
     # @yieldparam  [Object] result
     # @yieldreturn [void]
     # @return [Object] the result
-    def self.call(operator, operands)
+    def self.call(operator, operands = nil)
       self.new.call(operator, operands)
     end
 

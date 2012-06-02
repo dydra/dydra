@@ -16,6 +16,35 @@ module Dydra
     STATUS_ABORTED   = :aborted
 
     ##
+    # Enumerates all performed or pending operations.
+    #
+    # @example
+    #   Operation.each do |op|
+    #     puts op.inspect
+    #   end
+    #
+    # @example
+    #   Operation.each(:status => :running) do |op|
+    #     puts op.inspect
+    #   end
+    #
+    # @param  [Hash{Symbol => Object}] options
+    # @option options [Symbol] :status (nil)
+    # @yield  [operation]
+    # @yieldparam  [Operation] operation
+    # @yieldreturn [void]
+    # @return [Enumerator]
+    def self.each(options = {}, &block)
+      if block_given?
+        result = RPC::Client.call(:ListOperations, options[:status] ? [options[:status]] : nil)
+        result.each do |operation_uuid|
+          block.call(Operation.new(operation_uuid))
+        end
+      end
+      enum_for(:each, options)
+    end
+
+    ##
     # The operation UUID.
     #
     # @return [String]
@@ -126,7 +155,7 @@ module Dydra
     # Waits until this operation is done, meanwhile calling the given `block`
     # at regular intervals.
     #
-    # @param  [Hash{Symbol => Object} options
+    # @param  [Hash{Symbol => Object}] options
     # @option options [Float] :timeout (nil)
     # @option options [Float] :sleep (0.5)
     #   how many seconds to sleep before re-polling the operation status
