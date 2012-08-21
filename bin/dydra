@@ -56,7 +56,11 @@ module Dydra
             puts "Using #{$dydra[:user]} and password-based authentication"
           end
         end
-        run_command(args) unless args.empty?
+        if args.empty? or (args.size==1 and !['login', 'list', 'url', 'help', 'status'].include?(args[0]))
+          help
+        else
+          run_command(args)
+        end
       end
     end
 
